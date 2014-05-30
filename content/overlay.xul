@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://FireX/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://FireX/locale/overlay.dtd">
+<overlay id="FireX-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script src="overlay.js"/>
+	<toolbarpalette id="BrowserToolbarPalette">
+		<toolbarbutton type="menu" id="myextension-button" label="&addonToolbar;" tooltiptext="&addonToolbar;">
+			<menupopup>
+				<menuitem label="&activate;" oncommand="AddonBar.activate();"/>
+				<menuitem label="&reset;" oncommand="AddonBar.reset();"/>
+				<menuitem label="&ping;" oncommand="AddonBar.ping();"/>
+			</menupopup>
+		</toolbarbutton>
+		<toolbaritem id="ip-address">
+			<label>&proxy_off;</label>
+		</toolbaritem>
+	</toolbarpalette>
+</overlay>

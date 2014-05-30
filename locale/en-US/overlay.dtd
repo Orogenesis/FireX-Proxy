@@ -1,0 +1,6 @@
+<!ENTITY debugmode "FireX Proxy: Включить debug">
+<!ENTITY addonToolbar "FireX Proxy">
+<!ENTITY activate "Сменить IP">
+<!ENTITY reset "Отключить прокси">
+<!ENTITY ping "Проверить скорость">
+<!ENTITY proxy_off "Прокси отключен">

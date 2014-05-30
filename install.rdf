@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>divanproger@gmail.com</em:id>
+    <em:name>FireX Proxy</em:name>
+    <em:version>1.2.1</em:version>
+    <em:description>FireX Proxy extension.</em:description>
+    <em:creator>Exclumice</em:creator>
+    <em:homepageURL>https://addons.mozilla.org/ru/firefox/user/Exclumice/</em:homepageURL>
+    <em:iconURL>chrome://FireX/skin/icon-32.png</em:iconURL>
+    <!--<em:updateURL>http://FireX.mozdev.org/update.rdf</em:updateURL-->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:type>2</em:type>
+        <em:minVersion>4.0</em:minVersion>
+        <em:maxVersion>30.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+  </Description>
+</RDF>

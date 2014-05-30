@@ -1,0 +1,11 @@
+/* This is just an example. You shouldn't do this. */
+#myextension-button {
+  list-style-image: url("icon-24.png");
+}
+toolbar[iconsize="small"] #myextension-button {
+  list-style-image: url("icon-16.png");
+}
+#ip-address {
+	margin-top: 10px;
+	color: #12B300;
+}
