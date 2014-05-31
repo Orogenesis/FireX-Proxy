@@ -114,9 +114,10 @@ var AddonBar = {
 	},
 	activate: function() {
 		obj.parseProxyList(function(ip_addr) {
+			AddonBar.reset();
 			obj.connectTo(obj.randomProxy(ip_addr));
 
-			document.getElementById('ip-address').innerHTML = obj.getIPAddress();
+			document.getElementById('ip-address').innerHTML = obj.getIPAddress();	
 		});
 	},
 	reset: function() {
@@ -135,9 +136,13 @@ var AddonBar = {
 
 window.addEventListener("load", function(e) {
 	setTimeout(function() {
+		/* icon */
+		AddonBar.addIcon("nav-bar", "myextension-button");
+		AddonBar.addIcon("addon-bar", "myextension-button");
+		/* ip address */
+		AddonBar.addIcon("nav-bar", "ip-address");
+		AddonBar.addIcon("addon-bar", "ip-address");
+				
 		document.getElementById('ip-address').innerHTML = obj.getIPAddress() || 'Прокси отключен';
-
-		AddonBar.addIcon("nav-bar", "BrowserToolbarPalette");
-		AddonBar.addIcon("addon-bar", "BrowserToolbarPalette");
 	}, 5000);
 }, false);
