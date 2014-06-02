@@ -24,26 +24,79 @@ Addon.prototype.resetConfig = function() {
 Addon.prototype.getIPAddress = function() {
 	return prefs.getCharPref('network.proxy.http');
 }
+/* HideMyAss crawler (spider) */
 Addon.prototype.parseProxyList = function(callback) {
 	var req = new XMLHttpRequest();  
-	req.open('GET', 'http://free-proxy-list.net/', true);
+	req.open('GET', 'http://hidemyass.com/proxy-list/', true);
 
 	var win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
 
 	req.onreadystatechange = function() {
 		if(req.readyState == 4) {
 			if(req.status == 200) {
+
 				var response = req.responseText,
 					parser = new DOMParser(),
 					doc = parser.parseFromString(response, "text/html"),
-					doc_table = doc.getElementById('proxylisttable'),
-					doc_tr =  doc_table.getElementsByTagName('tr'),
+					doc_table = doc.getElementById("listtable"),
+					doc_tr = doc_table.getElementsByTagName('tbody')[0].getElementsByTagName('tr'),
 					ip_addr = [];
 
-				for(var i = 1; i < doc_tr.length - 1; i++) {
+				for(var i = 0; i < doc_tr.length; i++) {
+					var doc_td = [
+							doc_tr[i].getElementsByTagName('td')[1], doc_tr[i].getElementsByTagName('td')[2], doc_tr[i].getElementsByTagName('td')[4], doc_tr[i].getElementsByTagName('td')[5]
+						],
+						span = doc_td[0].getElementsByTagName('span')[0],
+						loopAddr = '',
+						proxySpeed = doc_td[2].getElementsByClassName('speedbar')[0].children[0].className,
+						connectionTime = doc_td[3].getElementsByClassName('speedbar')[0].children[0].className;
+
+					if(connectionTime !== 'fast' && (proxySpeed !== 'medium' || proxySpeed !== 'fast')) {
+						continue;
+					}
+
+					var match = span.getElementsByTagName('style')[0].innerHTML.match(/([^\n|.]+display:(?!none))/g),
+						allElements = span.childNodes;
+
+					for(var b = 0; b < allElements.length; b++) {
+						var this_span = allElements[b],
+							isLoop = false;
+
+						if(this_span.textContent.length && this_span.tagName == undefined) {
+							loopAddr += (loopAddr.length) ? '.' + this_span.textContent : this_span.textContent;
+							continue;
+						}
+
+						if(this_span.style.display == "none") {
+							continue;
+						}
+
+						if(this_span.tagName.toLowerCase() == 'style') {
+							continue;
+						}
+
+						if(this_span.className.length) {
+							for(var r = 0; r < match.length; r++) {
+								if(match[r].replace(/{.*/, '') == this_span.className) {
+									isLoop = true;
+									break;
+								}
+							}
+						}
+
+						if(!this_span.innerHTML.length || this_span.innerHTML === '.') {
+							continue;
+						}
+
+						if(!this_span.className.match(/^[0-9]+$/) && !isLoop && !this_span.style.display) {
+							continue;
+						}
+
+						loopAddr += (loopAddr.length) ? '.' + this_span.innerHTML : this_span.innerHTML;
+					}
+
 					ip_addr.push([
-						doc_tr[i].getElementsByTagName('td')[0].innerHTML,
-						doc_tr[i].getElementsByTagName('td')[1].innerHTML
+						loopAddr.replace(/\.{2,}/g, '.'), doc_td[1].innerHTML
 					]);
 				}
 
@@ -51,7 +104,7 @@ Addon.prototype.parseProxyList = function(callback) {
 
 				callback(ip_addr);
 			}
-		}	
+		}
 	}
 	req.send(null);
 }
@@ -82,7 +135,7 @@ Addon.prototype.ping = function(callback) {
 		
 	}, 1000);
 
-	req.open('GET', 'http://google.com/', true);
+	req.open('GET', 'http://www.rockstargames.com/', true);
 	req.onreadystatechange = function() {
 		if(req.readyState == 4) {
 			win.close();
@@ -113,8 +166,8 @@ var AddonBar = {
 	    }
 	},
 	activate: function() {
+		AddonBar.reset();
 		obj.parseProxyList(function(ip_addr) {
-			AddonBar.reset();
 			obj.connectTo(obj.randomProxy(ip_addr));
 
 			document.getElementById('ip-address').innerHTML = obj.getIPAddress();	
