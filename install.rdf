@@ -4,7 +4,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>divanproger@gmail.com</em:id>
     <em:name>FireX Proxy</em:name>
-    <em:version>2.0</em:version>
+    <em:version>2.0.1</em:version>
     <em:description>FireX Proxy extension.</em:description>
     <em:creator>Exclumice</em:creator>
     <em:homepageURL>https://addons.mozilla.org/ru/firefox/user/Exclumice/</em:homepageURL>

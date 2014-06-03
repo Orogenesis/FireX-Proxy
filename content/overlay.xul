@@ -6,13 +6,13 @@
 	<toolbarpalette id="BrowserToolbarPalette">
 		<toolbarbutton type="menu" id="myextension-button" label="&addonToolbar;" tooltiptext="&addonToolbar;">
 			<menupopup>
-				<menuitem label="&activate;" oncommand="AddonBar.activate();"/>
-				<menuitem label="&reset;" oncommand="AddonBar.reset();"/>
-				<menuitem label="&ping;" oncommand="AddonBar.ping();"/>
+				<menuitem class="icon-activate menuitem-iconic" label="&activate;" oncommand="AddonBar.activate();"/>
+				<menuitem class="icon-reset menuitem-iconic" label="&reset;" oncommand="AddonBar.reset();"/>
+				<menuitem class="icon-ping menuitem-iconic" label="&ping;" oncommand="AddonBar.ping();"/>
 			</menupopup>
 		</toolbarbutton>
-		<toolbaritem id="ip-address">
-			<label>&proxy_off;</label>
+		<toolbaritem>
+			<label id="ip-address" value="&proxy_off;" />
 		</toolbaritem>
 	</toolbarpalette>
 </overlay>

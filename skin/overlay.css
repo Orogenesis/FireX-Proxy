@@ -9,3 +9,12 @@ toolbar[iconsize="small"] #myextension-button {
 	margin: 10px 15px 0 0;
 	color: #12B300;
 }
+.icon-activate {
+	list-style-image: url("icon-activate.png");
+}
+.icon-reset {
+	list-style-image: url("icon-reset.png");
+}
+.icon-ping {
+	list-style-image: url("icon-ping.png");
+}

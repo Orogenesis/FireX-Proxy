@@ -115,11 +115,11 @@ Addon.prototype.ping = function(callback) {
 		isCompleted = false;
 
 	win.onload = function() {
-		win.document.getElementById('loading_description').innerHTML = 'Подождите, измеряем скорость соединения...';
+		win.document.getElementById('loading_description').value = 'Подождите, измеряем скорость соединения...';
 	}
 
 	var	interval = setInterval(function() {
-		win.document.getElementById('loading_description').innerHTML = 'Осталось: ' + parseInt(8 - pinged) + ' сек.';
+		win.document.getElementById('loading_description').value = 'Осталось: ' + parseInt(8 - pinged) + ' сек.';
 
 		if(pinged >= 8) {
 			win.close();
@@ -170,18 +170,18 @@ var AddonBar = {
 		obj.parseProxyList(function(ip_addr) {
 			obj.connectTo(obj.randomProxy(ip_addr));
 
-			document.getElementById('ip-address').innerHTML = obj.getIPAddress();	
+			document.getElementById('ip-address').value = obj.getIPAddress();	
 		});
 	},
 	reset: function() {
 		obj.resetConfig();
 
 		document.getElementById('ip-address').style.color = '#12B300';
-		document.getElementById('ip-address').innerHTML = 'Прокси отключен';
+		document.getElementById('ip-address').value = 'Прокси отключен';
 	},
 	ping: function() {
 		obj.ping(function(times) {
-			document.getElementById('ip-address').innerHTML = obj.getIPAddress() || 'Прокси отключен';
+			document.getElementById('ip-address').value = obj.getIPAddress() || 'Прокси отключен';
 			document.getElementById('ip-address').style.color = (times < 8) ? '#12B300' : '#B30000';
 		});
 	}
@@ -196,6 +196,6 @@ window.addEventListener("load", function(e) {
 		AddonBar.addIcon("nav-bar", "ip-address");
 		AddonBar.addIcon("addon-bar", "ip-address");
 				
-		document.getElementById('ip-address').innerHTML = obj.getIPAddress() || 'Прокси отключен';
+		document.getElementById('ip-address').value = obj.getIPAddress() || 'Прокси отключен';
 	}, 5000);
 }, false);
