@@ -6,7 +6,7 @@ toolbar[iconsize="small"] #myextension-button {
   list-style-image: url("icon-16.png");
 }
 #ip-address {
-	margin: 10px 15px 0 0;
+	margin: 10px 15px 0 5px;
 	color: #12B300;
 }
 .icon-activate {
