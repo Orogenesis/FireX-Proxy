@@ -1,2 +1,2 @@
-<!ENTITY loading_title "Загрузка">
-<!ENTITY wait_msg "Подождите, подключаем прокси...">
+<!ENTITY loading_title "Loading">
+<!ENTITY wait_msg "Please wait. Connection to proxy server...">

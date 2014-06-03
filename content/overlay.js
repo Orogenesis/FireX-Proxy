@@ -1,4 +1,5 @@
-var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
+	stringBundle = null;
 
 function Addon() {
 	this.initialized = true;
@@ -115,11 +116,11 @@ Addon.prototype.ping = function(callback) {
 		isCompleted = false;
 
 	win.onload = function() {
-		win.document.getElementById('loading_description').value = 'Подождите, измеряем скорость соединения...';
+		win.document.getElementById('loading_description').value = stringBundle.getString('waitCheckSpeed');
 	}
 
 	var	interval = setInterval(function() {
-		win.document.getElementById('loading_description').value = 'Осталось: ' + parseInt(8 - pinged) + ' сек.';
+		win.document.getElementById('loading_description').value = stringBundle.getString('doneSeconds') + ': ' + parseInt(8 - pinged) + ' ' + stringBundle.getString('seconds');
 
 		if(pinged >= 8) {
 			win.close();
@@ -177,11 +178,11 @@ var AddonBar = {
 		obj.resetConfig();
 
 		document.getElementById('ip-address').style.color = '#12B300';
-		document.getElementById('ip-address').value = 'Прокси отключен';
+		document.getElementById('ip-address').value = stringBundle.getString('proxyIsDisabled');
 	},
 	ping: function() {
 		obj.ping(function(times) {
-			document.getElementById('ip-address').value = obj.getIPAddress() || 'Прокси отключен';
+			document.getElementById('ip-address').value = obj.getIPAddress() || stringBundle.getString('proxyIsDisabled');
 			document.getElementById('ip-address').style.color = (times < 8) ? '#12B300' : '#B30000';
 		});
 	}
@@ -195,7 +196,9 @@ window.addEventListener("load", function(e) {
 		/* ip address */
 		AddonBar.addIcon("nav-bar", "ip-address");
 		AddonBar.addIcon("addon-bar", "ip-address");
+
+		stringBundle = document.getElementById('string-bundle');
 				
-		document.getElementById('ip-address').value = obj.getIPAddress() || 'Прокси отключен';
+		document.getElementById('ip-address').value = obj.getIPAddress() || stringBundle.getString('proxyIsDisabled');
 	}, 5000);
 }, false);

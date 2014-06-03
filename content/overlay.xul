@@ -3,6 +3,9 @@
 <!DOCTYPE overlay SYSTEM "chrome://FireX/locale/overlay.dtd">
 <overlay id="FireX-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<script src="overlay.js"/>
+	<stringbundleset id="stringbundleset">
+		<stringbundle id="string-bundle" src="chrome://FireX/locale/lang.properties"/>
+	</stringbundleset>
 	<toolbarpalette id="BrowserToolbarPalette">
 		<toolbarbutton type="menu" id="myextension-button" label="&addonToolbar;" tooltiptext="&addonToolbar;">
 			<menupopup>
