@@ -7,7 +7,7 @@
 		<stringbundle id="string-bundle" src="chrome://FireX/locale/lang.properties"/>
 	</stringbundleset>
 	<toolbarpalette id="BrowserToolbarPalette">
-		<toolbarbutton type="menu" id="myextension-button" label="&addonToolbar;" tooltiptext="&addonToolbar;">
+		<toolbarbutton type="menu-button" id="myextension-button" label="&addonToolbar;" tooltiptext="&addonToolbar;" class="toolbarbutton-1 chromeclass-toolbar-additional">
 			<menupopup>
 				<menuitem class="icon-activate menuitem-iconic" label="&activate;" oncommand="AddonBar.activate();"/>
 				<menuitem class="icon-reset menuitem-iconic" label="&reset;" oncommand="AddonBar.reset();"/>

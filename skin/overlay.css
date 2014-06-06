@@ -5,6 +5,12 @@
 toolbar[iconsize="small"] #myextension-button {
   list-style-image: url("icon-16.png");
 }
+toolbarpaletteitem[place="palette"] #myextension-button {
+	list-style-image: url("icon-32.png");
+}
+#myextension-button[cui-areatype="menu-panel"] {
+	list-style-image: url("icon-32.png");
+}
 #ip-address {
 	margin: 10px 15px 0 5px;
 	color: #12B300;
