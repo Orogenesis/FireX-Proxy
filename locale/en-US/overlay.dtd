@@ -3,3 +3,8 @@
 <!ENTITY reset "Disable proxy">
 <!ENTITY ping "Check connection speed">
 <!ENTITY proxy_off "Proxy is disabled">
+<!ENTITY proxy-list "Proxy list">
+<!ENTITY proxy-button "Activate">
+<!ENTITY proxy-help-list "Tip: click on any IP-address then click «Activate» button.">
+<!ENTITY refresh-proxy "Refresh proxy list">
+<!ENTITY is_empty "Proxy list is empty.">

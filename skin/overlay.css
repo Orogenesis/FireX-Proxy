@@ -24,3 +24,106 @@ toolbarpaletteitem[place="palette"] #myextension-button {
 .icon-ping {
 	list-style-image: url("icon-ping.png");
 }
+.icon-list {
+	list-style-image: url("icon-list.png");
+}
+.proxy-list {
+	background-color: #F0F0F0;
+	height: 200px;
+	overflow-y: auto;
+	width: 300px;
+	margin: 10px 0 10px 0;
+}
+#proxy-list-menu menupopup {
+	max-height: 400px;
+	-moz-appearance: none;
+	width: 400px;
+	padding: 10px;
+}
+.proxy-button {
+	padding: 5px;
+	border: none;
+	color: #fff;
+	font-size: 14px;
+	-moz-appearance: none;
+	cursor: pointer;
+	border-radius: 10px;
+	background: url("icon-button.png");
+	background-position: 30% 50%;
+	background-repeat: no-repeat;
+	background-color: #e74c3c;
+}
+.proxy-button:hover {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+.proxy-button > label {
+	text-transform: uppercase;
+}
+.proxy-list .active {
+	background-color: #55b128;
+}
+.proxy-list hbox {
+	font-size: 14px;
+	width: 100%;
+	margin: 2px;
+	cursor: pointer;
+}
+.proxy-list hbox > label:first-child {
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 5px;
+	width: 140px;
+}
+.proxy-list hbox:first-child:nth-child(odd) > label {
+	background-color: #e0f1f5;
+}
+.proxy-list hbox:first-child:nth-child(even) > label {
+	background-color: #d4e6ea;
+}
+.proxy-list hbox > label:not(:first-child) {
+	padding: 5px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background: url("planet.png");
+	background-position: 5px center;
+	background-repeat: no-repeat;
+	width: 180px;
+	text-indent: 25px;
+}
+.proxy-list hbox:not(:first-child):nth-child(odd) > label {
+	background-color: #e0f1f5;
+}
+.proxy-list hbox:not(:first-child):nth-child(even) > label {
+	background-color: #d4e6ea;
+}
+.proxy-help {
+	background: url("icon-help.png");
+	background-position: 97% 50%;
+	background-repeat: no-repeat;
+	background-color: #e5e5e5;
+	border-radius: 10px;
+	padding: 5px;
+	text-align: center;
+	width: 100%;
+}
+.proxy-help-text > label {
+	width: 80%;
+}
+.proxy-refresh-button {
+	padding: 5px;
+	border: none;
+	-moz-appearance: none;
+	cursor: pointer;
+	border-radius: 10px;
+	background: url("icon-refresh.png");
+	background-position: 20% 50%;
+	background-repeat: no-repeat;
+	background-color: #e74c3c;
+	color: #fff;
+}
+.proxy-refresh-button:hover {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+.proxy-refresh-button > label {
+	text-transform: uppercase;
+}

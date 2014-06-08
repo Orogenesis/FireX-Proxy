@@ -2,7 +2,7 @@ var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(
 	stringBundle = null;
 
 function Addon() {
-	this.initialized = true;
+	this.proxyList = [];
 }
 Addon.prototype.install = function(id) {
 	var toolbar = document.getElementById('addon-bar');
@@ -45,14 +45,15 @@ Addon.prototype.parseProxyList = function(callback) {
 
 				for(var i = 0; i < doc_tr.length; i++) {
 					var doc_td = [
-							doc_tr[i].getElementsByTagName('td')[1], doc_tr[i].getElementsByTagName('td')[2], doc_tr[i].getElementsByTagName('td')[4], doc_tr[i].getElementsByTagName('td')[5]
+							doc_tr[i].getElementsByTagName('td')[1], doc_tr[i].getElementsByTagName('td')[2], doc_tr[i].getElementsByTagName('td')[4], doc_tr[i].getElementsByTagName('td')[5], doc_tr[i].getElementsByTagName('td')[3]
 						],
 						span = doc_td[0].getElementsByTagName('span')[0],
 						loopAddr = '',
 						proxySpeed = doc_td[2].getElementsByClassName('speedbar')[0].children[0].className,
-						connectionTime = doc_td[3].getElementsByClassName('speedbar')[0].children[0].className;
+						connectionTime = doc_td[3].getElementsByClassName('speedbar')[0].children[0].className,
+						country = doc_td[4].getElementsByTagName('span')[0].textContent;
 
-					if(connectionTime !== 'fast' && (proxySpeed !== 'medium' || proxySpeed !== 'fast')) {
+					if(connectionTime !== 'fast' || (proxySpeed != 'fast' && proxySpeed != 'medium')) {
 						continue;
 					}
 
@@ -97,7 +98,7 @@ Addon.prototype.parseProxyList = function(callback) {
 					}
 
 					ip_addr.push([
-						loopAddr.replace(/\.{2,}/g, '.'), doc_td[1].innerHTML
+						loopAddr.replace(/\.{2,}/g, '.'), doc_td[1].innerHTML, country
 					]);
 				}
 
@@ -148,6 +149,38 @@ Addon.prototype.ping = function(callback) {
 	}
 	req.send(null);
 }
+Addon.prototype.addProxyItem = function(value, port, country) {
+	var xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul',
+		hbox = document.createElementNS(xulNS, 'hbox');
+		element = document.createElementNS(xulNS, 'label'),
+		el_country = document.createElementNS(xulNS, 'label');
+
+	element.setAttribute('value', value);
+	element.setAttribute('data-port', port);
+
+	hbox.setAttribute('onclick', 'AddonBar.chooseProxy(event);');
+	el_country.textContent = country;
+
+	document.getElementsByClassName('proxy-list')[0].appendChild(hbox);
+	hbox.appendChild(element);
+	hbox.appendChild(el_country);
+}
+Addon.prototype.addItemsToProxyList = function() {
+	var no_addr = document.getElementById('no_addresses');
+	if(no_addr) {
+		document.getElementsByClassName('proxy-list')[0].removeChild(no_addr);
+	}
+
+	var proxy_list = document.getElementsByClassName('proxy-list');
+
+	while(proxy_list.firstChild) {
+		proxy_list.removeChild(proxy_list.firstChild);
+	}
+
+	for(var i = 0; i < this.proxyList.length; i++) {
+		this.addProxyItem(this.proxyList[i][0], this.proxyList[i][1], this.proxyList[i][2]);
+	}
+}
 
 var obj = new Addon();
 
@@ -171,7 +204,11 @@ var AddonBar = {
 		obj.parseProxyList(function(ip_addr) {
 			obj.connectTo(obj.randomProxy(ip_addr));
 
-			document.getElementById('ip-address').value = obj.getIPAddress();	
+			document.getElementById('ip-address').value = obj.getIPAddress();
+
+			obj.proxyList = ip_addr;
+
+			obj.addItemsToProxyList();
 		});
 	},
 	reset: function() {
@@ -184,6 +221,32 @@ var AddonBar = {
 		obj.ping(function(times) {
 			document.getElementById('ip-address').value = obj.getIPAddress() || stringBundle.getString('proxyIsDisabled');
 			document.getElementById('ip-address').style.color = (times < 8) ? '#12B300' : '#B30000';
+		});
+	},
+	chooseProxy: function(event) {
+		if(!event.currentTarget.className.length) {
+			event.currentTarget.setAttribute('class', 'active');
+		}
+		else {
+			event.currentTarget.removeAttribute('class');
+		}
+	},
+	changeProxy: function() {
+		var hbox = document.getElementsByClassName('proxy-list')[0].getElementsByTagName('hbox');
+		for(var i = 0; i < hbox.length; i++) {
+			if(hbox[i].className.length) {
+				var hbox_child = hbox[i].children[0];
+				obj.connectTo([hbox_child.value, hbox_child.getAttribute('data-port')]);
+
+				document.getElementById('ip-address').value = obj.getIPAddress();
+				break;
+			}
+		}
+	},
+	refresh: function() {
+		obj.parseProxyList(function(ip_addr) {
+			obj.proxyList = ip_addr;
+			obj.addItemsToProxyList();
 		});
 	}
 };

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://FireX/skin/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://FireX/locale/overlay.dtd">
-<overlay id="FireX-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="FireX-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
 	<script src="overlay.js"/>
 	<stringbundleset id="stringbundleset">
 		<stringbundle id="string-bundle" src="chrome://FireX/locale/lang.properties"/>
@@ -10,6 +10,26 @@
 		<toolbarbutton type="menu-button" id="myextension-button" label="&addonToolbar;" tooltiptext="&addonToolbar;" class="toolbarbutton-1 chromeclass-toolbar-additional">
 			<menupopup>
 				<menuitem class="icon-activate menuitem-iconic" label="&activate;" oncommand="AddonBar.activate();"/>
+				<menu id="proxy-list-menu" class="icon-list menu-iconic" label="&proxy-list;">
+					<menupopup>
+						<vbox flex="1" class="proxy-help">
+							<html:div class="proxy-help-text">
+								<label>&proxy-help-list;</label>
+							</html:div>	
+						</vbox>
+						<vbox flex="1" class="proxy-list">
+							<label id="no_addresses">&is_empty;</label>
+						</vbox>
+						<vbox flex="1">
+							<button class="proxy-button" oncommand='AddonBar.changeProxy();'>
+								<label>&proxy-button;</label>
+							</button>
+							<button class="proxy-refresh-button" oncommand="AddonBar.refresh();" tooltiptext="&refresh-proxy;">
+								<label>Обновить список адресов</label>
+							</button>							
+						</vbox>
+					</menupopup>
+				</menu>	
 				<menuitem class="icon-reset menuitem-iconic" label="&reset;" oncommand="AddonBar.reset();"/>
 				<menuitem class="icon-ping menuitem-iconic" label="&ping;" oncommand="AddonBar.ping();"/>
 			</menupopup>
