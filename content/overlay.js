@@ -28,7 +28,7 @@ Addon.prototype.getIPAddress = function() {
 /* HideMyAss crawler (spider) */
 Addon.prototype.parseProxyList = function(callback) {
 	var req = new XMLHttpRequest();  
-	req.open('GET', 'http://hidemyass.com/proxy-list/', true);
+	req.open('GET', 'http://proxylist.hidemyass.com/', true);
 
 	var win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
 
@@ -39,7 +39,7 @@ Addon.prototype.parseProxyList = function(callback) {
 				var response = req.responseText,
 					parser = new DOMParser(),
 					doc = parser.parseFromString(response, "text/html"),
-					doc_table = doc.getElementById("listtable"),
+					doc_table = doc.getElementById("listable"),
 					doc_tr = doc_table.getElementsByTagName('tbody')[0].getElementsByTagName('tr'),
 					ip_addr = [];
 
@@ -49,11 +49,11 @@ Addon.prototype.parseProxyList = function(callback) {
 						],
 						span = doc_td[0].getElementsByTagName('span')[0],
 						loopAddr = '',
-						proxySpeed = doc_td[2].getElementsByClassName('speedbar')[0].children[0].className,
-						connectionTime = doc_td[3].getElementsByClassName('speedbar')[0].children[0].className,
+						proxySpeed = doc_td[2].getElementsByClassName('progress-indicator')[0].children[0].style.width,
+						connectionTime = doc_td[3].getElementsByClassName('progress-indicator')[0].children[0].style.width,
 						country = doc_td[4].getElementsByTagName('span')[0].textContent;
 
-					if(connectionTime !== 'fast' || (proxySpeed != 'fast' && proxySpeed != 'medium')) {
+					if(connectionTime < parseInt(connectionTime) || parseInt(proxySpeed) < 40) {
 						continue;
 					}
 

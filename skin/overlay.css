@@ -68,6 +68,9 @@ toolbarpaletteitem[place="palette"] #myextension-button {
 	margin: 2px;
 	cursor: pointer;
 }
+.proxy-list hbox > label {
+	cursor: pointer;
+}
 .proxy-list hbox > label:first-child {
 	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
