@@ -4,12 +4,12 @@
 <overlay id="FireX-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
 	<script src="overlay.js"/>
 	<stringbundleset id="stringbundleset">
-		<stringbundle id="string-bundle" src="chrome://FireX/locale/lang.properties"/>
+		<stringbundle id="firex-string-bundle" src="chrome://FireX/locale/lang.properties"/>
 	</stringbundleset>
 	<toolbarpalette id="BrowserToolbarPalette">
 		<toolbarbutton type="menu-button" id="myextension-button" label="&addonToolbar;" tooltiptext="&addonToolbar;" class="toolbarbutton-1 chromeclass-toolbar-additional">
 			<menupopup>
-				<menuitem class="icon-activate menuitem-iconic" label="&activate;" oncommand="AddonBar.activate();"/>
+				<menuitem class="icon-activate menuitem-iconic" label="&activate;" oncommand="ProxyAddonBar.activate();"/>
 				<menu id="proxy-list-menu" class="icon-list menu-iconic" label="&proxy-list;">
 					<menupopup>
 						<vbox flex="1" class="proxy-help">
@@ -21,21 +21,21 @@
 							<label id="no_addresses">&is_empty;</label>
 						</vbox>
 						<vbox flex="1">
-							<button class="proxy-button" oncommand='AddonBar.changeProxy();'>
+							<button class="proxy-button" oncommand='ProxyAddonBar.changeProxy();'>
 								<label>&proxy-button;</label>
 							</button>
-							<button class="proxy-refresh-button" oncommand="AddonBar.refresh();" tooltiptext="&refresh-proxy;">
-								<label>Обновить список адресов</label>
+							<button class="proxy-refresh-button" oncommand="ProxyAddonBar.refresh();" tooltiptext="&refresh-proxy;">
+								<label>&refresh-proxy;</label>
 							</button>							
 						</vbox>
 					</menupopup>
 				</menu>	
-				<menuitem class="icon-reset menuitem-iconic" label="&reset;" oncommand="AddonBar.reset();"/>
-				<menuitem class="icon-ping menuitem-iconic" label="&ping;" oncommand="AddonBar.ping();"/>
+				<menuitem class="icon-reset menuitem-iconic" label="&reset;" oncommand="ProxyAddonBar.reset();"/>
+				<menuitem class="icon-ping menuitem-iconic" label="&ping;" oncommand="ProxyAddonBar.ping();"/>
 			</menupopup>
 		</toolbarbutton>
-		<toolbaritem>
-			<label id="ip-address" value="&proxy_off;" />
+		<toolbaritem id="ip-address">
+			<label value="&proxy_off;" />
 		</toolbaritem>
 	</toolbarpalette>
 </overlay>

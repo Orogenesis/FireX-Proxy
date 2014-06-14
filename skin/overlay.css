@@ -1,4 +1,3 @@
-/* This is just an example. You shouldn't do this. */
 #myextension-button {
   list-style-image: url("icon-24.png");
 }
@@ -12,7 +11,7 @@ toolbarpaletteitem[place="palette"] #myextension-button {
 	list-style-image: url("icon-32.png");
 }
 #ip-address {
-	margin: 10px 15px 0 5px;
+	margin: 10px 15px 0 0;
 	color: #12B300;
 }
 .icon-activate {
