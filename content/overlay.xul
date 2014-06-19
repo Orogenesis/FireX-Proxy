@@ -22,9 +22,11 @@
 						</vbox>
 						<vbox flex="1">
 							<button class="proxy-button" oncommand='ProxyAddonBar.changeProxy();'>
+								<image src="chrome://FireX/skin/icon-button.png" />
 								<label>&proxy-button;</label>
 							</button>
 							<button class="proxy-refresh-button" oncommand="ProxyAddonBar.refresh();" tooltiptext="&refresh-proxy;">
+								<image src="chrome://FireX/skin/icon-refresh.png" />
 								<label>&refresh-proxy;</label>
 							</button>							
 						</vbox>

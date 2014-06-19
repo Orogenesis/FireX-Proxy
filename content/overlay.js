@@ -7,12 +7,14 @@ var ProxyAddonBar = {
 	onLoad: function(str) {
 		ProxyAddonBar.stringBundle = str;
 
-		/* icon */
-		ProxyAddonBar.addIcon("nav-bar", "myextension-button");
-		ProxyAddonBar.addIcon("addon-bar", "myextension-button");
-		/* ip address */
-		ProxyAddonBar.addIcon("nav-bar", "ip-address");
-		ProxyAddonBar.addIcon("addon-bar", "ip-address");
+		if(ProxyAddonBar.isFirstRun()) {
+			/* icon */
+			ProxyAddonBar.addIcon("nav-bar", "myextension-button");
+			ProxyAddonBar.addIcon("addon-bar", "myextension-button");
+			/* ip address */
+			ProxyAddonBar.addIcon("nav-bar", "ip-address");
+			ProxyAddonBar.addIcon("addon-bar", "ip-address");
+		}	
 	},
 	addIcon: function(toolbarId, id) {
 		if(!document.getElementById(id)) {
@@ -31,7 +33,13 @@ var ProxyAddonBar = {
 	activate: function() {
 		ProxyAddonBar.reset();
 		ProxyAddonBar.parseProxyList(function(ip_addr) {
-			ProxyAddonBar.connectTo(ProxyAddonBar.randomProxy(ip_addr));
+			var rand_proxy = ProxyAddonBar.randomProxy(ip_addr);
+			if(rand_proxy[3] == 'http') {
+				ProxyAddonBar.connectTo(rand_proxy);
+			}
+			else {
+				ProxyAddonBar.connectToSSL(rand_proxy);
+			}
 
 			document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
 
@@ -60,11 +68,20 @@ var ProxyAddonBar = {
 		}
 	},
 	changeProxy: function() {
+		ProxyAddonBar.resetConfig();
+
 		var hbox = document.getElementsByClassName('proxy-list')[0].getElementsByTagName('hbox');
 		for(var i = 0; i < hbox.length; i++) {
 			if(hbox[i].className.length) {
-				var hbox_child = hbox[i].children[0];
-				ProxyAddonBar.connectTo([hbox_child.value, hbox_child.getAttribute('data-port')]);
+				var hbox_child = hbox[i].children[0],
+					proxy_type = hbox[i].getElementsByClassName('proxy-type')[0].innerHTML.toLowerCase();
+
+				if(proxy_type == 'http') {
+					ProxyAddonBar.connectTo([hbox_child.value, hbox_child.getAttribute('data-port')]);
+				}
+				else {
+					ProxyAddonBar.connectToSSL([hbox_child.value, hbox_child.getAttribute('data-port')]);
+				}
 
 				document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
 				break;
@@ -85,11 +102,22 @@ var ProxyAddonBar = {
 		ProxyAddonBar.prefs.clearUserPref('network.proxy.http');
 		ProxyAddonBar.prefs.clearUserPref('network.proxy.http_port');
 		ProxyAddonBar.prefs.clearUserPref('network.proxy.type');
+
+		ProxyAddonBar.prefs.clearUserPref('network.proxy.ssl');
+		ProxyAddonBar.prefs.clearUserPref('network.proxy.ssl_port');
 	},
 	connectTo: function(addr) {
 		ProxyAddonBar.prefs.setCharPref('network.proxy.http', addr[0]);
 		ProxyAddonBar.prefs.setIntPref('network.proxy.http_port', addr[1]);
 		ProxyAddonBar.prefs.setIntPref('network.proxy.type', 1);
+	},
+	connectToSSL: function(addr) {
+		ProxyAddonBar.prefs.setCharPref('network.proxy.http', addr[0]);
+		ProxyAddonBar.prefs.setIntPref('network.proxy.http_port', addr[1]);
+
+		ProxyAddonBar.prefs.setCharPref('network.proxy.ssl', addr[0]);
+		ProxyAddonBar.prefs.setIntPref('network.proxy.ssl_port', addr[1]);
+		ProxyAddonBar.prefs.setIntPref('network.proxy.type', 1);		
 	},
 	randomProxy: function(proxy) {
 		return proxy[parseInt(Math.random() * proxy.length - 1)];
@@ -121,7 +149,7 @@ var ProxyAddonBar = {
 			
 		}, 1000);
 
-		req.open('GET', 'http://www.rockstargames.com/', true);
+		req.open('GET', 'http://www.mozilla.org/', true);
 		req.onreadystatechange = function() {
 			if(req.readyState == 4) {
 				win.close();
@@ -146,14 +174,15 @@ var ProxyAddonBar = {
 		}
 
 		for(var i = 0; i < ProxyAddonBar.proxyList.length; i++) {
-			ProxyAddonBar.addProxyItem(ProxyAddonBar.proxyList[i][0], ProxyAddonBar.proxyList[i][1], ProxyAddonBar.proxyList[i][2]);
+			ProxyAddonBar.addProxyItem(ProxyAddonBar.proxyList[i][0], ProxyAddonBar.proxyList[i][1], ProxyAddonBar.proxyList[i][2], ProxyAddonBar.proxyList[i][3]);
 		}
 	},
-	addProxyItem: function(value, port, country) {
+	addProxyItem: function(value, port, country, type) {
 		var xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul',
 			hbox = document.createElementNS(xulNS, 'hbox');
 			element = document.createElementNS(xulNS, 'label'),
-			el_country = document.createElementNS(xulNS, 'label');
+			el_country = document.createElementNS(xulNS, 'label'),
+			el_type = document.createElementNS(xulNS, 'label');
 
 		element.setAttribute('value', value);
 		element.setAttribute('data-port', port);
@@ -163,9 +192,14 @@ var ProxyAddonBar = {
 		}, false);
 
 		el_country.textContent = country;
+		el_country.setAttribute('class', 'proxy-country');
+
+		el_type.textContent = type.toUpperCase();
+		el_type.setAttribute('class', 'proxy-type');
 
 		document.getElementsByClassName('proxy-list')[0].appendChild(hbox);
 		hbox.appendChild(element);
+		hbox.appendChild(el_type);
 		hbox.appendChild(el_country);
 	},
 	parseProxyList: function(callback) {
@@ -187,15 +221,25 @@ var ProxyAddonBar = {
 
 					for(var i = 0; i < doc_tr.length; i++) {
 						var doc_td = [
-								doc_tr[i].getElementsByTagName('td')[1], doc_tr[i].getElementsByTagName('td')[2], doc_tr[i].getElementsByTagName('td')[4], doc_tr[i].getElementsByTagName('td')[5], doc_tr[i].getElementsByTagName('td')[3]
+								doc_tr[i].getElementsByTagName('td')[1], 
+								doc_tr[i].getElementsByTagName('td')[2], 
+								doc_tr[i].getElementsByTagName('td')[4], 
+								doc_tr[i].getElementsByTagName('td')[5], 
+								doc_tr[i].getElementsByTagName('td')[3],
+								doc_tr[i].getElementsByTagName('td')[6],
 							],
 							span = doc_td[0].getElementsByTagName('span')[0],
 							loopAddr = '',
 							proxySpeed = doc_td[2].getElementsByClassName('progress-indicator')[0].children[0].style.width,
 							connectionTime = doc_td[3].getElementsByClassName('progress-indicator')[0].children[0].style.width,
-							country = doc_td[4].getElementsByTagName('span')[0].textContent;
+							country = doc_td[4].getElementsByTagName('span')[0].textContent,
+							proxy_type = doc_td[5].innerHTML.toLowerCase();
 
 						if(connectionTime < parseInt(connectionTime) || parseInt(proxySpeed) < 40) {
+							continue;
+						}
+
+						if(proxy_type != 'http' && proxy_type != 'https') {
 							continue;
 						}
 
@@ -240,7 +284,7 @@ var ProxyAddonBar = {
 						}
 
 						ip_addr.push([
-							loopAddr.replace(/\.{2,}/g, '.'), doc_td[1].innerHTML, country
+							loopAddr.replace(/\.{2,}/g, '.'), doc_td[1].innerHTML, country, proxy_type
 						]);
 					}
 
@@ -251,6 +295,22 @@ var ProxyAddonBar = {
 			}
 		}
 		req.send(null);
+	},
+	isFirstRun: function() {
+		var firstRun = ProxyAddonBar.prefs.getBoolPref('extensions.firex.firstRun'),
+			currentVersion = 3.3;
+		if(firstRun) {
+			ProxyAddonBar.prefs.setBoolPref('extensions.firex.firstRun', false);
+			ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion);
+		}
+
+		if(parseFloat(ProxyAddonBar.prefs.getCharPref('extensions.firex.installedVersion')) < currentVersion) {
+			ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion.toString());
+
+			return true;
+		}
+
+		return firstRun;
 	}
 };
 
