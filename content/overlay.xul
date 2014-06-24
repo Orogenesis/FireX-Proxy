@@ -17,7 +17,7 @@
 								<label>&proxy-help-list;</label>
 							</html:div>	
 						</vbox>
-						<vbox flex="1" class="proxy-list">
+						<vbox flex="1" class="proxy-list" id="proxy-list-box">
 							<label id="no_addresses">&is_empty;</label>
 						</vbox>
 						<vbox flex="1">

@@ -70,7 +70,7 @@ var ProxyAddonBar = {
 	changeProxy: function() {
 		ProxyAddonBar.resetConfig();
 
-		var hbox = document.getElementsByClassName('proxy-list')[0].getElementsByTagName('hbox');
+		var hbox = document.getElementById('proxy-list-box').getElementsByTagName('hbox');
 		for(var i = 0; i < hbox.length; i++) {
 			if(hbox[i].className.length) {
 				var hbox_child = hbox[i].children[0],
@@ -94,6 +94,7 @@ var ProxyAddonBar = {
 			ProxyAddonBar.proxyList = ip_addr;
 			ProxyAddonBar.addItemsToProxyList();
 		});
+		Firebug.Console.log(document.getElementById('proxy-list-box'));
 	},
 	getIPAddress: function() {
 		return ProxyAddonBar.prefs.getCharPref('network.proxy.http');
@@ -164,10 +165,10 @@ var ProxyAddonBar = {
 	addItemsToProxyList: function() {
 		var no_addr = document.getElementById('no_addresses');
 		if(no_addr) {
-			document.getElementsByClassName('proxy-list')[0].removeChild(no_addr);
+			document.getElementById('proxy-list-box').removeChild(no_addr);
 		}
 
-		var proxy_list = document.getElementsByClassName('proxy-list');
+		var proxy_list = document.getElementById('proxy-list-box');
 
 		while(proxy_list.firstChild) {
 			proxy_list.removeChild(proxy_list.firstChild);
@@ -197,7 +198,7 @@ var ProxyAddonBar = {
 		el_type.textContent = type.toUpperCase();
 		el_type.setAttribute('class', 'proxy-type');
 
-		document.getElementsByClassName('proxy-list')[0].appendChild(hbox);
+		document.getElementById('proxy-list-box').appendChild(hbox);
 		hbox.appendChild(element);
 		hbox.appendChild(el_type);
 		hbox.appendChild(el_country);
