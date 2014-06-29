@@ -11,7 +11,7 @@
 			<menupopup>
 				<menuitem class="icon-activate menuitem-iconic" label="&activate;" oncommand="ProxyAddonBar.activate();"/>
 				<menu id="proxy-list-menu" class="icon-list menu-iconic" label="&proxy-list;">
-					<menupopup>
+					<menupopup id="proxy-popup">
 						<vbox flex="1" class="proxy-help">
 							<html:div class="proxy-help-text">
 								<label>&proxy-help-list;</label>

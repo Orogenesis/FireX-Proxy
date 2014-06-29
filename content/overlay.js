@@ -94,7 +94,6 @@ var ProxyAddonBar = {
 			ProxyAddonBar.proxyList = ip_addr;
 			ProxyAddonBar.addItemsToProxyList();
 		});
-		Firebug.Console.log(document.getElementById('proxy-list-box'));
 	},
 	getIPAddress: function() {
 		return ProxyAddonBar.prefs.getCharPref('network.proxy.http');
@@ -297,6 +296,9 @@ var ProxyAddonBar = {
 		}
 		req.send(null);
 	},
+	preventHide: function(e) {
+	    e.preventDefault();
+	},
 	isFirstRun: function() {
 		var firstRun = ProxyAddonBar.prefs.getBoolPref('extensions.firex.firstRun'),
 			currentVersion = 3.3;
@@ -317,6 +319,17 @@ var ProxyAddonBar = {
 
 window.addEventListener("load", function(e) {
 	setTimeout(function() {
+		var popup = document.getElementById('proxy-popup');
+		popup.addEventListener('mouseenter', function(e) {
+			if(!e.relatedTarget) { 
+				this.addEventListener('popuphiding', ProxyAddonBar.preventHide, false);
+			}
+		});
+		popup.addEventListener('mouseleave', function(e) {
+			if(!e.relatedTarget) {
+				this.removeEventListener('popuphiding', ProxyAddonBar.preventHide, false);
+			}
+		});
 
 		ProxyAddonBar.onLoad(document.getElementById('firex-string-bundle'));
 				
