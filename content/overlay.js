@@ -1,20 +1,112 @@
-var ProxyAddonBar = {
+var FavimExtension = {
 
-	proxyList: [],
 	prefs: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
 	stringBundle: null,
+	alertsService: Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService),
+	currentElement: null,
 
-	onLoad: function(str) {
-		ProxyAddonBar.stringBundle = str;
+	toolbarClick: function() {
+		FavimExtension.isUserLogged(function(res) {
+			if($.isEmptyObject(res)) {
+				/* Пользователь не авторизован на favim.com */
+				FavimExtension.alertsService.showAlertNotification("chrome://Favim/skin/icon32.png", "Ошибка", "Вы не авторизованы на Favim.com.", false);
+			}
+			else {
+				/* Пользователь авторизован на Favim.com, загружаем все изображение со страницы */
+				var content_body = $(content.document.body),
+					images = null;
 
-		if(ProxyAddonBar.isFirstRun()) {
-			/* icon */
-			ProxyAddonBar.addIcon("nav-bar", "myextension-button");
-			ProxyAddonBar.addIcon("addon-bar", "myextension-button");
-			/* ip address */
-			ProxyAddonBar.addIcon("nav-bar", "ip-address");
-			ProxyAddonBar.addIcon("addon-bar", "ip-address");
-		}	
+				$(content.document).scrollTop(0);
+
+				FavimExtension.addFavimToPage(content_body);
+
+				content_body.find('img').each(function(i, val) {
+					if(val.naturalWidth < 215 || val.naturalHeight < 185) {
+						return true;
+					}
+					FavimExtension.addImageToFavimBar(content_body, val, val.naturalWidth, val.naturalHeight);
+				});
+
+				content_body.find('*[src]').not('img').each(function(i, val) {
+					var image = new Image();
+					image.src = $(val).attr('src');
+
+					if(image.width < 215 || image.height < 185) {
+						return true;
+					}
+					FavimExtension.addImageToFavimBar(content_body, val, image.width, image.height);
+				});
+
+				if(content_body.find('.favim-image').length == 1) {
+					var image = new Image();
+					image.src = content_body.find('.favim-image > img').attr('src');
+
+					content_body.find('.favim-image').css({
+						'background': 'url('+ $(image).attr('src') + ')',
+						'background-position': 'center top'
+					});
+
+					content_body.find('.favim-image, .favim-add').css({
+						width: image.width / 2,
+						height: image.height / 2
+					});
+
+					content_body.find('.favim-size').css({
+						width: image.width / 2
+					});
+
+
+					content_body.find('.favim-add-heart').css('left', '40%');
+
+					content_body.find('.favim-image > img').css('display', 'none');
+				}
+
+				content_body.find("#favim-save").css({
+					'height': content_body[0].scrollHeight
+				});
+
+				content_body.find('.favim-close').on('click', function(e) {
+					content_body.find('#favim-save').remove();
+				});
+
+				content_body.find(".favim-image").on('click', function(e) {
+					FavimExtension.uploadImage($(this).children(':first'));
+				});
+			}
+		});
+	},
+	onLoad: function() {
+		if(FavimExtension.isFirstRun()) {
+			FavimExtension.addIcon("nav-bar", "favim-button");
+			FavimExtension.addIcon("addon-bar", "favim-button");
+		}
+		var contextMenu = document.getElementById("contentAreaContextMenu");
+		if(contextMenu) {
+			contextMenu.addEventListener('popupshowing', function(e) {
+				var contextFavim = document.getElementById("contextFavim");
+				if($(document.popupNode).prop('tagName').toLowerCase() != 'img') {
+					contextFavim.hidden = true;
+					return;
+				}
+				contextFavim.hidden = false;
+			});
+		}
+	},
+	isFirstRun: function() {
+		var firstRun = FavimExtension.prefs.getBoolPref('extensions.favim.firstRun'),
+			currentVersion = 1.0;
+		if(firstRun) {
+			FavimExtension.prefs.setBoolPref('extensions.favim.firstRun', false);
+			FavimExtension.prefs.setCharPref('extensions.favim.installedVersion', currentVersion);
+		}
+
+		if(parseFloat(FavimExtension.prefs.getCharPref('extensions.favim.installedVersion')) < currentVersion) {
+			FavimExtension.prefs.setCharPref('extensions.favim.installedVersion', currentVersion.toString());
+
+			return true;
+		}
+
+		return firstRun;
 	},
 	addIcon: function(toolbarId, id) {
 		if(!document.getElementById(id)) {
@@ -28,311 +120,232 @@ var ProxyAddonBar = {
 			if(toolbarId == "addon-bar") {
 				toolbar.collapsed = false;
 			}
-	    }
+	    }		
 	},
-	activate: function() {
-		ProxyAddonBar.reset();
-		ProxyAddonBar.parseProxyList(function(ip_addr) {
-			var rand_proxy = ProxyAddonBar.randomProxy(ip_addr);
-			if(rand_proxy[3] == 'http') {
-				ProxyAddonBar.connectTo(rand_proxy);
+	getOffsetElement: function(element) {
+		var top = 0, left = 0
+	    while(element) {
+			top = top + parseFloat(element.offsetTop)
+			left = left + parseFloat(element.offsetLeft)
+			element = element.offsetParent        
+	    }
+
+		return {
+			top: Math.round(top), 
+			left: Math.round(left)
+		}
+	},
+	isUserLogged: function(callback) {
+		$.ajax({
+			url: 'http://favim.com/ext/getuser.php',
+			cache: false,
+			dataType: "json",
+			success: function(data) {
+				callback(data);
+			}
+		});
+	},
+	uploadImage: function(element) {
+		var popup = 'http://favim.com/ext/getpopup/',
+			current_src = $(element).attr('src');
+		if(content.document.domain == 'favim.ru' || content.document.domain == 'favim.com') {
+			FavimExtension.alertsService.showAlertNotification("chrome://Favim/skin/icon32.png", "Ошибка", "Невозможно загрузить изображения с самого сайта Favim.com.", false);
+			return false;
+		}
+		FavimExtension.isUserLogged(function(res) {
+			if($.isEmptyObject(res)) {
+				/* Пользователь не авторизован на favim.com */
+				FavimExtension.alertsService.showAlertNotification("chrome://Favim/skin/icon32.png", "Ошибка", "Вы не авторизованы на Favim.com.", false);
 			}
 			else {
-				ProxyAddonBar.connectToSSL(rand_proxy);
+				if(!current_src.match(/^[a-zа-я\-\_0-9\.]+\.[a-z]+|^https?\:\/\//i) && current_src.length < 256) {
+					current_src = 'http://' + content.document.domain + current_src;
+				}
+
+				let top = ($(content.window).height() / 2) - (380 / 2),
+					left = ($(content.window).width() / 2) - (590 / 2);
+
+				window.open(popup + '?media='+ encodeURIComponent(current_src), "Favin.com", "width=590, height=380, top="+ top + ", left="+ left);
 			}
-
-			document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
-
-			ProxyAddonBar.proxyList = ip_addr;
-
-			ProxyAddonBar.addItemsToProxyList();
 		});
 	},
-	reset: function() {
-		ProxyAddonBar.resetConfig();
-		document.getElementById('ip-address').children[0].style.color = '#12B300';
-		document.getElementById('ip-address').children[0].value = ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
+	contextSave: function(e) {
+		/* Сохраняем изображение при клике в контекстном меню */
+		FavimExtension.uploadImage($(document.popupNode));
 	},
-	ping: function() {
-		ProxyAddonBar.pingLogic(function(times) {
-			document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
-			document.getElementById('ip-address').children[0].style.color = (times < 8) ? '#12B300' : '#B30000';
-		});
+	URLIsInvalid: function(url) {
+		return url.match(/.+\.(jpg|jpeg|png|gif)$/i) ? false : true;
 	},
-	chooseProxy: function(event) {
-		if(!event.currentTarget.className.length) {
-			event.currentTarget.setAttribute('class', 'active');
-		}
-		else {
-			event.currentTarget.removeAttribute('class');
-		}
+	addFavimDragMenu: function(doc) {
+		if(!doc.find('.fw-main').length) {
+			doc.append('\
+				<div class="fw-main">\
+					<div class="fwsmall">\
+						<div class="fwlogo">favim.com</div>\
+						<div class="fwsmalltext">\
+							Перетащите картинку\
+							<br>\
+							чтобы сохранить\
+						</div>\
+					</div>\
+				</div>');
+
+			doc.find(".fw-main").css({
+				'top': $(content.window).height() / 2.5
+			});
+
+			doc.append('<style>@import "chrome://Favim/skin/overlay.css";</style>');
+		}	
 	},
-	changeProxy: function() {
-		ProxyAddonBar.resetConfig();
-
-		var hbox = document.getElementById('proxy-list-box').getElementsByTagName('hbox');
-		for(var i = 0; i < hbox.length; i++) {
-			if(hbox[i].className.length) {
-				var hbox_child = hbox[i].children[0],
-					proxy_type = hbox[i].getElementsByClassName('proxy-type')[0].innerHTML.toLowerCase();
-
-				if(proxy_type == 'http') {
-					ProxyAddonBar.connectTo([hbox_child.value, hbox_child.getAttribute('data-port')]);
-				}
-				else {
-					ProxyAddonBar.connectToSSL([hbox_child.value, hbox_child.getAttribute('data-port')]);
-				}
-
-				document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
-				break;
-			}
-		}
+	addFavimToPage: function(doc) {
+		doc.append('<div id="favim-save">\
+			<div class="favim-header">\
+				<div class="favim-logo"></div>\
+				<div class="favim-close"></div>\
+			</div>\
+			<div class="favim-body"></div>\
+		</div>');
 	},
-	refresh: function() {
-		ProxyAddonBar.reset();
-		ProxyAddonBar.parseProxyList(function(ip_addr) {
-			ProxyAddonBar.proxyList = ip_addr;
-			ProxyAddonBar.addItemsToProxyList();
-		});
-	},
-	getIPAddress: function() {
-		return ProxyAddonBar.prefs.getCharPref('network.proxy.http');
-	},
-	resetConfig: function() {
-		ProxyAddonBar.prefs.clearUserPref('network.proxy.http');
-		ProxyAddonBar.prefs.clearUserPref('network.proxy.http_port');
-		ProxyAddonBar.prefs.clearUserPref('network.proxy.type');
-
-		ProxyAddonBar.prefs.clearUserPref('network.proxy.ssl');
-		ProxyAddonBar.prefs.clearUserPref('network.proxy.ssl_port');
-	},
-	connectTo: function(addr) {
-		ProxyAddonBar.prefs.setCharPref('network.proxy.http', addr[0]);
-		ProxyAddonBar.prefs.setIntPref('network.proxy.http_port', addr[1]);
-		ProxyAddonBar.prefs.setIntPref('network.proxy.type', 1);
-	},
-	connectToSSL: function(addr) {
-		ProxyAddonBar.prefs.setCharPref('network.proxy.http', addr[0]);
-		ProxyAddonBar.prefs.setIntPref('network.proxy.http_port', addr[1]);
-
-		ProxyAddonBar.prefs.setCharPref('network.proxy.ssl', addr[0]);
-		ProxyAddonBar.prefs.setIntPref('network.proxy.ssl_port', addr[1]);
-		ProxyAddonBar.prefs.setIntPref('network.proxy.type', 1);		
-	},
-	randomProxy: function(proxy) {
-		return proxy[parseInt(Math.random() * proxy.length - 1)];
-	},
-	pingLogic: function(callback) {
-		var req = new XMLHttpRequest(),
-			win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
-			pinged = 0,
-			isCompleted = false;
-
-		win.onload = function() {
-			win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('waitCheckSpeed');
-		}
-
-		var	interval = setInterval(function() {
-			win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('doneSeconds') + ': ' + parseInt(8 - pinged) + ' ' + ProxyAddonBar.stringBundle.getString('seconds');
-
-			if(pinged >= 8) {
-				win.close();
-				clearInterval(interval);
-
-				isCompleted = true;
-
-				callback(pinged);
-				return false;
-			}
-
-			pinged++;
-			
-		}, 1000);
-
-		req.open('GET', 'http://www.mozilla.org/', true);
-		req.onreadystatechange = function() {
-			if(req.readyState == 4) {
-				win.close();
-				clearInterval(interval);
-				if(!isCompleted) {
-					callback(pinged);
-				}
-			}
-		}
-		req.send(null);
-	},
-	addItemsToProxyList: function() {
-		var no_addr = document.getElementById('no_addresses');
-		if(no_addr) {
-			document.getElementById('proxy-list-box').removeChild(no_addr);
-		}
-
-		var proxy_list = document.getElementById('proxy-list-box');
-
-		while(proxy_list.firstChild) {
-			proxy_list.removeChild(proxy_list.firstChild);
-		}
-
-		for(var i = 0; i < ProxyAddonBar.proxyList.length; i++) {
-			ProxyAddonBar.addProxyItem(ProxyAddonBar.proxyList[i][0], ProxyAddonBar.proxyList[i][1], ProxyAddonBar.proxyList[i][2], ProxyAddonBar.proxyList[i][3]);
-		}
-	},
-	addProxyItem: function(value, port, country, type) {
-		var xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul',
-			hbox = document.createElementNS(xulNS, 'hbox');
-			element = document.createElementNS(xulNS, 'label'),
-			el_country = document.createElementNS(xulNS, 'label'),
-			el_type = document.createElementNS(xulNS, 'label');
-
-		element.setAttribute('value', value);
-		element.setAttribute('data-port', port);
-
-		hbox.addEventListener('click', function(e) {
-			ProxyAddonBar.chooseProxy(e);
-		}, false);
-
-		el_country.textContent = country;
-		el_country.setAttribute('class', 'proxy-country');
-
-		el_type.textContent = type.toUpperCase();
-		el_type.setAttribute('class', 'proxy-type');
-
-		document.getElementById('proxy-list-box').appendChild(hbox);
-		hbox.appendChild(element);
-		hbox.appendChild(el_type);
-		hbox.appendChild(el_country);
-	},
-	parseProxyList: function(callback) {
-		var req = new XMLHttpRequest();
-		req.open('GET', 'http://proxylist.hidemyass.com/', true);
-
-		var win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
-
-		req.onreadystatechange = function() {
-			if(req.readyState == 4) {
-				if(req.status == 200) {
-
-					var response = req.responseText,
-						parser = new DOMParser(),
-						doc = parser.parseFromString(response, "text/html"),
-						doc_table = doc.getElementById("listable"),
-						doc_tr = doc_table.getElementsByTagName('tbody')[0].getElementsByTagName('tr'),
-						ip_addr = [];
-
-					for(var i = 0; i < doc_tr.length; i++) {
-						var doc_td = [
-								doc_tr[i].getElementsByTagName('td')[1], 
-								doc_tr[i].getElementsByTagName('td')[2], 
-								doc_tr[i].getElementsByTagName('td')[4], 
-								doc_tr[i].getElementsByTagName('td')[5], 
-								doc_tr[i].getElementsByTagName('td')[3],
-								doc_tr[i].getElementsByTagName('td')[6],
-							],
-							span = doc_td[0].getElementsByTagName('span')[0],
-							loopAddr = '',
-							proxySpeed = doc_td[2].getElementsByClassName('progress-indicator')[0].children[0].style.width,
-							connectionTime = doc_td[3].getElementsByClassName('progress-indicator')[0].children[0].style.width,
-							country = doc_td[4].getElementsByTagName('span')[0].textContent,
-							proxy_type = doc_td[5].innerHTML.toLowerCase();
-
-						if(connectionTime < parseInt(connectionTime) || parseInt(proxySpeed) < 40) {
-							continue;
-						}
-
-						if(proxy_type != 'http' && proxy_type != 'https') {
-							continue;
-						}
-
-						var match = span.getElementsByTagName('style')[0].innerHTML.match(/([^\n|.]+display:(?!none))/g),
-							allElements = span.childNodes;
-
-						for(var b = 0; b < allElements.length; b++) {
-							var this_span = allElements[b],
-								isLoop = false;
-
-							if(this_span.textContent.length && this_span.tagName == undefined) {
-								loopAddr += (loopAddr.length) ? '.' + this_span.textContent : this_span.textContent;
-								continue;
-							}
-
-							if(this_span.style.display == "none") {
-								continue;
-							}
-
-							if(this_span.tagName.toLowerCase() == 'style') {
-								continue;
-							}
-
-							if(this_span.className.length) {
-								for(var r = 0; r < match.length; r++) {
-									if(match[r].replace(/{.*/, '') == this_span.className) {
-										isLoop = true;
-										break;
-									}
-								}
-							}
-
-							if(!this_span.innerHTML.length || this_span.innerHTML === '.') {
-								continue;
-							}
-
-							if(!this_span.className.match(/^[0-9]+$/) && !isLoop && !this_span.style.display) {
-								continue;
-							}
-
-							loopAddr += (loopAddr.length) ? '.' + this_span.innerHTML : this_span.innerHTML;
-						}
-
-						ip_addr.push([
-							loopAddr.replace(/\.{2,}/g, '.'), doc_td[1].innerHTML, country, proxy_type
-						]);
-					}
-
-					win.close();
-
-					callback(ip_addr);
-				}
-			}
-		}
-		req.send(null);
-	},
-	preventHide: function(e) {
-	    e.preventDefault();
-	},
-	isFirstRun: function() {
-		var firstRun = ProxyAddonBar.prefs.getBoolPref('extensions.firex.firstRun'),
-			currentVersion = 3.3;
-		if(firstRun) {
-			ProxyAddonBar.prefs.setBoolPref('extensions.firex.firstRun', false);
-			ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion);
-		}
-
-		if(parseFloat(ProxyAddonBar.prefs.getCharPref('extensions.firex.installedVersion')) < currentVersion) {
-			ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion.toString());
-
-			return true;
-		}
-
-		return firstRun;
+	addImageToFavimBar: function(content, image, width, height) {
+		content.find('#favim-save .favim-body').append('\
+			<div class="favim-image">\
+				<img src="'+ $(image).attr("src") +'" />\
+				<div class="favim-size">\
+					<div class="favim-text">\
+						'+ width + 'x' + height +'\
+					</div>\
+				</div>\
+				<div class="favim-add"></div>\
+				<div class="favim-add-heart"></div>\
+			</div>\
+		');
 	}
+
 };
 
-window.addEventListener("load", function(e) {
-	setTimeout(function() {
-		var popup = document.getElementById('proxy-popup');
-		popup.addEventListener('mouseenter', function(e) {
-			if(!e.relatedTarget) { 
-				this.addEventListener('popuphiding', ProxyAddonBar.preventHide, false);
-			}
-		});
-		popup.addEventListener('mouseleave', function(e) {
-			if(!e.relatedTarget) {
-				this.removeEventListener('popuphiding', ProxyAddonBar.preventHide, false);
-			}
-		});
+window.addEventListener("load", function load(e) {
+	FavimExtension.onLoad();
 
-		ProxyAddonBar.onLoad(document.getElementById('firex-string-bundle'));
-				
-		document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
-	}, 5000);
+	window.removeEventListener("load", load, false);
+
+	if(gBrowser) {
+	    gBrowser.addEventListener('DOMContentLoaded', function(event) {
+
+	    	var doc = $(content.document.body),
+	    		current_image = null;
+
+	    	FavimExtension.addFavimDragMenu(doc);
+
+	    	if(!doc.find("#favimImage").length) {
+	    		doc.append('<div id="favimImage" style="background: url(chrome://Favim/skin/icon24.png); width: 24px; height: 24px; cursor: pointer; z-index: 999; position: absolute; top: 0; left: 0; display: none;"></div>')
+	    	}
+			doc.on('mouseover', "img", function(e) {
+				if(content.document.domain == 'favim.ru' || content.document.domain == 'favim.com') {
+					return false;
+				}
+				if(this.width < 215 || this.height < 185) {
+					return false;
+				}
+
+				current_image = $(this);
+
+				var offset = $(this).offset();
+				doc.find("#favimImage").css({
+					'left': offset.left + 10,
+					'top': offset.top + 10,
+					'display': 'block'
+				});
+			})
+			doc.on('mouseout', "img", function(e) {
+				if(doc.find("#favimImage")[0] === $(e.relatedTarget)[0]) {
+					return false;
+				}
+				doc.find("#favimImage").css('display', 'none');
+			});
+			doc.unbind('click').on('click', "#favimImage", function(e) {
+				$(this).css('display', 'none');
+
+				FavimExtension.uploadImage(current_image);
+			});
+
+			/* drag & drop */
+
+			doc.on('dragstart', function(e) {
+				if($(e.target).is('img')) {
+					doc.find(".fw-main").css('display', 'block');
+					FavimExtension.currentElement = $(e.target);
+				}
+				else {
+					var children = $(e.target).find('img');
+					if(children.length) {
+						doc.find(".fw-main").css('display', 'block');
+						FavimExtension.currentElement = children;
+					}
+				}
+			});
+			doc.on('dragover', '.fw-main', function(e) {
+				e.preventDefault();
+			});
+			doc.unbind('drop').on('drop', '.fw-main', function(e) {
+				e.preventDefault();
+				FavimExtension.uploadImage(FavimExtension.currentElement);
+			});
+			doc.on('dragend', function(e) {
+				doc.find(".fw-main").css('display', 'none');
+			});
+
+			/* iframe */
+			doc.find('iframe').load(function() {
+				var iframe_body = $(this).contents().find('body');
+		    	if(!$(this).contents().find("#favimImage").length) {
+		    		iframe_body.append('<div id="favimImage" style="background: url(chrome://Favim/skin/icon24.png); width: 24px; height: 24px; cursor: pointer; z-index: 999; position: absolute; top: 0; left: 0; display: none;"></div>')
+		    	}
+
+				iframe_body.on('dragstart', function(e) {
+					if($(e.target).is('img')) {
+						doc.find(".fw-main").css('display', 'block');
+						FavimExtension.currentElement = $(e.target);
+					}
+					else {
+						var children = $(e.target).find('img');
+						if(children.length) {
+							doc.find(".fw-main").css('display', 'block');
+							FavimExtension.currentElement = children;
+						}
+					}
+				});
+				iframe_body.on('dragend', function(e) {
+					doc.find(".fw-main").css('display', 'none');
+				});
+				iframe_body.on('mouseover', "img", function(e) {
+					if(content.document.domain == 'favim.ru' || content.document.domain == 'favim.com') {
+						return false;
+					}
+					if(this.naturalWidth < 215 || this.naturalHeight < 185) {
+						return false;
+					}
+
+					current_image = $(this);
+
+					var offset = $(this).offset();
+					iframe_body.find('#favimImage').css({
+						'left': offset.left + 10,
+						'top': offset.top + 10,
+						'display': 'block'
+					});
+				})
+				iframe_body.on('mouseout', "img", function(e) {
+					if(iframe_body.find('#favimImage')[0] === $(e.relatedTarget)[0]) {
+						return false;
+					}
+					iframe_body.find('#favimImage').css('display', 'none');
+				});
+				iframe_body.unbind('click').on('click', "#favimImage", function(e) {
+					$(this).css('display', 'none');
+
+					FavimExtension.uploadImage(current_image);
+				});
+			});
+	    }, false);
+	}
 }, false);
