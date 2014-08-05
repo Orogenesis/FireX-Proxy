@@ -1,3 +1,7 @@
+if(typeof wrapper == 'undefined') {
+	var wrapper = {};
+}
+
 var ProxyAddonBar = {
 
 	proxyList: [],
@@ -123,43 +127,43 @@ var ProxyAddonBar = {
 		return proxy[parseInt(Math.random() * proxy.length - 1)];
 	},
 	pingLogic: function(callback) {
-		var req = new XMLHttpRequest(),
-			win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
-			pinged = 0,
-			isCompleted = false;
+		wrapper.req = new XMLHttpRequest(),
+		wrapper.win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
+		wrapper.pinged = 0,
+		wrapper.isCompleted = false;
 
-		win.onload = function() {
-			win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('waitCheckSpeed');
+		wrapper.win.onload = function() {
+			wrapper.win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('waitCheckSpeed');
 		}
 
 		var	interval = setInterval(function() {
-			win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('doneSeconds') + ': ' + parseInt(8 - pinged) + ' ' + ProxyAddonBar.stringBundle.getString('seconds');
+			wrapper.win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('doneSeconds') + ': ' + parseInt(8 - wrapper.pinged) + ' ' + ProxyAddonBar.stringBundle.getString('seconds');
 
-			if(pinged >= 8) {
-				win.close();
+			if(wrapper.pinged >= 8) {
+				wrapper.win.close();
 				clearInterval(interval);
 
-				isCompleted = true;
+				wrapper.isCompleted = true;
 
-				callback(pinged);
+				callback(wrapper.pinged);
 				return false;
 			}
 
-			pinged++;
+			wrapper.pinged++;
 			
 		}, 1000);
 
-		req.open('GET', 'http://www.mozilla.org/', true);
-		req.onreadystatechange = function() {
-			if(req.readyState == 4) {
-				win.close();
+		wrapper.req.open('GET', 'http://www.mozilla.org/', true);
+		wrapper.req.onreadystatechange = function() {
+			if(wrapper.req.readyState == 4) {
+				wrapper.win.close();
 				clearInterval(interval);
-				if(!isCompleted) {
-					callback(pinged);
+				if(!wrapper.isCompleted) {
+					callback(wrapper.pinged);
 				}
 			}
 		}
-		req.send(null);
+		wrapper.req.send(null);
 	},
 	addItemsToProxyList: function() {
 		var no_addr = document.getElementById('no_addresses');
@@ -178,29 +182,29 @@ var ProxyAddonBar = {
 		}
 	},
 	addProxyItem: function(value, port, country, type) {
-		var xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul',
-			hbox = document.createElementNS(xulNS, 'hbox');
-			element = document.createElementNS(xulNS, 'label'),
-			el_country = document.createElementNS(xulNS, 'label'),
-			el_type = document.createElementNS(xulNS, 'label');
+		wrapper.xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul',
+		wrapper.hbox = document.createElementNS(wrapper.xulNS, 'hbox');
+		wrapper.element = document.createElementNS(wrapper.xulNS, 'label'),
+		wrapper.el_country = document.createElementNS(wrapper.xulNS, 'label'),
+		wrapper.el_type = document.createElementNS(wrapper.xulNS, 'label');
 
-		element.setAttribute('value', value);
-		element.setAttribute('data-port', port);
+		wrapper.element.setAttribute('value', value);
+		wrapper.element.setAttribute('data-port', port);
 
-		hbox.addEventListener('click', function(e) {
+		wrapper.hbox.addEventListener('click', function(e) {
 			ProxyAddonBar.chooseProxy(e);
 		}, false);
 
-		el_country.textContent = country;
-		el_country.setAttribute('class', 'proxy-country');
+		wrapper.el_country.textContent = country;
+		wrapper.el_country.setAttribute('class', 'proxy-country');
 
-		el_type.textContent = type.toUpperCase();
-		el_type.setAttribute('class', 'proxy-type');
+		wrapper.el_type.textContent = type.toUpperCase();
+		wrapper.el_type.setAttribute('class', 'proxy-type');
 
-		document.getElementById('proxy-list-box').appendChild(hbox);
-		hbox.appendChild(element);
-		hbox.appendChild(el_type);
-		hbox.appendChild(el_country);
+		document.getElementById('proxy-list-box').appendChild(wrapper.hbox);
+		wrapper.hbox.appendChild(wrapper.element);
+		wrapper.hbox.appendChild(wrapper.el_type);
+		wrapper.hbox.appendChild(wrapper.el_country);
 	},
 	parseProxyList: function(callback) {
 		var req = new XMLHttpRequest();
@@ -301,7 +305,7 @@ var ProxyAddonBar = {
 	},
 	isFirstRun: function() {
 		var firstRun = ProxyAddonBar.prefs.getBoolPref('extensions.firex.firstRun'),
-			currentVersion = 3.3;
+			currentVersion = 3.4;
 		if(firstRun) {
 			ProxyAddonBar.prefs.setBoolPref('extensions.firex.firstRun', false);
 			ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion);
@@ -319,8 +323,9 @@ var ProxyAddonBar = {
 
 window.addEventListener("load", function(e) {
 	var popup = document.getElementById('proxy-popup');
+
 	popup.addEventListener('mouseenter', function(e) {
-		if(!e.relatedTarget) { 
+		if(!e.relatedTarget) {
 			this.addEventListener('popuphiding', ProxyAddonBar.preventHide, false);
 		}
 	});
