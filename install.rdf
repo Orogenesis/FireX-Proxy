@@ -4,7 +4,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>divanproger@gmail.com</em:id>
     <em:name>FireX Proxy</em:name>
-    <em:version>3.5</em:version>
+    <em:version>3.6</em:version>
     <em:description>FireX Proxy extension.</em:description>
     <em:creator>Exclumice</em:creator>
     <em:homepageURL>https://addons.mozilla.org/ru/firefox/user/Exclumice/</em:homepageURL>
@@ -15,7 +15,7 @@
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:type>2</em:type>
         <em:minVersion>10.0</em:minVersion>
-        <em:maxVersion>30.*</em:maxVersion>
+        <em:maxVersion>32.*</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>
