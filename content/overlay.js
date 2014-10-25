@@ -7,6 +7,7 @@ var ProxyAddonBar = {
     proxyList: [],
     prefs: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
     stringBundle: null,
+    ip_address: null,
 
     onLoad: function(str) {
         ProxyAddonBar.stringBundle = str;
@@ -48,7 +49,10 @@ var ProxyAddonBar = {
                 ProxyAddonBar.connectToSSL(rand_proxy);
             }
 
-            document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
+            if(ProxyAddonBar.ip_address)
+            {
+                ProxyAddonBar.ip_address.children[0].value = ProxyAddonBar.getIPAddress();
+            }
 
             ProxyAddonBar.proxyList = ip_addr;
 
@@ -57,13 +61,19 @@ var ProxyAddonBar = {
     },
     reset: function() {
         ProxyAddonBar.resetConfig();
-        document.getElementById('ip-address').children[0].style.color = '#12B300';
-        document.getElementById('ip-address').children[0].value = ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
+        if(ProxyAddonBar.ip_address)
+        {
+            ProxyAddonBar.ip_address.children[0].style.color = '#12B300';
+            ProxyAddonBar.ip_address.children[0].value = ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
+        }
     },
     ping: function() {
         ProxyAddonBar.pingLogic(function(times) {
-            document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
-            document.getElementById('ip-address').children[0].style.color = (times < 8) ? '#12B300' : '#B30000';
+            if(ProxyAddonBar.ip_address)
+            {
+                ProxyAddonBar.ip_address.children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
+                ProxyAddonBar.ip_address.children[0].style.color = (times < 8) ? '#12B300' : '#B30000';
+            }
         });
     },
     chooseProxy: function(event) {
@@ -97,7 +107,11 @@ var ProxyAddonBar = {
                     ProxyAddonBar.connectToSSL([hbox_child.value, hbox_child.getAttribute('data-port')]);
                 }
 
-                document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
+                if(ProxyAddonBar.ip_address)
+                {
+                    document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
+                }
+                
                 break;
             }
         }
@@ -353,6 +367,12 @@ window.addEventListener("load", function(e) {
     }
 
     ProxyAddonBar.onLoad(document.getElementById('firex-string-bundle'));
-            
-    document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
+           
+    var ip_address = document.getElementById('ip-address');
+    if(ip_address)
+    {
+        ip_address.children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
+
+        ProxyAddonBar.ip_address = ip_address;
+    }
 }, false);
