@@ -40,14 +40,11 @@ var ProxyAddonBar = {
 
             if (rand_proxy[3] == 'http') {
                 ProxyAddonBar.connectTo(rand_proxy);
-            }
-            else {
+            } else {
                 ProxyAddonBar.connectToSSL(rand_proxy);
             }
 
-            if (ProxyAddonBar.ip_address) {
-                ProxyAddonBar.ip_address.children[0].value = ProxyAddonBar.getIPAddress();
-            }
+            if (ProxyAddonBar.ip_address) ProxyAddonBar.ip_address.children[0].value = ProxyAddonBar.getIPAddress();
 
             ProxyAddonBar.proxyList = ip_addr;
 
@@ -83,8 +80,7 @@ var ProxyAddonBar = {
             }
 
             event.currentTarget.setAttribute('class', 'active');
-        }
-        else {
+        } else {
             event.currentTarget.removeAttribute('class');
         }
     },
@@ -100,14 +96,11 @@ var ProxyAddonBar = {
 
                 if (proxy_type == 'http') {
                     ProxyAddonBar.connectTo([hbox_child.value, hbox_child.getAttribute('data-port')]);
-                }
-                else {
+                } else {
                     ProxyAddonBar.connectToSSL([hbox_child.value, hbox_child.getAttribute('data-port')]);
                 }
 
-                if (ProxyAddonBar.ip_address) {
-                    document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
-                }
+                if (ProxyAddonBar.ip_address) document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
 
                 break;
             }
@@ -150,14 +143,14 @@ var ProxyAddonBar = {
         return proxy[parseInt(Math.random() * proxy.length - 1)];
     },
     pingLogic: function (callback) {
-        wrapper.req = new XMLHttpRequest(),
-            wrapper.win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
-        wrapper.pinged = 0,
-            wrapper.isCompleted = false;
+        wrapper.req = new XMLHttpRequest();
+        wrapper.win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
+        wrapper.pinged = 0;
+        wrapper.isCompleted = false;
 
         wrapper.win.onload = function () {
             wrapper.win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('waitCheckSpeed');
-        }
+        };
 
         var interval = setInterval(function () {
             wrapper.win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('doneSeconds') + ': ' + parseInt(8 - wrapper.pinged) + ' ' + ProxyAddonBar.stringBundle.getString('seconds');
@@ -184,7 +177,7 @@ var ProxyAddonBar = {
                     callback(wrapper.pinged);
                 }
             }
-        }
+        };
         wrapper.req.send(null);
     },
     addItemsToProxyList: function () {
@@ -198,11 +191,11 @@ var ProxyAddonBar = {
         while (proxy_list.firstChild) proxy_list.removeChild(proxy_list.firstChild);
     },
     addProxyItem: function (value, port, country, type) {
-        wrapper.xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul',
-            wrapper.hbox = document.createElementNS(wrapper.xulNS, 'hbox');
-        wrapper.element = document.createElementNS(wrapper.xulNS, 'label'),
-            wrapper.el_country = document.createElementNS(wrapper.xulNS, 'label'),
-            wrapper.el_type = document.createElementNS(wrapper.xulNS, 'label');
+        wrapper.xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+        wrapper.hbox = document.createElementNS(wrapper.xulNS, 'hbox');
+        wrapper.element = document.createElementNS(wrapper.xulNS, 'label');
+        wrapper.el_country = document.createElementNS(wrapper.xulNS, 'label');
+        wrapper.el_type = document.createElementNS(wrapper.xulNS, 'label');
 
         wrapper.element.setAttribute('value', value);
         wrapper.element.setAttribute('data-port', port);
@@ -239,9 +232,7 @@ var ProxyAddonBar = {
                     for (var i = 0; i < doc_tr.length; i++) {
                         var doc_td = [];
 
-                        for (var d = 0; d <= 5; d++) {
-                            doc_td.push(doc_tr[i].getElementsByTagName("td")[d + 1]);
-                        }
+                        for (var d = 0; d <= 5; d++) doc_td.push(doc_tr[i].getElementsByTagName("td")[d + 1]);
 
                         var span = doc_td[0].getElementsByTagName('span')[0];
                         var loopAddr = '';
@@ -250,13 +241,9 @@ var ProxyAddonBar = {
                         var country = doc_td[2].getElementsByTagName('span')[0].textContent;
                         var proxy_type = doc_td[5].innerHTML.toLowerCase();
 
-                        if (connectionTime < parseInt(connectionTime) || parseInt(proxySpeed) < 40) {
-                            continue;
-                        }
+                        if (connectionTime < parseInt(connectionTime) || parseInt(proxySpeed) < 40) continue;
 
-                        if (proxy_type != 'http' && proxy_type != 'https') {
-                            continue;
-                        }
+                        if (proxy_type != 'http' && proxy_type != 'https') continue;
 
                         var match = span.getElementsByTagName('style')[0].innerHTML.match(/([^\n|.]+display:(?!none))/g),
                             allElements = span.childNodes;
@@ -270,13 +257,9 @@ var ProxyAddonBar = {
                                 continue;
                             }
 
-                            if (this_span.style.display == "none") {
-                                continue;
-                            }
+                            if (this_span.style.display == "none") continue;
 
-                            if (this_span.tagName.toLowerCase() == 'style') {
-                                continue;
-                            }
+                            if (this_span.tagName.toLowerCase() == 'style') continue;
 
                             if (this_span.className.length) {
                                 for (var r = 0; r < match.length; r++) {
@@ -287,13 +270,9 @@ var ProxyAddonBar = {
                                 }
                             }
 
-                            if (!this_span.innerHTML.length || this_span.innerHTML === '.') {
-                                continue;
-                            }
+                            if (!this_span.innerHTML.length || this_span.innerHTML === '.') continue;
 
-                            if (!this_span.className.match(/^[0-9]+$/) && !isLoop && !this_span.style.display) {
-                                continue;
-                            }
+                            if (!this_span.className.match(/^[0-9]+$/) && !isLoop && !this_span.style.display) continue;
 
                             loopAddr += (loopAddr.length) ? '.' + this_span.innerHTML : this_span.innerHTML;
                         }
@@ -306,7 +285,7 @@ var ProxyAddonBar = {
                     callback(ip_addr);
                 }
             }
-        }
+        };
         req.send(null);
     },
     openList: function () {
@@ -322,7 +301,6 @@ var ProxyAddonBar = {
 
         if (parseFloat(ProxyAddonBar.prefs.getCharPref('extensions.firex.installedVersion')) < currentVersion) {
             ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion.toString());
-
             return true;
         }
 
@@ -336,7 +314,6 @@ window.addEventListener("load", function (e) {
     var ip_address = document.getElementById('ip-address');
     if (ip_address) {
         ip_address.children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
-
         ProxyAddonBar.ip_address = ip_address;
     }
 }, false);

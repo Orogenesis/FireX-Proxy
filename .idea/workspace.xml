@@ -27,8 +27,8 @@
       <file leaf-file-name="overlay.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/content/overlay.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.35433072" vertical-offset="1691" max-vertical-offset="5899">
-              <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+            <state vertical-scroll-proportion="5.4881887" vertical-offset="0" max-vertical-offset="5508">
+              <caret line="287" column="10" selection-start-line="287" selection-start-column="10" selection-end-line="287" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -260,8 +260,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/content/overlay.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35433072" vertical-offset="1691" max-vertical-offset="5899">
-          <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+        <state vertical-scroll-proportion="5.4881887" vertical-offset="0" max-vertical-offset="5508">
+          <caret line="287" column="10" selection-start-line="287" selection-start-column="10" selection-end-line="287" selection-end-column="10" />
           <folding />
         </state>
       </provider>
