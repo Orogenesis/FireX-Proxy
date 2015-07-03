@@ -30,34 +30,28 @@ toolbarpaletteitem[place="palette"] #myextension-button {
 	background-color: #F0F0F0;
 	height: 200px;
 	overflow-y: auto;
-	width: 350px;
 	margin: 10px 0 10px 0;
 }
-#proxy-list-menu menupopup {
-	max-height: 400px;
-	-moz-appearance: none;
-	width: 450px;
-	padding: 10px;
-}
-.proxy-button {
+.proxy-button, .proxy-refresh-button {
 	padding: 5px;
 	border: none;
 	color: #fff;
-	font-size: 14px;
+	font-size: 12px;
 	-moz-appearance: none;
 	cursor: pointer;
-	border-radius: 10px;
 	background-repeat: no-repeat;
-	background-color: #e74c3c;
+    background-color: #3498db;
+    font-family: 'Open Sans', sans-serif;
 }
-.proxy-button:hover {
-	background-color: rgba(0, 0, 0, 0.3);
-}
-.proxy-button > label {
+.proxy-button > label, .proxy-refresh-button > label {
 	text-transform: uppercase;
+}
+.proxy-refresh-button:hover, .proxy-button:hover {
+    background-color: #2980b9;
 }
 .proxy-list .active {
 	background-color: #55b128;
+    padding: 5px 0;
 }
 .proxy-list hbox {
 	font-size: 14px;
@@ -68,8 +62,6 @@ toolbarpaletteitem[place="palette"] #myextension-button {
 	cursor: pointer;
 }
 .proxy-list hbox > label:first-child {
-	border-top-left-radius: 10px;
-	border-bottom-left-radius: 10px;
 	padding: 5px;
 	width: 140px;
 }
@@ -81,8 +73,6 @@ toolbarpaletteitem[place="palette"] #myextension-button {
 }
 .proxy-list hbox > label.proxy-country {
 	padding: 5px;
-	border-top-right-radius: 10px;
-	border-bottom-right-radius: 10px;
 	background: url("planet.png");
 	background-position: 5px center;
 	background-repeat: no-repeat;
@@ -111,19 +101,7 @@ toolbarpaletteitem[place="palette"] #myextension-button {
 .proxy-help-text > label {
 	width: 80%;
 }
-.proxy-refresh-button {
-	padding: 5px;
-	border: none;
-	-moz-appearance: none;
-	cursor: pointer;
-	border-radius: 10px;
-	background-repeat: no-repeat;
-	background-color: #e74c3c;
-	color: #fff;
-}
-.proxy-refresh-button:hover {
-	background-color: rgba(0, 0, 0, 0.3);
-}
-.proxy-refresh-button > label {
-	text-transform: uppercase;
+#proxy-list-panel {
+    padding: 10px;
+    background-color: #fff !important;
 }
