@@ -158,14 +158,11 @@ var ProxyAddonBar = {
             if (wrapper.pinged >= 8) {
                 wrapper.win.close();
                 clearInterval(interval);
-
                 wrapper.isCompleted = true;
-
                 return callback(wrapper.pinged);
             }
 
             wrapper.pinged++;
-
         }, 1000);
 
         wrapper.req.open('GET', 'http://www.mozilla.org/', true);
@@ -299,7 +296,8 @@ var ProxyAddonBar = {
     },
     isFirstRun: function () {
         var firstRun = ProxyAddonBar.prefs.getBoolPref('extensions.firex.firstRun'),
-            currentVersion = 3.6;
+            currentVersion = 3.7;
+
         if (firstRun) {
             ProxyAddonBar.prefs.setBoolPref('extensions.firex.firstRun', false);
             ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion);
