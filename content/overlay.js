@@ -222,64 +222,70 @@ var ProxyAddonBar = {
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
                 if (req.status == 200) {
-                    var response = req.responseText;
-                    var parser = new DOMParser();
-                    var doc = parser.parseFromString(response, "text/html");
-                    var doc_table = doc.getElementById("listable");
-                    var doc_tr = doc_table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                    var doc = new DOMParser().parseFromString(req.responseText, "text/html");
                     var ip_addr = [];
+                    var doc_table = doc.getElementById("listable");
 
-                    for (var i = 0; i < doc_tr.length; i++) {
-                        var doc_td = [];
+                    if (doc_table != undefined) {
+                        var doc_tr = doc_table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
-                        for (var d = 0; d <= 5; d++) doc_td.push(doc_tr[i].getElementsByTagName("td")[d + 1]);
+                        for (var i = 0; i < doc_tr.length; i++) {
+                            var doc_td = [];
 
-                        var span = doc_td[0].getElementsByTagName('span')[0];
-                        var loopAddr = '';
-                        var proxySpeed = doc_td[3].getElementsByClassName('progress-indicator')[0].children[0].style.width;
-                        var connectionTime = doc_td[4].getElementsByClassName('progress-indicator')[0].children[0].style.width;
-                        var country = doc_td[2].getElementsByTagName('span')[0].textContent;
-                        var proxy_type = doc_td[5].innerHTML.toLowerCase();
+                            for (var d = 0; d <= 5; d++) doc_td.push(doc_tr[i].getElementsByTagName("td")[d + 1]);
 
-                        if (connectionTime < parseInt(connectionTime) || parseInt(proxySpeed) < 40) continue;
+                            var span = doc_td[0].getElementsByTagName('span')[0];
+                            var loopAddr = [];
+                            var proxyCondition = {
+                                proxySpeed: parseInt(doc_td[3].getElementsByClassName('progress-indicator')[0].children[0].style.width),
+                                connectionTime: parseInt(doc_td[4].getElementsByClassName('progress-indicator')[0].children[0].style.width),
+                                country: doc_td[2].getElementsByTagName('span')[0].textContent,
+                                proxyType: doc_td[5].innerHTML.toLowerCase()
+                            };
 
-                        if (proxy_type != 'http' && proxy_type != 'https') continue;
+                            if (proxyCondition.connectionTime < 60 || proxyCondition.proxySpeed < 40) continue;
 
-                        var match = span.getElementsByTagName('style')[0].innerHTML.match(/([^\n|.]+display:(?!none))/g),
-                            allElements = span.childNodes;
+                            if (proxyCondition.proxyType != 'http' && proxyCondition.proxyType != 'https') continue;
 
-                        for (var b = 0; b < allElements.length; b++) {
-                            var this_span = allElements[b],
-                                isLoop = false;
+                            var match = span.getElementsByTagName('style')[0].innerHTML.match(/([^\n|.]+display:(?!none))/g),
+                                allElements = span.childNodes;
 
-                            if (this_span.textContent.length && this_span.tagName == undefined) {
-                                loopAddr += (loopAddr.length) ? '.' + this_span.textContent : this_span.textContent;
-                                continue;
-                            }
+                            for (var b = 0; b < allElements.length; b++) {
+                                var this_span = allElements[b],
+                                    isLoop = false;
 
-                            if (this_span.style.display == "none") continue;
+                                if (this_span.textContent.length && this_span.tagName == undefined) {
+                                    loopAddr.push(this_span.textContent);
+                                    continue;
+                                }
 
-                            if (this_span.tagName.toLowerCase() == 'style') continue;
+                                if (this_span.style.display == "none") continue;
 
-                            if (this_span.className.length) {
-                                for (var r = 0; r < match.length; r++) {
-                                    if (match[r].replace(/{.*/, '') == this_span.className) {
-                                        isLoop = true;
-                                        break;
+                                if (this_span.tagName.toLowerCase() == 'style') continue;
+
+                                if (this_span.className.length) {
+                                    for (var r = 0; r < match.length; r++) {
+                                        if (match[r].replace(/{.*/, '') == this_span.className) {
+                                            isLoop = true;
+                                            break;
+                                        }
                                     }
                                 }
+
+                                if (!this_span.innerHTML.length || this_span.innerHTML === '.') continue;
+
+                                if (!this_span.className.match(/^[0-9]+$/) && !isLoop && !this_span.style.display) continue;
+
+                                loopAddr.push(this_span.innerHTML);
                             }
 
-                            if (!this_span.innerHTML.length || this_span.innerHTML === '.') continue;
-
-                            if (!this_span.className.match(/^[0-9]+$/) && !isLoop && !this_span.style.display) continue;
-
-                            loopAddr += (loopAddr.length) ? '.' + this_span.innerHTML : this_span.innerHTML;
+                            ip_addr.push([
+                                loopAddr.join('.').replace(/\.{2,}/g, '.'),
+                                doc_td[1].innerHTML,
+                                proxyCondition.country,
+                                proxyCondition.proxyType
+                            ]);
                         }
-
-                        ip_addr.push([
-                            loopAddr.replace(/\.{2,}/g, '.'), doc_td[1].innerHTML, country, proxy_type
-                        ]);
                     }
 
                     callback(ip_addr);
