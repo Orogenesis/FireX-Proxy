@@ -1,31 +1,30 @@
 if (typeof wrapper == 'undefined') var wrapper = {};
 
 var ProxyAddonBar = {
-
+    PING_TIMES: 10, // const
     proxyList: [],
     prefs: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
     stringBundle: null,
     ip_address: null,
+    proxyManager: null,
 
     onLoad: function (str) {
-        ProxyAddonBar.stringBundle = str;
+        this.stringBundle = str;
 
-        if (ProxyAddonBar.isFirstRun()) {
+        if (this.isFirstRun()) {
             /* icon */
-            ProxyAddonBar.addIcon("nav-bar", "myextension-button");
-            ProxyAddonBar.addIcon("addon-bar", "myextension-button");
+            this.addIcon("nav-bar", "myextension-button");
+            this.addIcon("addon-bar", "myextension-button");
             /* ip address */
-            ProxyAddonBar.addIcon("nav-bar", "ip-address");
-            ProxyAddonBar.addIcon("addon-bar", "ip-address");
+            this.addIcon("nav-bar", "ip-address");
+            this.addIcon("addon-bar", "ip-address");
         }
     },
     addIcon: function (toolbarId, id) {
         if (!document.getElementById(id)) {
             var toolbar = document.getElementById(toolbarId);
-
             toolbar.insertItem(id, null);
             toolbar.setAttribute("currentset", toolbar.currentSet);
-
             document.persist(toolbar.id, "currentset");
 
             if (toolbarId == "addon-bar") {
@@ -34,35 +33,32 @@ var ProxyAddonBar = {
         }
     },
     activate: function () {
-        ProxyAddonBar.reset();
-        ProxyAddonBar.parseProxyList(function (ip_addr) {
-            var rand_proxy = ProxyAddonBar.randomProxy(ip_addr);
-
-            if (rand_proxy[3] == 'http') {
-                ProxyAddonBar.connectTo(rand_proxy);
-            } else {
-                ProxyAddonBar.connectToSSL(rand_proxy);
-            }
-
-            if (ProxyAddonBar.ip_address) ProxyAddonBar.ip_address.children[0].value = ProxyAddonBar.getIPAddress();
-
-            ProxyAddonBar.proxyList = ip_addr;
-
-            ProxyAddonBar.addItemsToProxyList();
+        this.reset();
+        var self = this;
+        this.parseProxyList(function (ip_addr) {
+            var rand_proxy = self.randomProxy(ip_addr);
+            self.proxyManager.start(rand_proxy[0], rand_proxy[1], rand_proxy[3]);
+            self.ip_address.children[0].value = self.getIPAddress();
+            self.proxyList = ip_addr;
+            self.addItemsToProxyList();
         });
     },
+    disable: function () {
+        this.proxyManager.stop();
+        this.reset();
+    },
     reset: function () {
-        ProxyAddonBar.resetConfig();
-        if (ProxyAddonBar.ip_address) {
-            ProxyAddonBar.ip_address.children[0].style.color = '#12B300';
-            ProxyAddonBar.ip_address.children[0].value = ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
+        if (this.ip_address) {
+            this.ip_address.children[0].style.color = '#12B300';
+            this.ip_address.children[0].value = this.stringBundle.getString('proxyIsDisabled');
         }
     },
     ping: function () {
-        ProxyAddonBar.pingLogic(function (times) {
-            if (ProxyAddonBar.ip_address) {
-                ProxyAddonBar.ip_address.children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
-                ProxyAddonBar.ip_address.children[0].style.color = (times < 8) ? '#12B300' : '#B30000';
+        var self = this;
+        this.pingLogic(function (times) {
+            if (self.ip_address) {
+                self.ip_address.children[0].value = self.getIPAddress();
+                self.ip_address.children[0].style.color = (times < self.PING_TIMES) ? '#12B300' : '#B30000';
             }
         });
     },
@@ -85,77 +81,49 @@ var ProxyAddonBar = {
         }
     },
     changeProxy: function () {
-        ProxyAddonBar.resetConfig();
-
         var hbox = document.getElementById('proxy-list-box').getElementsByTagName('hbox');
 
         for (var i = 0; i < hbox.length; i++) {
             if (hbox[i].className.length) {
-                var hbox_child = hbox[i].children[0],
-                    proxy_type = hbox[i].getElementsByClassName('proxy-type')[0].innerHTML.toLowerCase();
+                var hbox_child = hbox[i].children[0];
+                var proxy_type = hbox[i].getElementsByClassName('proxy-type')[0].innerHTML.toLowerCase();
 
-                if (proxy_type == 'http') {
-                    ProxyAddonBar.connectTo([hbox_child.value, hbox_child.getAttribute('data-port')]);
-                } else {
-                    ProxyAddonBar.connectToSSL([hbox_child.value, hbox_child.getAttribute('data-port')]);
-                }
-
-                if (ProxyAddonBar.ip_address) document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
-
+                this.proxyManager.start(hbox_child.value, hbox_child.getAttribute('data-port'), proxy_type);
+                document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
                 break;
             }
         }
     },
     refresh: function () {
-        ProxyAddonBar.reset();
-        ProxyAddonBar.removeProxyList();
+        this.reset();
+        this.removeProxyList();
+        var self = this;
 
-        ProxyAddonBar.parseProxyList(function (ip_addr) {
-            ProxyAddonBar.proxyList = ip_addr;
-            ProxyAddonBar.addItemsToProxyList();
+        this.parseProxyList(function (ip_addr) {
+            self.proxyList = ip_addr;
+            self.addItemsToProxyList();
         });
     },
     getIPAddress: function () {
-        return ProxyAddonBar.prefs.getCharPref('network.proxy.http');
-    },
-    resetConfig: function () {
-        ProxyAddonBar.prefs.clearUserPref('network.proxy.http');
-        ProxyAddonBar.prefs.clearUserPref('network.proxy.http_port');
-        ProxyAddonBar.prefs.clearUserPref('network.proxy.type');
-
-        ProxyAddonBar.prefs.clearUserPref('network.proxy.ssl');
-        ProxyAddonBar.prefs.clearUserPref('network.proxy.ssl_port');
-    },
-    connectTo: function (addr) {
-        ProxyAddonBar.prefs.setCharPref('network.proxy.http', addr[0]);
-        ProxyAddonBar.prefs.setIntPref('network.proxy.http_port', addr[1]);
-        ProxyAddonBar.prefs.setIntPref('network.proxy.type', 1);
-    },
-    connectToSSL: function (addr) {
-        ProxyAddonBar.prefs.setCharPref('network.proxy.http', addr[0]);
-        ProxyAddonBar.prefs.setIntPref('network.proxy.http_port', addr[1]);
-
-        ProxyAddonBar.prefs.setCharPref('network.proxy.ssl', addr[0]);
-        ProxyAddonBar.prefs.setIntPref('network.proxy.ssl_port', addr[1]);
-        ProxyAddonBar.prefs.setIntPref('network.proxy.type', 1);
+        return this.proxyManager.proxyData.enabled ? this.proxyManager.proxyData.address : this.stringBundle.getString('proxyIsDisabled');
     },
     randomProxy: function (proxy) {
         return proxy[parseInt(Math.random() * proxy.length - 1)];
     },
     pingLogic: function (callback) {
+        var self = this;
         wrapper.req = new XMLHttpRequest();
         wrapper.win = window.open("chrome://FireX/content/loading.xul", "", "chrome");
         wrapper.pinged = 0;
         wrapper.isCompleted = false;
-
         wrapper.win.onload = function () {
-            wrapper.win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('waitCheckSpeed');
+            wrapper.win.document.getElementById('loading_description').value = self.stringBundle.getString('waitCheckSpeed');
         };
 
         var interval = setInterval(function () {
-            wrapper.win.document.getElementById('loading_description').value = ProxyAddonBar.stringBundle.getString('doneSeconds') + ': ' + parseInt(8 - wrapper.pinged) + ' ' + ProxyAddonBar.stringBundle.getString('seconds');
+            wrapper.win.document.getElementById('loading_description').value = self.stringBundle.getString('doneSeconds') + ': ' + parseInt(self.PING_TIMES - wrapper.pinged) + ' ' + self.stringBundle.getString('seconds');
 
-            if (wrapper.pinged >= 8) {
+            if (wrapper.pinged >= self.PING_TIMES) {
                 wrapper.win.close();
                 clearInterval(interval);
                 wrapper.isCompleted = true;
@@ -178,8 +146,8 @@ var ProxyAddonBar = {
         wrapper.req.send(null);
     },
     addItemsToProxyList: function () {
-        for (var i = 0; i < ProxyAddonBar.proxyList.length; i++) {
-            ProxyAddonBar.addProxyItem(ProxyAddonBar.proxyList[i][0], ProxyAddonBar.proxyList[i][1], ProxyAddonBar.proxyList[i][2], ProxyAddonBar.proxyList[i][3]);
+        for (var i = 0; i < this.proxyList.length; i++) {
+            this.addProxyItem(this.proxyList[i][0], this.proxyList[i][1], this.proxyList[i][2], this.proxyList[i][3]);
         }
     },
     removeProxyList: function () {
@@ -188,6 +156,7 @@ var ProxyAddonBar = {
         while (proxy_list.firstChild) proxy_list.removeChild(proxy_list.firstChild);
     },
     addProxyItem: function (value, port, country, type) {
+        var self = this;
         wrapper.xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
         wrapper.hbox = document.createElementNS(wrapper.xulNS, 'hbox');
         wrapper.element = document.createElementNS(wrapper.xulNS, 'label');
@@ -198,7 +167,7 @@ var ProxyAddonBar = {
         wrapper.element.setAttribute('data-port', port);
 
         wrapper.hbox.addEventListener('click', function (e) {
-            ProxyAddonBar.chooseProxy(e);
+            self.chooseProxy(e);
         }, false);
 
         wrapper.el_country.textContent = country;
@@ -215,7 +184,6 @@ var ProxyAddonBar = {
     parseProxyList: function (callback) {
         var req = new XMLHttpRequest();
         req.open('GET', 'http://proxylist.hidemyass.com/', true);
-
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
                 if (req.status == 200) {
@@ -278,7 +246,7 @@ var ProxyAddonBar = {
 
                             ip_addr.push([
                                 loopAddr.join('.').replace(/\.{2,}/g, '.'),
-                                doc_td[1].innerHTML,
+                                doc_td[1].innerHTML.replace(/\s/g, ''),
                                 proxyCondition.country,
                                 proxyCondition.proxyType
                             ]);
@@ -295,16 +263,15 @@ var ProxyAddonBar = {
         document.getElementById('proxy-list-panel').openPopupAtScreen((document.width / 2) - 225, (document.height / 2) - 175, false);
     },
     isFirstRun: function () {
-        var firstRun = ProxyAddonBar.prefs.getBoolPref('extensions.firex.firstRun'),
-            currentVersion = 3.7;
+        var firstRun = this.prefs.getBoolPref('extensions.firex.firstRun'), currentVersion = 3.8;
 
         if (firstRun) {
-            ProxyAddonBar.prefs.setBoolPref('extensions.firex.firstRun', false);
-            ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion);
+            this.prefs.setBoolPref('extensions.firex.firstRun', false);
+            this.prefs.setCharPref('extensions.firex.installedVersion', currentVersion);
         }
 
-        if (parseFloat(ProxyAddonBar.prefs.getCharPref('extensions.firex.installedVersion')) < currentVersion) {
-            ProxyAddonBar.prefs.setCharPref('extensions.firex.installedVersion', currentVersion.toString());
+        if (parseFloat(this.prefs.getCharPref('extensions.firex.installedVersion')) < currentVersion) {
+            this.prefs.setCharPref('extensions.firex.installedVersion', currentVersion.toString());
             return true;
         }
 
@@ -312,12 +279,15 @@ var ProxyAddonBar = {
     }
 };
 
+ProxyAddonBar.proxyManager = new ProxyManager();
+
 window.addEventListener("load", function (e) {
     ProxyAddonBar.onLoad(document.getElementById('firex-string-bundle'));
 
     var ip_address = document.getElementById('ip-address');
+
     if (ip_address) {
-        ip_address.children[0].value = ProxyAddonBar.getIPAddress() || ProxyAddonBar.stringBundle.getString('proxyIsDisabled');
+        ip_address.children[0].value = ProxyAddonBar.getIPAddress();
         ProxyAddonBar.ip_address = ip_address;
     }
 }, false);

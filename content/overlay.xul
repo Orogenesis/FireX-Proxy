@@ -2,6 +2,7 @@
 <?xml-stylesheet href="chrome://FireX/skin/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://FireX/locale/overlay.dtd">
 <overlay id="FireX-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
+    <script src="proxyManager.js"/>
 	<script src="overlay.js"/>
 	<stringbundleset id="stringbundleset">
 		<stringbundle id="firex-string-bundle" src="chrome://FireX/locale/lang.properties"/>
@@ -33,7 +34,7 @@
 			<menupopup>
 				<menuitem class="icon-activate menuitem-iconic" label="&activate;" oncommand="ProxyAddonBar.activate();"/>
                 <menuitem class="icon-list menuitem-iconic" label="&proxy-list;" oncommand="ProxyAddonBar.openList();" />
-                <menuitem class="icon-reset menuitem-iconic" label="&reset;" oncommand="ProxyAddonBar.reset();"/>
+                <menuitem class="icon-reset menuitem-iconic" label="&reset;" oncommand="ProxyAddonBar.disable();"/>
 				<menuitem class="icon-ping menuitem-iconic" label="&ping;" oncommand="ProxyAddonBar.ping();"/>
 			</menupopup>
 		</toolbarbutton>
