@@ -2,6 +2,7 @@
 <?xml-stylesheet href="chrome://FireX/skin/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://FireX/locale/overlay.dtd">
 <overlay id="FireX-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
+    <script src="FileReader.js"/>
     <script src="proxyManager.js"/>
 	<script src="overlay.js"/>
 	<stringbundleset id="stringbundleset">
