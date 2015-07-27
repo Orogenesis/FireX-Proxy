@@ -280,6 +280,11 @@ var ProxyAddonBar = {
 };
 
 ProxyAddonBar.proxyManager = new ProxyManager();
+new FileReader().fileDescriptor().readAll(function (data) {
+    if (data) {
+        ProxyAddonBar.proxyManager.uriList = data;
+    }
+});
 
 window.addEventListener("load", function (e) {
     ProxyAddonBar.onLoad(document.getElementById('firex-string-bundle'));

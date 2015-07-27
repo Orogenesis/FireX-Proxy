@@ -9,6 +9,8 @@ function ProxyManager() {
         enabled: false
     };
     this.proxyData = Object.create(this.defaultData);
+    this.uriList = [];
+    this.templateEnabled = true;
 }
 
 ProxyManager.prototype = {
@@ -17,10 +19,17 @@ ProxyManager.prototype = {
         return {
             applyFilter: function (th, uri, proxy) {
                 if (self.proxyData.enabled) {
-                    return self.services.proxyService.newProxyInfo('http', self.proxyData.address, self.proxyData.port, 0, null, null);
-                } else {
-                    return proxy;
+                    if (self.templateEnabled && self.uriList.length) {
+                        for (var i = self.uriList.length - 1; i >= 0; --i) {
+                            if (uri.spec.indexOf(self.uriList[i]) != -1) {
+                                return self.services.proxyService.newProxyInfo('http', self.proxyData.address, self.proxyData.port, 0, null, null);
+                            }
+                        }
+                    } else {
+                        return self.services.proxyService.newProxyInfo('http', self.proxyData.address, self.proxyData.port, 0, null, null);
+                    }
                 }
+                return proxy;
             },
             register: function () {
                 self.services.proxyService.registerFilter(this, 0);
