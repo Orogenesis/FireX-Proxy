@@ -35,7 +35,7 @@
         <entry file="file://$PROJECT_DIR$/content/overlay.xul">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="66" selection-start-line="19" selection-start-column="66" selection-end-line="19" selection-end-column="66" />
+              <caret line="22" column="27" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -45,7 +45,7 @@
         <entry file="file://$PROJECT_DIR$/skin/css/overlay.css">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="68" column="30" selection-start-line="68" selection-start-column="30" selection-end-line="68" selection-end-column="30" />
+              <caret line="15" column="43" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -61,16 +61,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="overlay.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/content/overlay.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="288" column="73" selection-start-line="288" selection-start-column="73" selection-end-line="288" selection-end-column="73" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="IdeDocumentHistory">
@@ -81,11 +71,11 @@
         <option value="$PROJECT_DIR$/content/FileReader.js" />
         <option value="$PROJECT_DIR$/locale/en-US/overlay.dtd" />
         <option value="$PROJECT_DIR$/locale/ru/overlay.dtd" />
-        <option value="$PROJECT_DIR$/content/overlay.js" />
         <option value="$PROJECT_DIR$/skin/overlay.css" />
         <option value="$PROJECT_DIR$/skin/css/overlay.css" />
         <option value="$PROJECT_DIR$/content/overlay.xul" />
         <option value="$PROJECT_DIR$/content/proxyManager.js" />
+        <option value="$PROJECT_DIR$/content/overlay.js" />
       </list>
     </option>
   </component>
@@ -585,22 +575,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/content/FileReader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="101" selection-start-line="26" selection-start-column="101" selection-end-line="26" selection-end-column="101" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/content/overlay.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="288" column="73" selection-start-line="288" selection-start-column="73" selection-end-line="288" selection-end-column="73" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/content/loading.xul">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.018888889">
@@ -620,7 +594,7 @@
     <entry file="file://$PROJECT_DIR$/skin/css/overlay.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="68" column="30" selection-start-line="68" selection-start-column="30" selection-end-line="68" selection-end-column="30" />
+          <caret line="15" column="43" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="43" />
           <folding />
         </state>
       </provider>
@@ -628,7 +602,23 @@
     <entry file="file://$PROJECT_DIR$/content/overlay.xul">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="66" selection-start-line="19" selection-start-column="66" selection-end-line="19" selection-end-column="66" />
+          <caret line="22" column="27" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/content/overlay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/content/FileReader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="26" column="101" selection-start-line="26" selection-start-column="101" selection-end-line="26" selection-end-column="101" />
           <folding />
         </state>
       </provider>

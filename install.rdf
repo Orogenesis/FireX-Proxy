@@ -8,7 +8,7 @@
     <em:description>FireX Proxy extension.</em:description>
     <em:creator>Exclumice</em:creator>
     <em:homepageURL>https://addons.mozilla.org/ru/firefox/user/Exclumice/</em:homepageURL>
-    <em:iconURL>chrome://FireX/skin/icon-32.png</em:iconURL>
+    <em:iconURL>chrome://FireX/skin/icons/icon-32.png</em:iconURL>
     <!--<em:updateURL>http://FireX.mozdev.org/update.rdf</em:updateURL-->
     <em:targetApplication>
       <Description>
