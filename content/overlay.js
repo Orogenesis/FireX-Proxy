@@ -13,8 +13,8 @@ var ProxyAddonBar = {
 
         if (this.isFirstRun()) {
             /* icon */
-            this.addIcon("nav-bar", "myextension-button");
-            this.addIcon("addon-bar", "myextension-button");
+            this.addIcon("nav-bar", "proxy-toolbar-button");
+            this.addIcon("addon-bar", "proxy-toolbar-button");
             /* ip address */
             this.addIcon("nav-bar", "ip-address");
             this.addIcon("addon-bar", "ip-address");
@@ -63,6 +63,17 @@ var ProxyAddonBar = {
         });
     },
     chooseProxy: function (event) {
+        var document_checkboxes = document.getElementsByClassName('checkbox-square');
+        if (document_checkboxes.length) {
+            for (var j = 0; j < document_checkboxes.length; j++) {
+                var this_class = document_checkboxes[j].getAttribute('class');
+                if (this_class.indexOf('active') != -1) {
+                    document_checkboxes[j].setAttribute('class', this_class.substring(0, this_class.indexOf('active') - 1));
+                    break;
+                }
+            }
+        }
+
         if (!event.currentTarget.className.length) {
             var elements = document.getElementsByClassName('proxy-list')[0].childNodes;
 
@@ -76,8 +87,15 @@ var ProxyAddonBar = {
             }
 
             event.currentTarget.setAttribute('class', 'active');
+            var checkBox = event.currentTarget.getElementsByClassName('checkbox-square');
+            if (checkBox.length) {
+                checkBox[0].setAttribute('class', checkBox[0].getAttribute('class') + ' ' + 'active');
+            }
+
+            this.changeProxy();
         } else {
             event.currentTarget.removeAttribute('class');
+            this.disable();
         }
     },
     changeProxy: function () {
@@ -85,11 +103,13 @@ var ProxyAddonBar = {
 
         for (var i = 0; i < hbox.length; i++) {
             if (hbox[i].className.length) {
-                var hbox_child = hbox[i].children[0];
-                var proxy_type = hbox[i].getElementsByClassName('proxy-type')[0].innerHTML.toLowerCase();
+                var hbox_child = hbox[i].getElementsByClassName('proxy-address');
+                var proxy_type = hbox[i].getElementsByClassName('proxy-type');
 
-                this.proxyManager.start(hbox_child.value, hbox_child.getAttribute('data-port'), proxy_type);
-                document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
+                if (hbox_child.length && proxy_type.length) {
+                    this.proxyManager.start(hbox_child[0].value, hbox_child[0].getAttribute('data-port'), proxy_type[0].innerHTML.toLowerCase());
+                    document.getElementById('ip-address').children[0].value = ProxyAddonBar.getIPAddress();
+                }
                 break;
             }
         }
@@ -98,7 +118,6 @@ var ProxyAddonBar = {
         this.reset();
         this.removeProxyList();
         var self = this;
-
         this.parseProxyList(function (ip_addr) {
             self.proxyList = ip_addr;
             self.addItemsToProxyList();
@@ -159,10 +178,12 @@ var ProxyAddonBar = {
         var self = this;
         wrapper.xulNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
         wrapper.hbox = document.createElementNS(wrapper.xulNS, 'hbox');
+        wrapper.checkbox = document.createElementNS('http://www.w3.org/1999/xhtml', 'html:div');
         wrapper.element = document.createElementNS(wrapper.xulNS, 'label');
         wrapper.el_country = document.createElementNS(wrapper.xulNS, 'label');
         wrapper.el_type = document.createElementNS(wrapper.xulNS, 'label');
-
+        wrapper.checkbox.setAttribute('class', 'checkbox-square');
+        wrapper.element.setAttribute('class', 'proxy-address');
         wrapper.element.setAttribute('value', value);
         wrapper.element.setAttribute('data-port', port);
 
@@ -172,11 +193,11 @@ var ProxyAddonBar = {
 
         wrapper.el_country.textContent = country;
         wrapper.el_country.setAttribute('class', 'proxy-country');
-
         wrapper.el_type.textContent = type.toUpperCase();
         wrapper.el_type.setAttribute('class', 'proxy-type');
 
         document.getElementById('proxy-list-box').appendChild(wrapper.hbox);
+        wrapper.hbox.appendChild(wrapper.checkbox);
         wrapper.hbox.appendChild(wrapper.element);
         wrapper.hbox.appendChild(wrapper.el_type);
         wrapper.hbox.appendChild(wrapper.el_country);
@@ -260,7 +281,13 @@ var ProxyAddonBar = {
         req.send(null);
     },
     openList: function () {
-        document.getElementById('proxy-list-panel').openPopupAtScreen((document.width / 2) - 225, (document.height / 2) - 175, false);
+        this.openPopup('proxy-list-panel');
+    },
+    openPopup: function (str_element) {
+        var panel = document.getElementById(str_element);
+        if (panel) {
+            panel.openPopup(document.getElementById('proxy-toolbar-button'), 'after_end', 0, 0, false, false);
+        }
     },
     isFirstRun: function () {
         var firstRun = this.prefs.getBoolPref('extensions.firex.firstRun'), currentVersion = 3.8;

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<?xml-stylesheet href="chrome://FireX/skin/overlay.css" type="text/css"?>
+<?xml-stylesheet href="chrome://FireX/skin/css/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://FireX/locale/overlay.dtd">
 <overlay id="FireX-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
     <script src="FileReader.js"/>
@@ -8,30 +8,24 @@
 	<stringbundleset id="stringbundleset">
 		<stringbundle id="firex-string-bundle" src="chrome://FireX/locale/lang.properties"/>
 	</stringbundleset>
-    <vbox>
-        <panel id="proxy-list-panel" width="450">
-            <vbox flex="1" class="proxy-help">
-                <html:div class="proxy-help-text">
-                    <label>&proxy-help-list;</label>
+    <popupset id="mainPopupSet">
+        <panel id="proxy-list-panel" width="400" type="arrow">
+            <html:div id="proxy-wrapper" style="width: 400px;">
+                <html:div class="proxy-list" id="proxy-list-box">
+                    <label id="no_addresses">&is_empty;</label>
                 </html:div>
-            </vbox>
-            <vbox flex="1" class="proxy-list" id="proxy-list-box">
-                <label id="no_addresses">&is_empty;</label>
-            </vbox>
-            <vbox flex="1">
-                <button class="proxy-button" oncommand='ProxyAddonBar.changeProxy();'>
-                    <image src="chrome://FireX/skin/icon-button.png" />
-                    <label>&proxy-button;</label>
-                </button>
-                <button class="proxy-refresh-button" oncommand="ProxyAddonBar.refresh();" tooltiptext="&refresh-proxy;">
-                    <image src="chrome://FireX/skin/icon-refresh.png" />
-                    <label>&refresh-proxy;</label>
-                </button>
-            </vbox>
+                <html:div>
+                    <html:div>
+                        <button class="proxy-refresh-button" oncommand="ProxyAddonBar.refresh();" tooltiptext="&refresh-proxy;">
+                            <image src="chrome://FireX/skin/icons/icon-refresh.png" />
+                        </button>
+                    </html:div>
+                </html:div>
+            </html:div>
         </panel>
-    </vbox>
+    </popupset>
 	<toolbarpalette id="BrowserToolbarPalette">
-		<toolbarbutton type="menu-button" id="myextension-button" label="&addonToolbar;" tooltiptext="&addonToolbar;" class="toolbarbutton-1 chromeclass-toolbar-additional">
+		<toolbarbutton type="menu-button" id="proxy-toolbar-button" label="&addonToolbar;" tooltiptext="&addonToolbar;" class="toolbarbutton-1 chromeclass-toolbar-additional">
 			<menupopup>
 				<menuitem class="icon-activate menuitem-iconic" label="&activate;" oncommand="ProxyAddonBar.activate();"/>
                 <menuitem class="icon-list menuitem-iconic" label="&proxy-list;" oncommand="ProxyAddonBar.openList();" />

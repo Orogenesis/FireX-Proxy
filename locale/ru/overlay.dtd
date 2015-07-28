@@ -1,10 +1,11 @@
 <!ENTITY addonToolbar "FireX Proxy">
 <!ENTITY activate "Сменить IP">
 <!ENTITY reset "Отключить прокси">
+<!ENTITY templates "Шаблоны сайтов">
 <!ENTITY ping "Проверить скорость">
 <!ENTITY proxy_off "Прокси отключен">
 <!ENTITY proxy-list "Список прокси">
 <!ENTITY proxy-button "Активировать">
 <!ENTITY proxy-help-list "Подсказка: нажмите левой кнопкой мышки на любой IP-адрес, затем нажмите кнопку «Активировать».">
 <!ENTITY refresh-proxy "Обновить список прокси">
-<!ENTITY is_empty "В данный момент список пуст.">
+<!ENTITY is_empty "В данный момент список адресов пуст.">

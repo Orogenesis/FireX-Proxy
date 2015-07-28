@@ -1,6 +1,7 @@
 <!ENTITY addonToolbar "FireX Proxy">
 <!ENTITY activate "Change IP">
 <!ENTITY reset "Disable proxy">
+<!ENTITY templates "URL templates">
 <!ENTITY ping "Check connection speed">
 <!ENTITY proxy_off "Proxy is disabled">
 <!ENTITY proxy-list "Proxy list">

@@ -1,0 +1,108 @@
+@font-face {
+	font-family: LatoRegular;
+	src: url(../fonts/Lato-Regular.ttf);
+}
+
+#proxy-toolbar-button {
+  list-style-image: url("../icons/icon-16.png");
+}
+toolbar[iconsize="small"] #proxy-toolbar-button {
+  list-style-image: url("../icons/icon-16.png");
+}
+toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
+	list-style-image: url("../icons/icon-32.png");
+}
+#proxy-toolbar-button[cui-areatype="menu-panel"] {
+	list-style-image: url("../icons/icon-32.png");
+}
+#ip-address {
+	margin: 10px 15px 0 0;
+	color: #12B300;
+}
+.icon-activate {
+	list-style-image: url("../icons/icon-activate.png");
+}
+.icon-reset {
+	list-style-image: url("../icons/icon-reset.png");
+}
+.icon-ping {
+	list-style-image: url("../icons/icon-ping.png");
+}
+.icon-list {
+	list-style-image: url("../icons/icon-list.png");
+}
+.proxy-list {
+	height: 200px;
+	overflow-y: auto;
+	margin: 10px 0 10px 0;
+	text-align: center;
+}
+.proxy-refresh-button {
+	padding: 15px;
+	border: none;
+	-moz-appearance: none;
+	cursor: pointer;
+	background-repeat: no-repeat;
+    background-color: #D8E8E7;
+	width: 100%;
+}
+
+.proxy-refresh-button:hover {
+    background-color: #D1E8E7;
+}
+.proxy-list .active {
+	background-color: #D8E8E7;
+}
+.proxy-list hbox {
+	font-size: 14px;
+	margin: 2px;
+	cursor: pointer;
+	display: block;
+	padding: 10px;
+	text-align: left;
+}
+.proxy-list hbox label {
+	cursor: pointer;
+	color: #585858;
+	font-size: 12px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+.proxy-list hbox > label.proxy-country {
+	padding: 5px;
+	background: url("../icons/planet.png");
+	background-position: 5px center;
+	background-repeat: no-repeat;
+	text-indent: 25px;
+	width: 35%;
+}
+.proxy-list hbox > label.proxy-type {
+	width: 20%;
+}
+.proxy-list hbox > label.proxy-address {
+	width: 35%;
+}
+#proxy-list-panel box.panel-arrowcontent {
+	padding: 0 !important;
+}
+#proxy-list-panel label, #proxy-list-panel button {
+	-moz-margin-start: 0 !important;
+	margin: 0 !important;
+	outline: 0 !important;
+}
+.checkbox-square {
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	margin-right: 8px;
+	vertical-align: -4px;
+}
+.checkbox-square.active {
+	background: url('../icons/icon-checked.png') center center no-repeat #78C0BD;
+	border-color: #6AB5B2;
+}
+#proxy-list-panel #no_addresses {
+	font-family: LatoRegular, sans-serif;
+}

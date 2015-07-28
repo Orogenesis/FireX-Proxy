@@ -10,7 +10,7 @@ function ProxyManager() {
     };
     this.proxyData = Object.create(this.defaultData);
     this.uriList = [];
-    this.templateEnabled = true;
+    this.templateEnabled = false;
 }
 
 ProxyManager.prototype = {
