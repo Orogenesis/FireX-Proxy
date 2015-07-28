@@ -11,9 +11,8 @@
     <popupset id="mainPopupSet">
         <panel id="proxy-list-panel" width="400" type="arrow">
             <html:div id="proxy-wrapper" style="width: 400px;">
-                <html:div class="proxy-list" id="proxy-list-box">
-                    <label id="no_addresses">&is_empty;</label>
-                </html:div>
+                <html:div id="proxy-message">&is_empty;</html:div>
+                <html:div class="proxy-list" id="proxy-list-box"></html:div>
                 <html:div>
                     <html:div>
                         <button class="proxy-refresh-button" oncommand="ProxyAddonBar.refresh();" tooltiptext="&refresh-proxy;">

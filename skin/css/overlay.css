@@ -35,7 +35,7 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 	height: 200px;
 	overflow-y: auto;
 	margin: 10px 0 10px 0;
-	text-align: center;
+	text-align: left;
 }
 .proxy-refresh-button {
 	padding: 15px;
@@ -59,7 +59,6 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 	cursor: pointer;
 	display: block;
 	padding: 10px;
-	text-align: left;
 }
 .proxy-list hbox label {
 	cursor: pointer;
@@ -88,7 +87,13 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 #proxy-list-panel label, #proxy-list-panel button {
 	-moz-margin-start: 0 !important;
 	margin: 0 !important;
-	outline: 0 !important;
+}
+#proxy-list-panel button:focus, #proxy-list-panel button:active {
+	outline: none;
+}
+#proxy-list-panel button::-moz-focus-inner {
+	border: 0;
+	outline: none;
 }
 .checkbox-square {
 	border: 1px solid #CCCCCC;
@@ -103,6 +108,11 @@ toolbarpaletteitem[place="palette"] #proxy-toolbar-button {
 	background: url('../icons/icon-checked.png') center center no-repeat #78C0BD;
 	border-color: #6AB5B2;
 }
-#proxy-list-panel #no_addresses {
+#proxy-wrapper {
+	text-align: center;
+}
+#proxy-list-panel #proxy-message {
 	font-family: LatoRegular, sans-serif;
+	margin-top: 10px;
+	display: block;
 }

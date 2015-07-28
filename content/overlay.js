@@ -122,6 +122,8 @@ var ProxyAddonBar = {
             self.proxyList = ip_addr;
             self.addItemsToProxyList();
         });
+
+        document.getElementById('proxy-message').style.display = 'none';
     },
     getIPAddress: function () {
         return this.proxyManager.proxyData.enabled ? this.proxyManager.proxyData.address : this.stringBundle.getString('proxyIsDisabled');
