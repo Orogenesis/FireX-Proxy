@@ -1,8 +1,9 @@
-content	FireX	content/
-overlay	chrome://browser/content/browser.xul	chrome://FireX/content/overlay.xul
+content	FireX	chrome/content/
+overlay	chrome://browser/content/browser.xul	        chrome://FireX/content/overlay.xul
 
-locale	FireX	en-US	locale/en-US/
-locale	FireX	ru-RU	locale/ru/
+locale	FireX	en-US	chrome/locale/en-US/
+locale	FireX	ru-RU	chrome/locale/ru/
 
-skin	FireX	classic/1.0	skin/
-style   chrome://global/content/customizeToolbar.xul  chrome://FireX/skin/overlay.css
+skin	FireX	classic/1.0	                            chrome/skin/
+style   chrome://global/content/customizeToolbar.xul    chrome://FireX/skin/css/overlay.css
+style	chrome://browser/content/browser.xul		    chrome://FireX/skin/css/overlay.css

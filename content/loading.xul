@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
-<!DOCTYPE window SYSTEM "chrome://FireX/locale/lang.dtd">
-<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&loading_title;">
-	<description id="loading_description" flex="1" value="&wait_msg;" />
-</window>
