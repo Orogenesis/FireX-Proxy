@@ -2,35 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="251e5ddc-f73b-4be1-9a5a-a49a61c7a9f2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/fonts/Roboto-Medium.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/activeIcon-16.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-16.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-24.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-32.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-activate.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-checked.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-help.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-list-arrow.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-list.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-ok.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-ping.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-refresh.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-remove.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-reset.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-web.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/inspect.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/loading.gif" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/planet.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/content/FileReader.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/locale/en-US/lang.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/locale/ru/lang.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/css/overlay.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/locale/en-US/overlay.dtd" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/locale/ru/overlay.dtd" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/content/overlay.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/content/overlay.xul" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/content/proxyManager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/chrome/content/overlay.js" afterPath="$PROJECT_DIR$/chrome/content/overlay.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="FireX Proxy.iws" />
@@ -53,11 +25,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.019058296">
+            <state vertical-scroll-proportion="-0.6296296">
               <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="overlay.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/chrome/content/overlay.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.74211097">
+              <caret line="237" column="0" selection-start-line="237" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -81,6 +63,7 @@
         <option value="$PROJECT_DIR$/locale/en-US/overlay.dtd" />
         <option value="$PROJECT_DIR$/locale/ru/overlay.dtd" />
         <option value="$PROJECT_DIR$/content/overlay.js" />
+        <option value="$PROJECT_DIR$/chrome/content/overlay.js" />
       </list>
     </option>
   </component>
@@ -142,6 +125,38 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FireX Proxy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FireX-Proxy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chrome" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FireX Proxy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FireX-Proxy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chrome" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="content" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -199,12 +214,18 @@
       <option name="project" value="LOCAL" />
       <updated>1448558895959</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Socks4/5 support">
+      <created>1448559009107</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1448559009107</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -214,7 +235,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24947916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24947916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -272,8 +293,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.019058296">
+        <state vertical-scroll-proportion="-0.6296296">
           <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chrome/content/overlay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.74211097">
+          <caret line="237" column="0" selection-start-line="237" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
           <folding />
         </state>
       </provider>

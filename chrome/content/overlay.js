@@ -207,6 +207,8 @@ com.firexProxyPackage = {
     },
     parseProxyList: function (callback) {
         var req = new XMLHttpRequest();
+        var __self = this;
+
         req.open('GET', 'http://proxylist.hidemyass.com/', true);
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
@@ -234,7 +236,7 @@ com.firexProxyPackage = {
 
                             if (proxyCondition.connectionTime < 60 || proxyCondition.proxySpeed < 40) continue;
 
-                            if (this.ALLOWED_PROTOCOLS.indexOf(proxyCondition.proxyType) == -1) continue;
+                            if (__self.ALLOWED_PROTOCOLS.indexOf(proxyCondition.proxyType) == -1) continue;
 
                             var match = span.getElementsByTagName('style')[0].innerHTML.match(/([^\n|.]+display:(?!none))/g),
                                 allElements = span.childNodes;
