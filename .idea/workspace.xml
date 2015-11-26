@@ -2,10 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="251e5ddc-f73b-4be1-9a5a-a49a61c7a9f2" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/fonts/Roboto-Medium.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/activeIcon-16.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-16.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-24.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-32.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-activate.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-checked.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-help.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-list-arrow.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-list.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-ok.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-ping.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-refresh.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-remove.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-reset.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/icon-web.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/inspect.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/loading.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/icons/planet.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/content/FileReader.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/locale/en-US/lang.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/locale/ru/lang.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/skin/css/overlay.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/locale/en-US/overlay.dtd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/locale/ru/overlay.dtd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/content/overlay.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/content/overlay.xul" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/chrome/content/proxyManager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="FireX Proxy.iws" />
     <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,7 +52,18 @@
     <favorites_list name="FireX Proxy" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.019058296">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -152,7 +193,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448558871092</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Socks4/5 support">
+      <created>1448558895959</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1448558895959</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -220,6 +267,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.11308204">
           <caret line="6" column="19" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.019058296">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

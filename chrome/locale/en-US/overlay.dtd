@@ -1,0 +1,8 @@
+<!ENTITY addonToolbar "FireX Proxy">
+<!ENTITY activate "Change IP">
+<!ENTITY reset "Disable proxy">
+<!ENTITY templates "URL templates">
+<!ENTITY proxy_off "Proxy is disabled">
+<!ENTITY proxy-list "Proxy list">
+<!ENTITY is_empty "Proxy list is empty">
+<!ENTITY enableTemplates "Enable templates">
