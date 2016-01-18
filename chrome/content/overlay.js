@@ -2,7 +2,7 @@ if (!com) var com = {};
 if (!com.firexProxyPackage) com.firexProxyPackage = {};
 
 com.firexProxyPackage = {
-    CURRENT_VERSION: 4.2,
+    CURRENT_VERSION: 4.3,
     ALLOWED_PROTOCOLS: ['http', 'https', 'socks4/5'],
     proxyList: [],
     prefs: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
@@ -54,6 +54,7 @@ com.firexProxyPackage = {
 
                         if (i_checkBox.length) {
                             var this_class = i_checkBox[0].getAttribute('class');
+
                             if (this_class.indexOf('active') != -1) {
                                 i_checkBox[0].setAttribute('class', this_class.substring(0, this_class.indexOf('active') - 1));
                             }
@@ -90,10 +91,12 @@ com.firexProxyPackage = {
             if (hbox[i].className.length) {
                 var hbox_child = hbox[i].getElementsByClassName('proxy-address');
                 var proxy_type = hbox[i].getElementsByClassName('proxy-type');
+
                 if (hbox_child.length && proxy_type.length) {
                     this.proxyManager.start(hbox_child[0].value, hbox_child[0].getAttribute('data-port'), proxy_type[0].textContent.toLowerCase());
                     this.controlIcon(true);
                 }
+
                 break;
             }
         }
@@ -114,12 +117,15 @@ com.firexProxyPackage = {
             }
         });
 
-        if (proxyMessage) proxyMessage.style.display = 'none';
+        if (proxyMessage) {
+            proxyMessage.style.display = 'none';
+        }
 
         var doc_box = document.getElementById('proxy-list-box');
 
         if (doc_box) {
             var list_class = doc_box.getAttribute('class');
+
             if (list_class.indexOf('loading') == -1) {
                 doc_box.setAttribute('class', list_class + ' ' + 'loading');
             }
@@ -167,13 +173,17 @@ com.firexProxyPackage = {
     removeTemplate: function (tmpl, uniqueId) {
         if (this.proxyManager.uriList.length) {
             var uriIndex = this.proxyManager.uriList.indexOf(tmpl);
+
             if (uriIndex != -1) {
                 var unEl = document.getElementById(uniqueId);
 
-                if (unEl) document.getElementById('templates-list').removeChild(unEl.parentNode);
+                if (unEl !== null) {
+                    document.getElementById('templates-list').removeChild(unEl.parentNode);
+                }
 
                 this.proxyManager.uriList.splice(uriIndex, 1);
-                new FileReader().fileDescriptor().removeLine(tmpl);
+
+                (new FileReader()).fileDescriptor().removeLine(tmpl);
             }
         }
     },
@@ -190,6 +200,7 @@ com.firexProxyPackage = {
     },
     enableTemplates: function (checkBox) {
         var checkBox_class = checkBox.getAttribute('class');
+
         if (checkBox_class.indexOf('active') != -1) {
             checkBox.setAttribute('class', checkBox_class.substring(0, checkBox_class.indexOf('active') - 1));
             this.proxyManager.templateEnabled = false;
@@ -206,93 +217,89 @@ com.firexProxyPackage = {
         this.addTemplate(tmpl);
     },
     parseProxyList: function (callback) {
-        var req = new XMLHttpRequest();
-        var __self = this;
+        var __request = new XMLHttpRequest();
+        var __regExp = /(\.([\da-z\-\_]+).display\:none)/gi;
+        var __tableData = {
+            ipIndex: 1,
+            portIndex: 2,
+            locationIndex: 3,
+            protocolIndex: 6
+        };
 
-        req.open('GET', 'http://proxylist.hidemyass.com/', true);
-        req.onreadystatechange = function () {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    var doc = new DOMParser().parseFromString(req.responseText, "text/html");
+        __request.open('GET', 'http://proxylist.hidemyass.com/', true);
+        __request.onreadystatechange = function () {
+            if (__request.readyState == XMLHttpRequest.DONE) {
+                if (__request.status == 200) {
+                    var __document = (new DOMParser()).parseFromString(__request.responseText, "text/html");
                     var ip_addr = [];
-                    var doc_table = doc.getElementById("listable");
+                    var __table = __document.getElementById("listable");
 
-                    if (doc_table != undefined) {
-                        var doc_tr = doc_table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                    if (__table != undefined) {
+                        var __tr = __table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
-                        for (var i = 0; i < doc_tr.length; i++) {
-                            var doc_td = [];
+                        for (var i = 0; i < __tr.length; i++) {
+                            var matched = [];
+                            var hidden = [];
+                            var address = [];
 
-                            for (var d = 0; d <= 5; d++) doc_td.push(doc_tr[i].getElementsByTagName("td")[d + 1]);
+                            var nodes = __tr[i].children;
+                            var ipNode = nodes[__tableData.ipIndex].firstElementChild;
+                            var hideStyles = ipNode.getElementsByTagName('style')[0].textContent;
 
-                            var span = doc_td[0].getElementsByTagName('span')[0];
-                            var loopAddr = [];
-                            var proxyCondition = {
-                                proxySpeed: parseInt(doc_td[3].getElementsByClassName('progress-indicator')[0].children[0].style.width),
-                                connectionTime: parseInt(doc_td[4].getElementsByClassName('progress-indicator')[0].children[0].style.width),
-                                country: doc_td[2].getElementsByTagName('span')[0].textContent,
-                                proxyType: doc_td[5].innerHTML.toLowerCase()
-                            };
-
-                            if (proxyCondition.connectionTime < 60 || proxyCondition.proxySpeed < 40) continue;
-
-                            if (__self.ALLOWED_PROTOCOLS.indexOf(proxyCondition.proxyType) == -1) continue;
-
-                            var match = span.getElementsByTagName('style')[0].innerHTML.match(/([^\n|.]+display:(?!none))/g),
-                                allElements = span.childNodes;
-
-                            for (var b = 0; b < allElements.length; b++) {
-                                var this_span = allElements[b],
-                                    isLoop = false;
-
-                                if (this_span.textContent.length && this_span.tagName == undefined) {
-                                    loopAddr.push(this_span.textContent);
-                                    continue;
-                                }
-
-                                if (this_span.style.display == "none") continue;
-
-                                if (this_span.tagName.toLowerCase() == 'style') continue;
-
-                                if (this_span.className.length) {
-                                    for (var r = 0; r < match.length; r++) {
-                                        if (match[r].replace(/{.*/, '') == this_span.className) {
-                                            isLoop = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if (!this_span.innerHTML.length || this_span.innerHTML === '.') continue;
-
-                                if (!this_span.className.match(/^[0-9]+$/) && !isLoop && !this_span.style.display) continue;
-
-                                loopAddr.push(this_span.innerHTML);
+                            while ((matched = __regExp.exec(hideStyles)) !== null) {
+                                hidden.push(matched[2]);
                             }
 
+                            var __childs = ipNode.childNodes;
+
+                            for (var j = 0; j < __childs.length; j++) {
+                                var __byte = parseFloat(__childs[j].textContent.trim());
+
+                                if (!isNaN(__byte) && (__byte % 1) !== 0) {
+                                    __byte *= (Math.pow(10, __byte.toString().length - 2));
+                                    __byte = ~~__byte;
+                                }
+
+                                if (__childs[j].nodeType == Node.TEXT_NODE) {
+                                    address.push(__byte);
+                                } else if (__childs[j].style.display != 'none' && hidden.indexOf(__childs[j].className) == -1) {
+                                    if (__childs[j].tagName.toLowerCase() == 'span') {
+                                        address.push(__byte);
+                                    }
+                                }
+                            }
+
+                            var __ipAsString = address.filter(function (n) {
+                                return !(n % 1) && !isNaN(n) && isFinite(n);
+                            }).join('.');
+
                             ip_addr.push([
-                                loopAddr.join('.').replace(/\.{2,}/g, '.'),
-                                doc_td[1].innerHTML.replace(/\s/g, ''),
-                                proxyCondition.country,
-                                proxyCondition.proxyType
+                                __ipAsString,
+                                nodes[__tableData.portIndex].textContent.trim(),
+                                nodes[__tableData.locationIndex].textContent.trim(),
+                                nodes[__tableData.protocolIndex].textContent.trim()
                             ]);
                         }
                     }
 
                     callback(ip_addr);
-                } else callback([]);
+                } else {
+                    callback([]);
+                }
 
-                var doc_box = document.getElementById('proxy-list-box');
+                var __box = document.getElementById('proxy-list-box');
 
-                if (doc_box) {
-                    var list_class = doc_box.getAttribute('class');
+                if (__box) {
+                    var list_class = __box.getAttribute('class');
+
                     if (list_class.indexOf('loading') != -1) {
-                        doc_box.setAttribute('class', list_class.substring(0, list_class.indexOf('loading') - 1));
+                        __box.setAttribute('class', list_class.substring(0, list_class.indexOf('loading') - 1));
                     }
                 }
             }
         };
-        req.send(null);
+
+        __request.send(null);
     },
     openList: function () {
         this.openPopup('proxy-list-panel');
@@ -387,20 +394,25 @@ com.firexProxyPackage = {
         hightlight = hightlight || false;
         var extensionButton = document.getElementById('proxy-toolbar-button');
 
-        if (extensionButton) {
-            var extensionButton_class = extensionButton.getAttribute('class'),
-                extensionButton_index = extensionButton_class.indexOf('active');
+        if (extensionButton !== null) {
+            var extensionButton_class = extensionButton.getAttribute('class');
+            var extensionButton_index = extensionButton_class.indexOf('active');
+
             if (hightlight) {
-                if (extensionButton_index == -1) extensionButton.setAttribute('class', extensionButton_class + ' ' + 'active');
+                if (extensionButton_index == -1) {
+                    extensionButton.setAttribute('class', extensionButton_class + ' ' + 'active');
+                }
             } else {
-                if (extensionButton_index != -1) extensionButton.setAttribute('class', extensionButton_class.substring(0, extensionButton_index - 1));
+                if (extensionButton_index != -1) {
+                    extensionButton.setAttribute('class', extensionButton_class.substring(0, extensionButton_index - 1));
+                }
             }
         }
     }
 };
 
 com.firexProxyPackage.proxyManager = new ProxyManager();
-new FileReader().fileDescriptor().readAll(function (data) {
+(new FileReader()).fileDescriptor().readAll(function (data) {
     if (data) {
         com.firexProxyPackage.proxyManager.uriList = data;
     }
@@ -410,11 +422,13 @@ window.addEventListener("load", function (e) {
     com.firexProxyPackage.onLoad(document.getElementById('firex-string-bundle'));
     var tmplEnable = document.getElementById('tmpl-enable');
 
-    if (tmplEnable) {
+    if (tmplEnable !== null) {
         tmplEnable.addEventListener('click', function () {
             com.firexProxyPackage.enableTemplates(this);
         });
 
-        if (com.firexProxyPackage.prefs.getBoolPref('extensions.firex.enableTemplates')) tmplEnable.click();
+        if (com.firexProxyPackage.prefs.getBoolPref('extensions.firex.enableTemplates')) {
+            tmplEnable.click();
+        }
     }
 }, false);
