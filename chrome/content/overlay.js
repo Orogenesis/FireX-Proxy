@@ -3,7 +3,6 @@ if (!com.firexProxyPackage) com.firexProxyPackage = {};
 
 com.firexProxyPackage = {
     CURRENT_VERSION: 4.3,
-    ALLOWED_PROTOCOLS: ['http', 'https', 'socks4/5'],
     proxyList: [],
     prefs: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch),
     stringBundle: null,
@@ -44,6 +43,7 @@ com.firexProxyPackage = {
     },
     chooseProxy: function (event) {
         var proxy_list = document.getElementById('proxy-list-box');
+
         if (proxy_list) {
             var hbox_elements = proxy_list.childNodes;
 
@@ -160,8 +160,9 @@ com.firexProxyPackage = {
         }
     },
     listPanelShown: function () {
-        var proxyMessage = document.getElementById('proxy-message'),
-            listNodes = document.getElementById('proxy-list-box');
+        var proxyMessage = document.getElementById('proxy-message');
+        var listNodes = document.getElementById('proxy-list-box');
+
         if (proxyMessage) {
             if (listNodes) {
                 if (listNodes.childNodes.length) {
@@ -226,13 +227,13 @@ com.firexProxyPackage = {
             protocolIndex: 6
         };
 
-        __request.open('GET', 'http://proxylist.hidemyass.com/', true);
+        __request.open('GET', 'http://proxylist.hidemyass.com/search-1304002', true);
         __request.onreadystatechange = function () {
             if (__request.readyState == XMLHttpRequest.DONE) {
                 if (__request.status == 200) {
                     var __document = (new DOMParser()).parseFromString(__request.responseText, "text/html");
-                    var ip_addr = [];
                     var __table = __document.getElementById("listable");
+                    var __list = [];
 
                     if (__table != undefined) {
                         var __tr = __table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
@@ -273,7 +274,7 @@ com.firexProxyPackage = {
                                 return !(n % 1) && !isNaN(n) && isFinite(n);
                             }).join('.');
 
-                            ip_addr.push([
+                            __list.push([
                                 __ipAsString,
                                 nodes[__tableData.portIndex].textContent.trim(),
                                 nodes[__tableData.locationIndex].textContent.trim(),
@@ -282,7 +283,7 @@ com.firexProxyPackage = {
                         }
                     }
 
-                    callback(ip_addr);
+                    callback(__list);
                 } else {
                     callback([]);
                 }
