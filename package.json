@@ -1,0 +1,16 @@
+{
+  "title": "FireX Proxy",
+  "name": "firex-proxy",
+  "version": "5.0",
+  "description": "FireX Proxy",
+  "main": "index.js",
+  "author": "Exclumice",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "keywords": [
+    "jetpack"
+  ]
+}

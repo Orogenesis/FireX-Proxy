@@ -1,0 +1,188 @@
+@font-face {
+    font-family: Roboto;
+    src: url('../fonts/Roboto-Thin.ttf');
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('../fonts/Roboto-Regular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('../fonts/Roboto-Medium.ttf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('../fonts/Roboto-Bold.ttf');
+    font-weight: 700;
+}
+
+:focus, :active {
+    outline: none;
+}
+
+::-moz-focus-inner {
+    border: 0;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    position: relative;
+    height: 300px;
+}
+
+button, input,
+textarea, select {
+    font-family: inherit;
+}
+
+#proxy-content {
+    height: 240px;
+    overflow-y: auto;
+}
+
+#proxy-list-box {
+    width: 100%;
+    margin: 10px 0 10px 0;
+    font-size: 12px;
+    font-weight: 500;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#proxy-list-box.loading {
+    background: url(../icons/loading.gif) no-repeat center center;
+}
+
+#proxy-list-box .active {
+    background-color: #D8E8E7;
+}
+
+#proxy-list-box tr {
+    line-height: 30px;
+}
+
+#proxy-list-box td {
+    margin: 2px;
+    cursor: pointer;
+    padding: 10px;
+    color: #585858;
+    text-transform: uppercase;
+}
+
+#proxy-list-box td.checkbox {
+    width: 20px;
+}
+
+#proxy-list-box .country {
+    background: url("../icons/planet.png") no-repeat 5px center;
+    padding-left: 36px;
+}
+
+#settings-panel input.settings-input {
+    padding: 10px;
+    border: 0;
+    outline: 0;
+}
+
+#settings-panel .settings-template {
+    color: #585858;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 15px;
+}
+
+#settings-panel .settings-template::after {
+    content: ' ';
+    display: block;
+    clear: both;
+}
+
+#settings-panel .settings-template img {
+    float: right;
+    cursor: pointer;
+}
+
+#templates-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#enable-templates {
+    margin-top: 10px;
+}
+
+#enable-templates::after {
+    content: ' ';
+    display: block;
+    clear: both;
+}
+
+#tmpl-block {
+    float: right;
+    margin-right: 18px;
+    text-transform: uppercase;
+    font-size: 10px;
+    color: #585858;
+}
+
+.list-style-arrow {
+    background: url("../icons/icon-list-arrow.png") no-repeat;
+    padding-left: 20px;
+    margin-left: -8px;
+}
+
+.bottom-button {
+    padding: 25px;
+    border: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    background-color: #D8E8E7;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100%;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+}
+
+.bottom-button.refresh {
+    background-image: url(../icons/icon-refresh.png);
+}
+
+.bottom-button:hover {
+    background-color: #D1E8E7;
+}
+
+/**
+ * Checkbox
+ */
+
+.checkbox-square {
+    border: 1px solid #CCCCCC;
+    border-radius: 2px;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: -4px;
+    cursor: pointer;
+}
+
+.checkbox-square.active, #proxy-list-box .active .checkbox-square {
+    background: url('../icons/icon-checked.png') center center no-repeat #78C0BD;
+    border-color: #6AB5B2;
+}

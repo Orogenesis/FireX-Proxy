@@ -1,8 +1,0 @@
-<!ENTITY addonToolbar "FireX Proxy">
-<!ENTITY activate "Сменить IP">
-<!ENTITY reset "Отключить прокси">
-<!ENTITY templates "Шаблоны URL">
-<!ENTITY proxy_off "Прокси отключен">
-<!ENTITY proxy-list "Список прокси">
-<!ENTITY is_empty "В данный момент список адресов пуст">
-<!ENTITY enableTemplates "Включить шаблоны">
