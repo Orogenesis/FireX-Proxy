@@ -27,7 +27,7 @@
     var FireX = {};
     //MODELS
     FireX.ProxyServer = Backbone.Model.extend({
-                defauls: {
+                defaults: {
                     ip: '127.0.0.1',
                     type: 'HTTP',
                     country: 'United States'
@@ -50,8 +50,8 @@
     });
     FireX.AppView = Backbone.View.extend({
                 el: '#proxy-content',
-                table: '#proxy-list-box',
                 initialize: function () {
+                    this.table = this.$('#proxy-list-box');
                     this.update();
                 },
                 events: {'click .refresh': 'update'},
