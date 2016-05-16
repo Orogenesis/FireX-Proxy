@@ -2,61 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="../libs/jquery.js" type="text/javascript"></script>
+    <script src="../libs/underscore.js" type="text/javascript"></script>
+    <script src="../libs/backbone.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
 </head>
 <body>
 <div id="proxy-content">
     <table id="proxy-list-box">
-        <tr class="active">
-            <td class="checkbox">
-                <div class="checkbox-square"></div>
-            </td>
-            <td>127.0.0.1</td>
-            <td>HTTP</td>
-            <td class="country">United States</td>
-        </tr>
-        <tr>
-            <td class="checkbox">
-                <div class="checkbox-square"></div>
-            </td>
-            <td>127.0.0.1</td>
-            <td>HTTP</td>
-            <td class="country">United States</td>
-        </tr>
-        <tr>
-            <td class="checkbox">
-                <div class="checkbox-square"></div>
-            </td>
-            <td>127.0.0.1</td>
-            <td>HTTP</td>
-            <td class="country">United States</td>
-        </tr>
-        <tr>
-            <td class="checkbox">
-                <div class="checkbox-square"></div>
-            </td>
-            <td>127.0.0.1</td>
-            <td>HTTP</td>
-            <td class="country">United States</td>
-        </tr>
-        <tr>
-            <td class="checkbox">
-                <div class="checkbox-square"></div>
-            </td>
-            <td>127.0.0.1</td>
-            <td>HTTP</td>
-            <td class="country">United States</td>
-        </tr>
-        <tr>
-            <td class="checkbox">
-                <div class="checkbox-square"></div>
-            </td>
-            <td>127.0.0.1</td>
-            <td>HTTP</td>
-            <td class="country">United States</td>
-        </tr>
     </table>
+    <button id="refresh-button" class="bottom-button refresh"></button>
 </div>
-<button class="bottom-button refresh"></button>
+<!-- template-->
+<script type="text/template" id="server-template">
+    <td class="checkbox">
+        <div class="checkbox-square"></div>
+    </td>
+    <td><%- ip%></td>
+    <td><%- type%></td>
+    <td class="country"><%- country%></td>
+</script>
+<script type="text/javascript">
+
+    var FireX = {};
+    //MODELS
+    FireX.ProxyServer = Backbone.Model.extend({
+                defauls: {
+                    ip: '127.0.0.1',
+                    type: 'HTTP',
+                    country: 'United States'
+                }
+            }
+    );
+    //COLLECTIONS
+    FireX.ProxyList = Backbone.Collection.extend({
+        model: FireX.proxyList,
+        url: 'proxy-list'
+    });
+    //VIEWS
+    FireX.ProxyView = Backbone.View.extend({
+        tag: 'tr',
+        template: _.template($('#server-template').html()),
+        render: function () {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        }
+    });
+    FireX.AppView = Backbone.View.extend({
+                el: '#proxy-content',
+                table: '#proxy-list-box',
+                initialize: function () {
+                    this.update();
+                },
+                events: {'click .refresh': 'update'},
+                update: function () {
+                    console.log("bump");
+                }
+            }
+    );
+    //INITIALIZERS
+    FireX.appView = new FireX.AppView();
+</script>
 </body>
 </html>
