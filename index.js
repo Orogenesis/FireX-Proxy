@@ -2,10 +2,9 @@ const self = require('sdk/self');
 const { FileReader } = require('./FileReader.js');
 const { ActionButton } = require("sdk/ui/button/action");
 const { Panel } = require("sdk/panel");
-const  { Request } = require("sdk/request").Request;
+const  { Request } = require("sdk/request");
 var panel = Panel({
     contentURL: './html/list.html',
-    contentScriptFile:,
     height: 300,
     width: 400
 });
