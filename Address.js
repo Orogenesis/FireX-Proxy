@@ -1,4 +1,9 @@
-function Address() {}
+function Address(address, port, protocol, country) {
+    this.setIPAddress(address);
+    this.setPort(port);
+    this.setProxyProtocol(protocol);
+    this.setCountry(country);
+}
 
 Address.prototype = {
     /**
@@ -26,6 +31,19 @@ Address.prototype = {
      */
     getPort: function () {
         return this.port;
+    },
+    /**
+     * @param {String} country
+     * @returns void
+     */
+    setCountry: function (country) {
+        this.country = country;
+    },
+    /**
+     * @returns {String|*}
+     */
+    getCountry: function () {
+        return this.country;
     },
     /**
      * @param {String} protocol
