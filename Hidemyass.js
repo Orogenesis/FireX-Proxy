@@ -5,6 +5,9 @@ const { Request } = require('sdk/request');
 function Hidemyass() {}
 
 Hidemyass.prototype = {
+    /**
+     * @returns {Promise}
+     */
     pull: function () {
         (function (__self) {
             return new Promise(function (resolve, reject) {
@@ -25,6 +28,10 @@ Hidemyass.prototype = {
             });
         })(this);
     },
+    /**
+     * @param {Function} callback
+     * @returns void
+     */
     getList: function (callback) {
         this.pull().then(function (response) {
             var a = [];
@@ -44,18 +51,34 @@ Hidemyass.prototype = {
             callback(a);
         });
     },
+    /**
+     * @param {Function} callback
+     * @returns {*}
+     */
     makeRequest: function (callback) {
         return Request({
             url: this.getProviderUri(),
             onComplete: callback
         });
     },
+    /**
+     * @returns {String}
+     */
     getProviderUri: function () {
         return 'http://proxylist.hidemyass.com/search-1304002';
     },
+    /**
+     * @param {String} string
+     * @returns {Document}
+     * @private
+     */
     __toDOM: function (string) {
         return new DOMParser().parseFromString(string);
     },
+    /**
+     * @param {Element} dRow
+     * @returns void
+     */
     __tableGenerator: function* (dRow) {
         var dCells = dTable.querySelectorAll("td");
 
@@ -63,6 +86,9 @@ Hidemyass.prototype = {
             yield cell;
         });
     },
+    /**
+     * @type {Object}
+     */
     properties: {
         table: '#listable'
     },
