@@ -37,13 +37,13 @@ Hidemyass.prototype = {
             var a = [];
 
             response.forEach(function (row, i) {
-                var lastUpdate = row.next().value;
-                var address = row.next().value;
-                var port = row.next().value;
-                var country = row.next().value;
-                var speed = row.next().value;
-                var connectionTime = row.next().value;
-                var connectionType = row.next().value;
+                var lastUpdate      = row.next().value;
+                var address         = row.next().value;
+                var port            = row.next().value;
+                var country         = row.next().value;
+                var speed           = row.next().value;
+                var connectionTime  = row.next().value;
+                var connectionType  = row.next().value;
 
                 a.push(new Address(address, port, connectionType, country));
             });
