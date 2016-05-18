@@ -73,7 +73,7 @@ FileReader.prototype = {
          * Close file output stream
          */
 
-        //FileUtils.closeSafeFileOutputStream(ostream);
+        FileUtils.closeSafeFileOutputStream(ostream);
     },
     /**
      * @param {Function} callback
