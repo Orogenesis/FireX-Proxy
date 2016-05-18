@@ -4,16 +4,23 @@ const { ActionButton } = require("sdk/ui/button/action");
 const { Panel } = require("sdk/panel");
 const  { Request } = require("sdk/request");
 
-new Hidemyass().getList(function (list) {
-    console.error(list);
-});
-
+// new Hidemyass().getList(function (list) {
+//     console.error(list);
+// });
 var panel = Panel({
     contentURL: './html/list.html',
+    contentScriptFiles: ['./js/apps/list.js'],
     height: 300,
     width: 400
 });
 
+panel.port.on("parse-proxy", function () {
+    console.error("1");
+    new Hidemyass().getList(function (list) {
+        console.error(list);
+        panel.port.emit("list-ready", list);
+    });
+});
 var button = ActionButton({
     id: "firex-action",
     label: "FireX Proxy",

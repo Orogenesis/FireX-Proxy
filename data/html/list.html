@@ -5,6 +5,7 @@
     <script src="../libs/jquery.js" type="text/javascript"></script>
     <script src="../libs/underscore.js" type="text/javascript"></script>
     <script src="../libs/backbone.js" type="text/javascript"></script>
+    <script src="../libs/backbone-ls.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
 </head>
 <body>
@@ -22,46 +23,9 @@
     <td><%- type%></td>
     <td class="country"><%- country%></td>
 </script>
-<script type="text/javascript">
-
-    var FireX = {};
-    //MODELS
-    FireX.ProxyServer = Backbone.Model.extend({
-                defaults: {
-                    ip: '127.0.0.1',
-                    type: 'HTTP',
-                    country: 'United States'
-                }
-            }
-    );
-    //COLLECTIONS
-    FireX.ProxyList = Backbone.Collection.extend({
-        model: FireX.proxyList,
-        url: 'proxy-list'
-    });
-    //VIEWS
-    FireX.ProxyView = Backbone.View.extend({
-        tag: 'tr',
-        template: _.template($('#server-template').html()),
-        render: function () {
-            this.$el.html(this.template(this.model.toJSON()));
-            return this;
-        }
-    });
-    FireX.AppView = Backbone.View.extend({
-                el: '#proxy-content',
-                initialize: function () {
-                    this.table = this.$('#proxy-list-box');
-                    this.update();
-                },
-                events: {'click .refresh': 'update'},
-                update: function () {
-                    console.log("bump");
-                }
-            }
-    );
-    //INITIALIZERS
-    FireX.appView = new FireX.AppView();
-</script>
+<script src="../js/models/proxyserver.js" type="text/javascript"></script>
+<script src="../js/collections/proxylist.js" type="text/javascript"></script>
+<script src="../js/views/proxyview.js" type="text/javascript"></script>
+<script src="../js/views/appview.js" type="text/javascript"></script>
 </body>
 </html>
