@@ -1,6 +1,9 @@
 const { WebScraping } = require('./WebScraping.js');
 const { Address } = require('./Address.js');
 const { Request } = require('sdk/request');
+const { Cc, Ci } = require('chrome');
+
+const DOMParser = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser);
 
 function Hidemyass() {}
 
@@ -9,19 +12,20 @@ Hidemyass.prototype = {
      * @returns {Promise}
      */
     pull: function () {
-        (function (__self) {
+        return (function (__self) {
             return new Promise(function (resolve, reject) {
-                this.makeRequest(function (response) {
+                __self.makeRequest(function (response) {
                     var dTree = __self.__toDOM(response.text);
 
                     var dTable = dTree.querySelector(__self.properties.table);
+
                     var dRow = dTable.querySelectorAll("tbody tr");
 
                     var a = [];
 
-                    dRow.forEach(function (row, i) {
-                        a.push(__self.__tableGenerator(row));
-                    });
+                    for (var i = 0; i < dRow.length; ++i) {
+                        a.push(__self.__tableGenerator(dRow[i]));
+                    }
 
                     resolve(a);
                 });
@@ -36,9 +40,15 @@ Hidemyass.prototype = {
         this.pull().then(function (response) {
             var a = [];
 
+            var webScraping = new WebScraping();
+
             response.forEach(function (row, i) {
                 var lastUpdate      = row.next().value;
                 var address         = row.next().value;
+
+                webScraping.setHiddenNodes(address.querySelector('style'));
+                address = webScraping.cellToAddress(address.firstElementChild.childNodes).asString();
+
                 var port            = row.next().value;
                 var country         = row.next().value;
                 var speed           = row.next().value;
@@ -59,7 +69,7 @@ Hidemyass.prototype = {
         return Request({
             url: this.getProviderUri(),
             onComplete: callback
-        });
+        }).get();
     },
     /**
      * @returns {String}
@@ -73,18 +83,18 @@ Hidemyass.prototype = {
      * @private
      */
     __toDOM: function (string) {
-        return new DOMParser().parseFromString(string);
+        return DOMParser.parseFromString(string, "text/html");
     },
     /**
      * @param {Element} dRow
      * @returns void
      */
     __tableGenerator: function* (dRow) {
-        var dCells = dTable.querySelectorAll("td");
+        var dCells = dRow.querySelectorAll("td");
 
-        dCells.forEach(function (cell, i) {
-            yield cell;
-        });
+        for (var i = 0; i < dCells.length; ++i) {
+            yield dCells[i];
+        }
     },
     /**
      * @type {Object}
@@ -93,3 +103,5 @@ Hidemyass.prototype = {
         table: '#listable'
     },
 };
+
+exports.Hidemyass = Hidemyass;

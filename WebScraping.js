@@ -1,8 +1,32 @@
+const { IArray } = require('./IArray.js');
+
 function WebScraping() {
     this.hNodes = [];
 }
 
 WebScraping.prototype = {
+    /**
+     * @param {Element} jCell
+     * @returns {{asArray, asString}}
+     */
+    cellToAddress: function (jCell) {
+        var a = [];
+
+        for (var i = 0; i < jCell.length; ++i) {
+            a.push(this.nodeToByte(jCell[i]));
+        }
+
+        a = IArray.filterNumeric(a);
+
+        return {
+            asArray: function () {
+                return a;
+            },
+            asString: function () {
+                return a.join('.');
+            }
+        };
+    },
     nodeToByte: function (jNode) {
         var __byte = parseFloat(jNode.textContent.trim());
         var hidden = this.getHiddenNodes();
