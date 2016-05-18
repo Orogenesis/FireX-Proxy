@@ -9,7 +9,7 @@ const  { Request } = require("sdk/request");
 // });
 var panel = Panel({
     contentURL: './html/list.html',
-    contentScriptFiles: ['./js/apps/list.js'],
+    contentScriptFile: ['./libs/jquery.js', './libs/underscore.js', './libs/backbone.js', './libs/backbone-ls.js', './js/models/proxyserver.js', './js/collections/proxylist.js', './js/views/proxyview.js', './js/views/appview.js', './js/apps/list.js'],
     height: 300,
     width: 400
 });

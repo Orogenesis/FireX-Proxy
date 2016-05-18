@@ -1,4 +1,5 @@
 var FireX = FireX || {};
+console.error("appview");
 FireX.ListView = Backbone.View.extend({
         el: '#proxy-content',
         initialize: function () {
