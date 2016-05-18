@@ -1,6 +1,6 @@
 var FireX = FireX || {};
 console.error("ProxyServerModel");
-FireX.ProxyServer = Backbone.Model.extend({
+FireX.ProxyServerModel = Backbone.Model.extend({
         defaults: {
             ip: '127.0.0.1',
             port: '8000',
