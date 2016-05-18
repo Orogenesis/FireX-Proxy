@@ -2,7 +2,6 @@ const self = require('sdk/self');
 const { Hidemyass } = require('./Hidemyass.js');
 const { ActionButton } = require("sdk/ui/button/action");
 const { Panel } = require("sdk/panel");
-const { Request } = require("sdk/request");
 
 new Hidemyass().getList(function (list) {
     console.error(list);

@@ -46,14 +46,19 @@ Hidemyass.prototype = {
                 var lastUpdate      = row.next().value;
                 var address         = row.next().value;
 
-                webScraping.setHiddenNodes(address.querySelector('style'));
-                address = webScraping.cellToAddress(address.firstElementChild.childNodes).asString();
+                webScraping.setHiddenNodes(address.querySelector('style').textContent);
+                address             = webScraping.cellToAddress(address.firstElementChild.childNodes).asString();
 
                 var port            = row.next().value;
+                port                = port.textContent.trim();
+
                 var country         = row.next().value;
+                country             = country.firstElementChild.textContent.trim();
+
                 var speed           = row.next().value;
                 var connectionTime  = row.next().value;
                 var connectionType  = row.next().value;
+                connectionType      = connectionType.textContent.trim();
 
                 a.push(new Address(address, port, connectionType, country));
             });
