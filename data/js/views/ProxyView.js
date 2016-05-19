@@ -6,7 +6,6 @@ $(function () {
         template: _.template($('#server-template').html()),
         render: function () {
             this.$el.html(this.template(this.model.toJSON()));
-            return this;
         }
     });
 });

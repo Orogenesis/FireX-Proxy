@@ -50,10 +50,10 @@ $(function () {
         },
         addressToModel: function (address) {
             return {
-                iAddress:   address.getIPAddress(),
-                iPort:      address.getPort(),
-                iProtocol:  address.getProxyProtocol(),
-                iCountry:   address.getCountry()
+                iAddress:   address.ipAddress,
+                iPort:      address.port,
+                iProtocol:  address.protocol,
+                iCountry:   address.country
             }
         }
     });
