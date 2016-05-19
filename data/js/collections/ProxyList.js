@@ -2,8 +2,8 @@ var FireX = FireX || {};
 
 $(function () {
     FireX.ProxyList = Backbone.Collection.extend({
-        model: FireX.ProxyServer,
-        localStorage: new Store("proxy-cache")
+        model: FireX.ProxyServerModel,
+        url: '/proxylist'
     });
 
     FireX.proxyList = new FireX.ProxyList();
