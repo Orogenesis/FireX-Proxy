@@ -2,25 +2,19 @@ const self = require('sdk/self');
 const { Hidemyass } = require('./Hidemyass.js');
 const { ActionButton } = require("sdk/ui/button/action");
 const { Panel } = require("sdk/panel");
-const  { Request } = require("sdk/request");
 
-// new Hidemyass().getList(function (list) {
-//     console.error(list);
-// });
 var panel = Panel({
     contentURL: './html/list.html',
-    contentScriptFile: ['./libs/jquery.js', './libs/underscore.js', './libs/backbone.js', './libs/backbone-ls.js', './js/models/ProxyServerModel.js', './js/collections/ProxyList.js', './js/views/ProxyView.js', './js/views/ListView.js', './js/apps/List.js'],
     height: 300,
     width: 400
 });
 
-panel.port.on("parse-proxy", function () {
-    console.error("1");
+panel.port.on("getList", function (response) {
     new Hidemyass().getList(function (list) {
-        console.error(list);
-        panel.port.emit("list-ready", list);
+        panel.port.emit("onList", list);
     });
 });
+
 var button = ActionButton({
     id: "firex-action",
     label: "FireX Proxy",

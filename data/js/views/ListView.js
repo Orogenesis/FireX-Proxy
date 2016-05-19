@@ -1,42 +1,60 @@
 var FireX = FireX || {};
-console.error("appview");
-FireX.ListView = Backbone.View.extend({
+
+$(function () {
+    FireX.ListView = Backbone.View.extend({
         el: '#proxy-content',
+        events: {
+            'click .refresh': 'update'
+        },
         initialize: function () {
-            console.error("initialize function");
-            self.port.on("list-ready", this.data);
+            var that = this;
+
+            addon.port.on('onList', function (response) {
+                that.onList(response);
+            });
+
             this.table = this.$('#proxy-list-box');
+
             this.listenTo(FireX.proxyList, 'add', this.addOne);
             this.listenTo(FireX.proxyList, 'reset', this.addAll);
-            if (FireX.proxyList.size == 0) this.update();
+
+            if (!FireX.proxyList.size) {
+                this.update();
+            }
+
             FireX.proxyList.fetch();
         },
-        events: {'click .refresh': 'update'},
         update: function () {
-            console.error("update function");
-            self.port.emit("parse-proxy");
+            addon.port.emit('getList');
         },
         addOne: function (proxy) {
-            var view = new FireX.ProxyView({model: FireX.ProxyServer});
+            var view = new FireX.ProxyView({
+                model: FireX.ProxyServer
+            });
+
             this.table.append(view.render().el);
         },
         addAll: function () {
-            this.table.html('');
+            this.table.empty();
+
             FireX.proxyList.each(this.addOne, this);
         },
-        data: function (proxyList) {
+        onList: function (proxyList) {
             FireX.proxyList.reset();
-            for (var i = 0; i < proxyList.length; i++) {
-                FireX.proxyList.create(this.addressToModel(proxyList[i]));
-            }
+
+            (function (that) {
+                proxyList.forEach(function (item, i) {
+                    FireX.proxyList.create(that.addressToModel(item));
+                });
+            })(this);
         },
         addressToModel: function (address) {
             return {
-                ip: address.getIPAddress(),
-                port: address.getPort(),
-                type: address.getProxyProtocol(),
-                country: address.getCountry()
+                iAddress:   address.ipAddress,
+                iPort:      address.port,
+                iProtocol:  address.protocol,
+                iCountry:   address.country
             }
         }
-    }
-);
+    });
+});

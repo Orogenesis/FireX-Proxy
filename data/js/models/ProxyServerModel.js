@@ -1,11 +1,12 @@
 var FireX = FireX || {};
-console.error("ProxyServerModel");
-FireX.ProxyServerModel = Backbone.Model.extend({
+
+$(function () {
+    FireX.ProxyServerModel = Backbone.Model.extend({
         defaults: {
-            ip: '127.0.0.1',
-            port: '8000',
-            type: 'HTTP',
-            country: 'United States'
+            iAddress: '127.0.0.1',
+            iPort: '80',
+            iProtocol: 'HTTP',
+            iCountry: 'UK'
         }
-    }
-);
+    });
+});

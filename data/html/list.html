@@ -6,23 +6,26 @@
     <script src="../libs/underscore.js" type="text/javascript"></script>
     <script src="../libs/backbone.js" type="text/javascript"></script>
     <script src="../libs/backbone-ls.js" type="text/javascript"></script>
+    <script src="../js/models/ProxyServerModel.js" type="text/javascript"></script>
+    <script src="../js/collections/ProxyList.js" type="text/javascript"></script>
+    <script src="../js/views/ProxyView.js" type="text/javascript"></script>
+    <script src="../js/views/ListView.js" type="text/javascript"></script>
+    <script src="../js/app.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
 </head>
 <body>
 <div id="proxy-content">
     <table id="proxy-list-box">
     </table>
-    <button id="refresh-button" class="bottom-button refresh"></button>
+    <button class="bottom-button refresh"></button>
 </div>
-<!-- template-->
 <script type="text/template" id="server-template">
     <td class="checkbox">
         <div class="checkbox-square"></div>
     </td>
-    <td><%- ip%></td>
-    <td><%- type%></td>
-    <td class="country"><%- country%></td>
+    <td><%- ip %></td>
+    <td><%- type %></td>
+    <td class="country"><%- country %></td>
 </script>
-
 </body>
 </html>
