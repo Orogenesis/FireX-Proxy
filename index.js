@@ -2,6 +2,8 @@ const self = require('sdk/self');
 const { Hidemyass } = require('./Hidemyass.js');
 const { ActionButton } = require("sdk/ui/button/action");
 const { Panel } = require("sdk/panel");
+const {Address} = require('./Address.js');
+const {Connector} = require('./Connector.js');
 
 var panel = Panel({
     contentURL: './html/list.html',
@@ -9,10 +11,22 @@ var panel = Panel({
     width: 400
 });
 
+/**
+ * @type {Connector}
+ */
+var connector;
+
 panel.port.on("getList", function (response) {
     new Hidemyass().getList(function (list) {
         panel.port.emit("onList", list);
     });
+}).on("connect", function (server) {
+    console.error("connect");
+    connector = new Connector(new Address(server.iAddress, server.iPort, server.iProtocol, server.iCountry));
+    connector.start();
+}).on("disconnect", function () {
+    console.error("disconnect");
+    connector.stop();
 });
 
 var button = ActionButton({
@@ -27,5 +41,7 @@ var button = ActionButton({
         panel.show({
             position: button
         });
+
+        panel.port.emit('onMenuOpen');
     }
 });

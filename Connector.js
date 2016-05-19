@@ -1,5 +1,5 @@
-var { Cc, Ci } = require('chrome');
-var nsIProtocolProxyService = Cc["@mozilla.org/network/protocol-proxy-service;1"].getService(Ci.nsIProtocolProxyService);
+const {Cc, Ci} = require('chrome');
+const nsIProtocolProxyService = Cc["@mozilla.org/network/protocol-proxy-service;1"].getService(Ci.nsIProtocolProxyService);
 
 /**
  * @param {Address} address

@@ -6,7 +6,15 @@ $(function () {
             iAddress: '127.0.0.1',
             iPort: '80',
             iProtocol: 'HTTP',
-            iCountry: 'UK'
+            iCountry: 'UK',
+            iActive: false
+        },
+        toggle: function () {
+            this.save({
+                iActive: !this.get('iActive')
+            });
+            
+            return this.get('iActive');
         }
     });
 });

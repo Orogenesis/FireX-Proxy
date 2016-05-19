@@ -11,36 +11,37 @@ $(function () {
 
             addon.port.on('onList', function (response) {
                 that.onList(response);
+            }).on('onMenuOpen', function () {
+                that.onMenuOpen();
             });
 
             this.table = this.$('#proxy-list-box');
+            this.spinner = this.$('#loading-gif');
 
             this.listenTo(FireX.proxyList, 'add', this.addOne);
-            this.listenTo(FireX.proxyList, 'reset', this.addAll);
-
-            if (!FireX.proxyList.size) {
+        },
+        onMenuOpen: function () {
+            if (!FireX.proxyList.length) {
                 this.update();
             }
-
-            FireX.proxyList.fetch();
         },
         update: function () {
             addon.port.emit('getList');
+
+            this.table.empty();
+            this.spinner.show();
         },
         addOne: function (proxy) {
             var view = new FireX.ProxyView({
-                model: FireX.ProxyServer
+                model: proxy
             });
 
             this.table.append(view.render().el);
         },
-        addAll: function () {
-            this.table.empty();
-
-            FireX.proxyList.each(this.addOne, this);
-        },
         onList: function (proxyList) {
             FireX.proxyList.reset();
+
+            this.spinner.hide();
 
             (function (that) {
                 proxyList.forEach(function (item, i) {
@@ -50,10 +51,10 @@ $(function () {
         },
         addressToModel: function (address) {
             return {
-                iAddress:   address.ipAddress,
-                iPort:      address.port,
-                iProtocol:  address.protocol,
-                iCountry:   address.country
+                iAddress: address.ipAddress,
+                iPort: address.port,
+                iProtocol: address.protocol,
+                iCountry: address.country
             }
         }
     });
