@@ -2,8 +2,8 @@ const self = require('sdk/self');
 const { Hidemyass } = require('./Hidemyass.js');
 const { ActionButton } = require("sdk/ui/button/action");
 const { Panel } = require("sdk/panel");
-const {Address} = require('./Address.js');
-const {Connector} = require('./Connector.js');
+const { Address } = require('./Address.js');
+const { Connector } = require('./Connector.js');
 
 var panel = Panel({
     contentURL: './html/list.html',
@@ -21,11 +21,9 @@ panel.port.on("getList", function (response) {
         panel.port.emit("onList", list);
     });
 }).on("connect", function (server) {
-    console.error("connect");
     connector = new Connector(new Address(server.iAddress, server.iPort, server.iProtocol, server.iCountry));
     connector.start();
 }).on("disconnect", function () {
-    console.error("disconnect");
     connector.stop();
 });
 

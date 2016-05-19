@@ -1,4 +1,4 @@
-const {Cc, Ci} = require('chrome');
+const { Cc, Ci } = require('chrome');
 const nsIProtocolProxyService = Cc["@mozilla.org/network/protocol-proxy-service;1"].getService(Ci.nsIProtocolProxyService);
 
 /**
@@ -7,6 +7,7 @@ const nsIProtocolProxyService = Cc["@mozilla.org/network/protocol-proxy-service;
  */
 function Connector(address) {
     this.address = address;
+    this.setState(false);
 }
 
 Connector.prototype = {
@@ -14,22 +15,20 @@ Connector.prototype = {
      * @returns {{applyFilter, register, unregister}}
      */
     service: function () {
-        return (function (self) {
+        return (function (that) {
             return {
                 applyFilter: function (th, uri, proxy) {
                     var __uri = uri.spec;
 
-                    if (self.isTemplateEnabled() && __uri.indexOf(self.getUriList()) < 0) {
+                    if (!that.isEnabled() || (that.isTemplateEnabled() && __uri.indexOf(that.getUriList()) < 0)) {
                         return proxy;
                     }
 
-                    return nsIProtocolProxyService.newProxyInfo(self.address.getProxyProtocol(), self.address.getIPAddress(), self.address.getPort(), 0, -1, null);
-                }
-                ,
+                    return nsIProtocolProxyService.newProxyInfo(that.address.getProxyProtocol(), that.address.getIPAddress(), that.address.getPort(), 0, -1, null);
+                },
                 register: function () {
                     nsIProtocolProxyService.registerFilter(this, 0);
-                }
-                ,
+                },
                 unregister: function () {
                     nsIProtocolProxyService.unregisterFilter(this);
                 }
@@ -41,12 +40,14 @@ Connector.prototype = {
      */
     start: function () {
         this.service().register();
+        this.setState(true);
     },
     /**
      * @returns void
      */
     stop: function () {
         this.service().unregister();
+        this.setState(false);
     },
     /**
      * @returns {Boolean}
@@ -66,6 +67,18 @@ Connector.prototype = {
      */
     getUriList: function () {
         return this.uriList;
+    },
+    /**
+     * @param {Boolean} state
+     */
+    setState: function (state) {
+        this.iEnabled = state;
+    },
+    /**
+     * @returns {Boolean}
+     */
+    isEnabled: function () {
+        return this.iEnabled;
     }
 };
 

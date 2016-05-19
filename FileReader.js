@@ -1,5 +1,5 @@
 const { Cc, Cu, Ci } = require("chrome");
-const { NetUtil} = Cu.import("resource://gre/modules/NetUtil.jsm");
+const { NetUtil } = Cu.import("resource://gre/modules/NetUtil.jsm");
 const { FileUtils } = Cu.import("resource://gre/modules/FileUtils.jsm");
 
 function FileReader(fPath) {
