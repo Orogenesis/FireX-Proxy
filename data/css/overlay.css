@@ -55,20 +55,15 @@ textarea, select {
 }
 
 #proxy-list-box {
+    height: 100%;
     width: 100%;
-    margin: 10px 0 10px 0;
     font-size: 12px;
     font-weight: 500;
     border-collapse: collapse;
     border-spacing: 0;
 }
 
-#loading-gif {
-    text-align: center;
-    display: none;
-    width: 100%;
-    line-height: 100%;
-    height: 100%;
+.spinner {
     background: url(../icons/loading.gif) no-repeat center center;
 }
 
