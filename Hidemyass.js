@@ -108,7 +108,7 @@ Hidemyass.prototype = {
      */
     properties: {
         table: '#listable'
-    },
+    }
 };
 
 exports.Hidemyass = Hidemyass;
