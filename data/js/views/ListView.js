@@ -16,7 +16,6 @@ $(function () {
             });
 
             this.table = this.$('#proxy-list-box');
-            this.spinner = this.$('#loading-gif');
 
             this.listenTo(FireX.proxyList, 'add', this.addOne);
         },
@@ -28,8 +27,7 @@ $(function () {
         update: function () {
             addon.port.emit('getList');
 
-            this.table.empty();
-            this.spinner.show();
+            this.table.addClass('spinner').empty();
         },
         addOne: function (proxy) {
             var view = new FireX.ProxyView({
@@ -41,7 +39,7 @@ $(function () {
         onList: function (proxyList) {
             FireX.proxyList.reset();
 
-            this.spinner.hide();
+            this.table.removeClass('spinner');
 
             (function (that) {
                 proxyList.forEach(function (item, i) {

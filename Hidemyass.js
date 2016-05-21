@@ -17,14 +17,16 @@ Hidemyass.prototype = {
                 __self.makeRequest(function (response) {
                     var dTree = __self.__toDOM(response.text);
 
-                    var dTable = dTree.querySelector(__self.properties.table);
-
-                    var dRow = dTable.querySelectorAll("tbody tr");
-
                     var a = [];
 
-                    for (var i = 0; i < dRow.length; ++i) {
-                        a.push(__self.__tableGenerator(dRow[i]));
+                    var dTable = dTree.querySelector(__self.properties.table);
+
+                    if (typeof dTable == 'object') {
+                        var dRow = dTable.querySelectorAll("tbody tr");
+
+                        for (var i = 0; i < dRow.length; ++i) {
+                            a.push(__self.__tableGenerator(dRow[i]));
+                        }
                     }
 
                     resolve(a);

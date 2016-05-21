@@ -42,6 +42,7 @@ body {
     font-weight: normal;
     position: relative;
     height: 300px;
+    width: 400px;
 }
 
 button, input,
@@ -50,13 +51,17 @@ textarea, select {
 }
 
 #proxy-content {
+    height: 100%;
+}
+
+#proxy-content .h-max {
     height: 240px;
     overflow-y: auto;
 }
 
 #proxy-list-box {
-    height: 100%;
     width: 100%;
+    height: 100%;
     font-size: 12px;
     font-weight: 500;
     border-collapse: collapse;
@@ -174,6 +179,10 @@ textarea, select {
 
 .checkbox-square {
     border: 1px solid #CCCCCC;
+    background-image: url('../icons/icon-checked.png');
+    background-color: #d9d9d9;
+    background-repeat: no-repeat;
+    background-position: center center;
     border-radius: 2px;
     width: 15px;
     height: 15px;
@@ -184,6 +193,6 @@ textarea, select {
 }
 
 .checkbox-square.active, #proxy-list-box .active .checkbox-square {
-    background: url('../icons/icon-checked.png') center center no-repeat #78C0BD;
+    background-color: #78C0BD;
     border-color: #6AB5B2;
 }
