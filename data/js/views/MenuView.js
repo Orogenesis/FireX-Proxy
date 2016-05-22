@@ -2,22 +2,23 @@ var FireX = FireX || {};
 
 $(function () {
     FireX.MenuEntryView = Backbone.View.extend({
-        template: _.template($("#menu-entry-template")),
+        template: _.template($("#menu-entry-template").html()),
         events: {'click':'choose'},
         initialize: function () {
 
         },
         render: function () {
-            this.$el.html(this.template());
+            this.$el.html(this.template(this.model.toJSON()));
 
             return this;
         },
         choose: function () {
+            //TODO: fix. No reaction.
             this.$el.addClass('.active').siblings().removeClass('.active');
         }
     });
     FireX.MenuView = Backbone.View.extend({
-        template: _.template($("#menu-template")),
+        template: _.template($("#menu-template").html()),
         initialize: function () {
 
         },

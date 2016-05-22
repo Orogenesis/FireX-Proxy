@@ -7,9 +7,10 @@ $(function () {
 
         initialize: function () {
             FireX.menuList = new FireX.Menu();
-            FireX.menuList.create({iTo:'here', iName:'click me'});
-            
-            this.menu.html(new MenuView().render().el);
+            FireX.menuList.create({iTo: 'here', iText: 'click me'});
+            //Удобно. Тут добавляешь кнопку исразу в routes пишешь действие для нее.
+
+            this.menu.html(new FireX.MenuView().render().el);
             
             this.index();
         },
