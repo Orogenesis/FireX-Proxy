@@ -41,7 +41,7 @@ body {
     background-color: #fff;
     font-weight: normal;
     position: relative;
-    height: 300px;
+    height: 350px;
     width: 400px;
 }
 
@@ -197,29 +197,26 @@ textarea, select {
     border-color: #6AB5B2;
 }
 
-ul {
+#menu {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-}
-#menu-list .active {
-    background-color: #4CAF50;
-    color: white;
-}
-li {
-    float: left;
+    background-color: #D8E8E7;
+    color: #585858;
+    display: block;
 }
 
-li a {
+#menu li {
     display: inline-block;
-    color: white;
+}
+
+#menu li a {
+    color: inherit;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    display: inline-block;
 }
 
-li a:hover {
-    background-color: #111;
+#menu li a:hover, #menu .active {
+    background-color: #78C0BD;
+    color: #fff;
 }

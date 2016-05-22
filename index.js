@@ -7,7 +7,7 @@ const { Connector } = require('./Connector.js');
 
 var panel = Panel({
     contentURL: './html/index.html',
-    height: 300,
+    height: 350,
     width: 400
 });
 

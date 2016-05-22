@@ -7,9 +7,16 @@ $(function () {
 
         initialize: function () {
             FireX.menuList = new FireX.Menu();
-            FireX.menuList.create({iTo: 'here', iText: 'click me'});
-            //Удобно. Тут добавляешь кнопку исразу в routes пишешь действие для нее.
 
+            FireX.menuList.create({
+                iTo: '#/list',
+                iText: 'Список прокси'
+            });
+
+            FireX.menuList.create({
+                iTo: '#/urls',
+                iText: 'Шаблоны URL'
+            });
 
             this.menu.html(new FireX.MenuView().render().el);
             
