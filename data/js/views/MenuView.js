@@ -25,7 +25,7 @@ $(function () {
             this.$el.html(this.template());
             this.ul = this.$('#menu-list');
             (function (that) {
-                FireX.menu.forEach(function (item, i) {
+                FireX.menuList.forEach(function (item, i) {
                     that.ul.append(new FireX.MenuEntryView({model: item}).render().el);
                 })
             })(this);
