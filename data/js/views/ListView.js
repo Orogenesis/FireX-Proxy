@@ -2,11 +2,18 @@ var FireX = FireX || {};
 
 $(function () {
     FireX.ListView = Backbone.View.extend({
-        el: '#proxy-content',
+        template: _.template($('#list-template').html()),
         events: {
             'click .refresh': 'update'
         },
         initialize: function () {
+            this.listenTo(FireX.proxyList, 'add', this.addOne);
+        },
+        render: function () {
+            this.$el.html(this.template());
+
+            this.table = this.$('#proxy-list-box');
+
             var that = this;
 
             addon.port.on('onList', function (response) {
@@ -15,9 +22,7 @@ $(function () {
                 that.onMenuOpen();
             });
 
-            this.table = this.$('#proxy-list-box');
-
-            this.listenTo(FireX.proxyList, 'add', this.addOne);
+            return this;
         },
         onMenuOpen: function () {
             if (!FireX.proxyList.length) {
