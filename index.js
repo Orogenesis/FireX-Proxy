@@ -6,8 +6,8 @@ const { Address } = require('./Address.js');
 const { Connector } = require('./Connector.js');
 
 var panel = Panel({
-    contentURL: './html/list.html',
-    height: 300,
+    contentURL: './html/index.html',
+    height: 400,
     width: 400
 });
 

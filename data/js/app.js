@@ -1,5 +1,6 @@
 var FireX = FireX || {};
 
 $(function () {
-    new FireX.ListView();
+    FireX.router = new FireX.Router();
+    Backbone.history.start();
 });
