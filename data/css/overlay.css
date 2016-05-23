@@ -217,15 +217,15 @@ textarea, select {
     display: inline-block;
 }
 #menu a {
-    margin-left: 10px;
+    margin-left: 5px;
 }
 #menu li:hover, #menu .active {
     background-color: #78C0BD;
     color: #fff;
 }
 #menu li[data-type="list"] {
-    background: url('../icons/list.png') no-repeat left center;
+    background: url('../icons/list.png') no-repeat 3% center;
 }
 #menu li[data-type="template"] {
-    background: url('../icons/template.png') no-repeat left center;
+    background: url('../icons/template.png') no-repeat 3% center;
 }
