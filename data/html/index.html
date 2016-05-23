@@ -18,11 +18,11 @@
     <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
 </head>
 <body>
-<ul id="menu"></ul>
+<div id="menu"></div>
 <div id="primary-content"></div>
 <!-- MENU TEMPLATE -->
 <script type="text/template" id="menu-entry-template">
-    <li><a href="<%-iTo%>"><%-iText%></a></li>
+    <li data-type="<%-iIcon%>"><a href="<%-iTo%>"><%-iText%></a></li>
 </script>
 <!-- LIST PAGE -->
 <script type="text/template" id="list-template">

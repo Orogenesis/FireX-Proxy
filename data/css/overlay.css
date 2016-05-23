@@ -198,7 +198,7 @@ textarea, select {
 }
 
 #menu {
-    list-style-type: none;
+
     background-color: #D8E8E7;
     color: #585858;
     display: block;
@@ -206,6 +206,7 @@ textarea, select {
 
 #menu li {
     display: inline-block;
+    background-repeat:no-repeat;
 }
 
 #menu li a {
@@ -219,4 +220,10 @@ textarea, select {
 #menu li a:hover, #menu .active {
     background-color: #78C0BD;
     color: #fff;
+}
+#menu li[data-type="list"] {
+    background: url('../icons/list.png') no-repeat left center;
+}
+#menu li[data-type="template"] {
+    background: url('../icons/template.png') no-repeat left center;
 }

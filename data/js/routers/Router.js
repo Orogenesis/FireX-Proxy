@@ -10,12 +10,14 @@ $(function () {
 
             FireX.menuList.create({
                 iTo: '#/list',
-                iText: 'Список прокси'
+                iText: 'Список прокси',
+                iIcon: 'list'
             });
 
             FireX.menuList.create({
                 iTo: '#/urls',
-                iText: 'Шаблоны URL'
+                iText: 'Шаблоны URL',
+                iIcon: 'template'
             });
 
             this.menu.html(new FireX.MenuView().render().el);
