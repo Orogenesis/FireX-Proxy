@@ -217,7 +217,7 @@ textarea, select {
     display: inline-block;
 }
 #menu a {
-    margin-left: 5px;
+    margin-left: 25px;
 }
 #menu li:hover, #menu .active {
     background-color: #78C0BD;
