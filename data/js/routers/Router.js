@@ -2,30 +2,42 @@ var FireX = FireX || {};
 
 $(function () {
     FireX.Router = Backbone.Router.extend({
-        menu: $('#menu-holder'),
         content: $('#primary-content'),
-
+        routes: {
+            "index": 'index',
+            "patterns": 'patterns',
+            "favorite": 'favorite'
+        },
         initialize: function () {
             FireX.menuList = new FireX.Menu();
 
             FireX.menuList.create({
-                iTo: '#/list',
+                iTo: '#/index',
+                iIcon: 'list',
                 iText: 'Список прокси'
             });
 
             FireX.menuList.create({
-                iTo: '#/urls',
-                iText: 'Шаблоны URL'
+                iTo: '#/patterns',
+                iIcon: 'settings',
+                iText: 'Настройки'
             });
 
-            this.menu.html(new FireX.MenuView().render().el);
-            
+            FireX.menuList.create({
+                iTo: '#/favorite',
+                iIcon: 'star',
+                iText: 'Избранное'
+            });
+
+            new FireX.MenuView();
+
             this.index();
         },
         index: function() {
-            var view = new FireX.ListView();
-
-            this.content.html(view.render().el);
+            this.content.html(new FireX.ListView().render().el);
+        },
+        patterns: function () {
+            this.content.html(new FireX.PatternView().render().el);
         }
     });
 });

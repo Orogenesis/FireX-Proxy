@@ -2,13 +2,13 @@ var FireX = FireX || {};
 
 $(function () {
     FireX.MenuEntryView = Backbone.View.extend({
-        tagName: 'li',
+        tagName: 'a',
         template: _.template($("#menu-entry-template").html()),
         events: {
             'click': 'choose'
         },
         render: function () {
-            this.$el.html(this.template(this.model.toJSON()));
+            this.$el.attr("href", this.model.iTo).html(this.template(this.model.toJSON()));
 
             return this;
         },

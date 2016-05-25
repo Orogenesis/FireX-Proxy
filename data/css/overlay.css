@@ -40,7 +40,7 @@ body {
     font-size: 14px;
     background-color: #fff;
     font-weight: normal;
-    position: relative;
+    position: 400;
     height: 350px;
     width: 400px;
 }
@@ -198,25 +198,32 @@ textarea, select {
 }
 
 #menu {
-    list-style-type: none;
-    background-color: #D8E8E7;
-    color: #585858;
+    background-color: #009FE1;
     display: block;
+    height: 50px;
 }
 
-#menu li {
+#menu a {
+    height: 100%;
+    min-width: 50px;
     display: inline-block;
 }
 
-#menu li a {
-    color: inherit;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+#menu i {
     display: inline-block;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
 }
 
-#menu li a:hover, #menu .active {
-    background-color: #78C0BD;
-    color: #fff;
+#menu i.settings {
+    background: url(../icons/settings-16.png) no-repeat 10px center;
+}
+
+#menu i.list {
+    background: url(../icons/list-16.png) no-repeat 10px center;
+}
+
+#menu i.star {
+    background: url(../icons/star-16.png) no-repeat 10px center;
 }

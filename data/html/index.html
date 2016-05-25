@@ -18,11 +18,11 @@
     <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
 </head>
 <body>
-<ul id="menu"></ul>
+<div id="menu"></div>
 <div id="primary-content"></div>
 <!-- MENU TEMPLATE -->
 <script type="text/template" id="menu-entry-template">
-    <li><a href="<%-iTo%>"><%-iText%></a></li>
+    <i class="<%- iIcon %>"></i>
 </script>
 <!-- LIST PAGE -->
 <script type="text/template" id="list-template">
@@ -41,6 +41,10 @@
     <td><%- iAddress %></td>
     <td><%- iProtocol %></td>
     <td class="country"><%- iCountry %></td>
+</script>
+<!-- PATTERN TEMPLATE -->
+<script type="text/template" id="pattern-template">
+    ...
 </script>
 </body>
 </html>
