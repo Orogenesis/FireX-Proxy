@@ -16,12 +16,15 @@ $(function () {
             }).on('onMenuOpen', function () {
                 that.onMenuOpen();
             });
+
         },
         render: function () {
             this.$el.html(this.template());
 
             this.table = this.$('#proxy-list-box');
 
+            if(FireX.proxyList.length) this.addAll();
+            
             return this;
         },
         onMenuOpen: function () {
@@ -40,6 +43,11 @@ $(function () {
             });
 
             this.table.append(view.render().el);
+        },
+        addAll: function () {
+            this.table.empty();
+
+            FireX.proxyList.each(this.addOne, this);
         },
         onList: function (proxyList) {
             FireX.proxyList.reset();

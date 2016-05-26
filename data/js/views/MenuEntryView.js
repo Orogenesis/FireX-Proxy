@@ -7,13 +7,30 @@ $(function () {
         events: {
             'click': 'choose'
         },
+
+        initialize: function () {
+            this.listenTo(this.model, 'change', this.render);
+
+        },
         render: function () {
-            this.$el.attr("href", this.model.get("iTo")).html(this.template(this.model.toJSON()));
+            this.$el.html(this.template(this.model.toJSON()));
 
             return this;
         },
+        attributes: function () {
+            return {
+                href: this.model.get('iTo')
+            };
+        },
         choose: function () {
-            this.$el.addClass('active').siblings().removeClass('active');
+            _.each(FireX.menuList.without(this.model), (function (entry) {
+                entry.save({
+                    iActive: false
+                })
+            }));
+            this.model.save({
+                iActive: !this.model.get('iActive')
+            });
         }
     });
 });

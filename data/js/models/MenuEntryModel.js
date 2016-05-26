@@ -4,7 +4,8 @@ $(function () {
     FireX.MenuEntryModel = Backbone.Model.extend({
         defaults: {
             iTo: null,
-            iIcon: null
+            iIcon: null,
+            iActive: false
         }
     });
 });

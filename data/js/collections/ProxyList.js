@@ -6,5 +6,5 @@ $(function () {
         url: '/proxylist'
     });
 
-    FireX.proxyList = new FireX.ProxyList();
+
 });

@@ -10,11 +10,14 @@ $(function () {
         },
         initialize: function () {
             FireX.menuList = new FireX.Menu();
+            FireX.menuView = new FireX.MenuView();
+            FireX.proxyList = new FireX.ProxyList();
 
             FireX.menuList.create({
                 iTo: '#/index',
                 iIcon: 'list',
-                iText: 'Список прокси'
+                iText: 'Список прокси',
+                iActive: true
             });
 
             FireX.menuList.create({
@@ -29,8 +32,6 @@ $(function () {
                 iText: 'Избранное'
             });
 
-            new FireX.MenuView().render();
-
             this.index();
         },
         index: function() {
@@ -38,6 +39,9 @@ $(function () {
         },
         patterns: function () {
             this.content.html(new FireX.PatternView().render().el);
+        },
+        settings: function() {
+            this.content.html('');
         }
     });
 });

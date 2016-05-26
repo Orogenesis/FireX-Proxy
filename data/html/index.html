@@ -24,6 +24,9 @@
 <!-- MENU TEMPLATE -->
 <script type="text/template" id="menu-entry-template">
     <i class="<%- iIcon %>"></i>
+    <% if(iActive) { %>
+        <%= iText %>
+    <% } %>
 </script>
 <!-- LIST PAGE -->
 <script type="text/template" id="list-template">
