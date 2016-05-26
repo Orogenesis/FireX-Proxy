@@ -9,9 +9,12 @@ $(function () {
             "favorite": 'favorite'
         },
         initialize: function () {
+            Backbone.history.start();
+
             FireX.menuList = new FireX.Menu();
             FireX.menuView = new FireX.MenuView();
             FireX.proxyList = new FireX.ProxyList();
+            FireX.patterns = new FireX.Patterns();
 
             FireX.menuList.create({
                 iTo: '#/index',
@@ -38,10 +41,12 @@ $(function () {
             this.content.html(new FireX.ListView().render().el);
         },
         patterns: function () {
-            this.content.html(new FireX.PatternView().render().el);
+            this.content.html(new FireX.PatternPageView().render().el);
         },
         settings: function() {
             this.content.html('');
         }
     });
+
+    FireX.router = new FireX.Router();
 });

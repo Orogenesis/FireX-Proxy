@@ -29,7 +29,7 @@ $(function () {
                 })
             }));
             this.model.save({
-                iActive: !this.model.get('iActive')
+                iActive: true
             });
         }
     });
