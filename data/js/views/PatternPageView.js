@@ -12,12 +12,19 @@ $(function () {
         },
         initialize: function () {
             this.listenTo(FireX.patterns, 'add', this.addOne);
+
+            FireX.patterns.fetch();
         },
         render: function () {
             this.$el.html(this.template());
 
             this.list = this.$('.h-max');
             this.input = this.$('input[name=address]');
+            this.form = this.$('#new-entry');
+
+            if(FireX.patterns.length) {
+                FireX.patterns.each(this.addOne, this);
+            }
 
             return this;
         },
@@ -27,7 +34,7 @@ $(function () {
             if(this.input.val().trim()) {
 
                 FireX.patterns.create(this.newPattern());
-                this.input[0].reset();
+                this.form[0].reset();
             }
         },
         addOne: function (pattern) {

@@ -1,6 +1,8 @@
 var FireX = FireX || {};
 
 $(function () {
+
+
     FireX.Router = Backbone.Router.extend({
         content: $('#primary-content'),
         routes: {
