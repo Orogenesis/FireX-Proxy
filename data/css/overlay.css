@@ -162,19 +162,20 @@ textarea, select {
 
 #menu a {
     height: 100%;
-    min-width: 50px;
     text-decoration: none;
-    vertical-align: top;
     color: #6AB5B2;
     display: inline-block;
+    line-height: 50px;
+    margin-right: 10px;
 }
 
 #menu i {
     display: inline-block;
     height: 100%;
-    width: 100%;
+    width: 16px;
     cursor: pointer;
     vertical-align: top;
+    padding-right: 15px;
 }
 
 #menu i.settings {
