@@ -29,7 +29,7 @@ $(function () {
                 iText: 'Избранное'
             });
 
-            new FireX.MenuView();
+            new FireX.MenuView().render();
 
             this.index();
         },

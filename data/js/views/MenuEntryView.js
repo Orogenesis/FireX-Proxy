@@ -8,7 +8,7 @@ $(function () {
             'click': 'choose'
         },
         render: function () {
-            this.$el.attr("href", this.model.iTo).html(this.template(this.model.toJSON()));
+            this.$el.attr("href", this.model.get("iTo")).html(this.template(this.model.toJSON()));
 
             return this;
         },

@@ -13,6 +13,7 @@
     <script src="../js/views/ListView.js" type="text/javascript"></script>
     <script src="../js/views/MenuEntryView.js" type="text/javascript"></script>
     <script src="../js/views/MenuView.js" type="text/javascript"></script>
+    <script src="../js/views/PatternView.js" type="text/javascript"></script>
     <script src="../js/routers/Router.js" type="text/javascript"></script>
     <script src="../js/app.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
@@ -44,7 +45,24 @@
 </script>
 <!-- PATTERN TEMPLATE -->
 <script type="text/template" id="pattern-template">
-    ...
+    <div id="pattern">
+        <div class="h-max">
+            <div class="d-set">
+                <div class="d-uri">mozilla.org</div>
+                <button class="d-rm">
+                    <i class="rm-button"></i>
+                </button>
+            </div>
+            <div class="d-set">
+                <div class="d-uri">mozilla.org</div>
+                <button class="d-rm">
+                    <i class="rm-button"></i>
+                </button>
+            </div>
+        </div>
+        <input type="text" name="address" placeholder="mozilla.org"/>
+        <button class="bottom-button done"></button>
+    </div>
 </script>
 </body>
 </html>

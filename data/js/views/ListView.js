@@ -8,11 +8,6 @@ $(function () {
         },
         initialize: function () {
             this.listenTo(FireX.proxyList, 'add', this.addOne);
-        },
-        render: function () {
-            this.$el.html(this.template());
-
-            this.table = this.$('#proxy-list-box');
 
             var that = this;
 
@@ -21,6 +16,11 @@ $(function () {
             }).on('onMenuOpen', function () {
                 that.onMenuOpen();
             });
+        },
+        render: function () {
+            this.$el.html(this.template());
+
+            this.table = this.$('#proxy-list-box');
 
             return this;
         },
