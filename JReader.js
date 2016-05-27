@@ -24,3 +24,5 @@ JReader.prototype = {
         });
     }
 };
+
+exports.JReader = JReader;
