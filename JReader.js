@@ -6,23 +6,21 @@ function JReader(fPath) {
 
 JReader.prototype = Object.create(FileReader.prototype);
 
-JReader.prototype = {
-    /**
-     * @param {Object} jObject
-     * @returns {void}
-     */
-    write: function (jObject) {
-        FileReader.prototype.write.call(this, JSON.stringify(jObject));
-    },
-    /**
-     * @param {Function} callback
-     * @returns {void}
-     */
-    readAll: function (callback) {
-        FileReader.prototype.readAll.call(this, function (data) {
-            callback(JSON.parse(data));
-        });
-    }
+/**
+ * @param {Object} jObject
+ * @returns {void}
+ */
+JReader.prototype.write = function (jObject) {
+    FileReader.prototype.write.call(this, JSON.stringify(jObject));
+};
+/**
+ * @param {Function} callback
+ * @returns {void}
+ */
+JReader.prototype.readAll = function (callback) {
+    FileReader.prototype.readAll.call(this, function (data) {
+        callback(JSON.parse(data));
+    });
 };
 
 exports.JReader = JReader;
