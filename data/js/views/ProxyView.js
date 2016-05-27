@@ -11,8 +11,7 @@ $(function () {
             this.listenTo(this.model, 'change', this.render);
         },
         render: function () {
-            this.$el.html(this.template(this.model.toJSON()));
-            this.$el.toggleClass('active', this.model.get('iActive'));
+            this.$el.html(this.template(this.model.toJSON())).toggleClass('active', this.model.get('iActive'));
 
             return this;
         },

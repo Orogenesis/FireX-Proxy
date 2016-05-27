@@ -4,12 +4,12 @@ $(function () {
     FireX.MenuView = Backbone.View.extend({
         el: '#menu',
         initialize: function () {
-            this.listenTo(FireX.menuList, "add", this.addOne);
+            this.listenTo(FireX.Menu, "add", this.addOne);
         },
         addOne: function (menu) {
             this.$el.append(new FireX.MenuEntryView({
                 model: menu
             }).render().el);
-        },
+        }
     });
 });

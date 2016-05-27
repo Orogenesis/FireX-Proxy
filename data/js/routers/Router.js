@@ -1,8 +1,6 @@
 var FireX = FireX || {};
 
 $(function () {
-
-
     FireX.Router = Backbone.Router.extend({
         content: $('#primary-content'),
         routes: {
@@ -11,27 +9,22 @@ $(function () {
             "favorite": 'favorite'
         },
         initialize: function () {
-            Backbone.history.start();
+            new FireX.MenuView();
 
-            FireX.menuList = new FireX.Menu();
-            FireX.menuView = new FireX.MenuView();
-            FireX.proxyList = new FireX.ProxyList();
-            FireX.patterns = new FireX.Patterns();
-
-            FireX.menuList.create({
+            FireX.Menu.create({
                 iTo: '#/index',
                 iIcon: 'list',
                 iText: 'Список прокси',
                 iActive: true
             });
 
-            FireX.menuList.create({
+            FireX.Menu.create({
                 iTo: '#/patterns',
                 iIcon: 'settings',
                 iText: 'Настройки'
             });
 
-            FireX.menuList.create({
+            FireX.Menu.create({
                 iTo: '#/favorite',
                 iIcon: 'star',
                 iText: 'Избранное'
@@ -45,10 +38,11 @@ $(function () {
         patterns: function () {
             this.content.html(new FireX.PatternPageView().render().el);
         },
-        settings: function() {
-            this.content.html('');
+        favorite: function() {
+            this.content.empty();
         }
     });
 
-    FireX.router = new FireX.Router();
+    FireX.Router = new FireX.Router();
+    Backbone.history.start();
 });

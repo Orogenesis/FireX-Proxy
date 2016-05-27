@@ -23,12 +23,13 @@ $(function () {
             };
         },
         choose: function () {
-            _.each(FireX.menuList.without(this.model), (function (entry) {
+            _.each(FireX.Menu.without(this.model), (function (entry) {
                 entry.save({
                     iActive: false
                 })
             }));
-            this.model.save({
+
+            this.model.set({
                 iActive: true
             });
         }

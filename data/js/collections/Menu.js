@@ -5,4 +5,6 @@ $(function () {
         model: FireX.MenuEntryModel,
         url: '/menu'
     });
+
+    FireX.Menu = new FireX.Menu();
 });

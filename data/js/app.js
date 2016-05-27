@@ -1,5 +1,5 @@
 var FireX = FireX || {};
 
 $(function () {
-    
+
 });

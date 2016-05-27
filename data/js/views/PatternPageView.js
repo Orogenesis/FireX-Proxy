@@ -2,18 +2,15 @@ var FireX = FireX || {};
 
 $(function () {
     FireX.PatternPageView = Backbone.View.extend({
-        tagName: 'div',
-        attributes: {
-            'id':'pattern'
-        },
+        id: 'pattern',
         template: _.template($('#pattern-page-template').html()),
         events: {
             'submit #new-entry': 'create'
         },
         initialize: function () {
-            this.listenTo(FireX.patterns, 'add', this.addOne);
+            this.listenTo(FireX.Patterns, 'add', this.addOne);
 
-            FireX.patterns.fetch();
+            FireX.Patterns.fetch();
         },
         render: function () {
             this.$el.html(this.template());
@@ -22,20 +19,18 @@ $(function () {
             this.input = this.$('input[name=address]');
             this.form = this.$('#new-entry');
 
-            if(FireX.patterns.length) {
-                FireX.patterns.each(this.addOne, this);
+            if (FireX.Patterns.length) {
+                FireX.Patterns.each(this.addOne, this);
             }
 
             return this;
         },
-        create: function (e) {
-            e.preventDefault();
+        create: function (event) {
+            event.preventDefault();
 
-            if(this.input.val().trim()) {
+            FireX.Patterns.create(this.newPattern());
 
-                FireX.patterns.create(this.newPattern());
-                this.form[0].reset();
-            }
+            this.form[0].reset();
         },
         addOne: function (pattern) {
             var view = new FireX.PatternView({

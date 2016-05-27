@@ -7,7 +7,7 @@ $(function () {
             'click .refresh': 'update'
         },
         initialize: function () {
-            this.listenTo(FireX.proxyList, 'add', this.addOne);
+            this.listenTo(FireX.ProxyList, 'add', this.addOne);
 
             var that = this;
 
@@ -23,12 +23,14 @@ $(function () {
 
             this.table = this.$('#proxy-list-box');
 
-            if(FireX.proxyList.length) this.addAll();
-            
+            if (FireX.ProxyList.length) {
+                this.addAll();
+            }
+
             return this;
         },
         onMenuOpen: function () {
-            if (!FireX.proxyList.length) {
+            if (!FireX.ProxyList.length) {
                 this.update();
             }
         },
@@ -47,16 +49,16 @@ $(function () {
         addAll: function () {
             this.table.empty();
 
-            FireX.proxyList.each(this.addOne, this);
+            FireX.ProxyList.each(this.addOne, this);
         },
-        onList: function (proxyList) {
-            FireX.proxyList.reset();
+        onList: function (list) {
+            FireX.ProxyList.reset();
 
             this.table.removeClass('spinner');
 
             (function (that) {
-                proxyList.forEach(function (item, i) {
-                    FireX.proxyList.create(that.addressToModel(item));
+                _.each(list, function (value) {
+                    FireX.ProxyList.create(that.addressToModel(value));
                 });
             })(this);
         },
