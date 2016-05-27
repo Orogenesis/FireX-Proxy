@@ -36,14 +36,14 @@ Connector.prototype = {
         })(this);
     },
     /**
-     * @returns void
+     * @returns {void}
      */
     start: function () {
         this.service().register();
         this.setState(true);
     },
     /**
-     * @returns void
+     * @returns {void}
      */
     stop: function () {
         this.service().unregister();
@@ -57,7 +57,7 @@ Connector.prototype = {
     },
     /**
      * @param {Boolean} state
-     * @returns void
+     * @returns {void}
      */
     setTemplateState: function (state) {
         this.tEnabled = state;

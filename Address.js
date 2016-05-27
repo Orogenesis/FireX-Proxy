@@ -8,7 +8,7 @@ function Address(address, port, protocol, country) {
 Address.prototype = {
     /**
      * @param {String} address
-     * @returns void
+     * @returns {void}
      */
     setIPAddress: function (address) {
         this.ipAddress = address;
@@ -21,7 +21,7 @@ Address.prototype = {
     },
     /**
      * @param {String} port
-     * @returns void
+     * @returns {void}
      */
     setPort: function (port) {
         this.port = port;
@@ -34,7 +34,7 @@ Address.prototype = {
     },
     /**
      * @param {String} country
-     * @returns void
+     * @returns {void}
      */
     setCountry: function (country) {
         this.country = country;
@@ -47,7 +47,7 @@ Address.prototype = {
     },
     /**
      * @param {String} protocol
-     * @returns void
+     * @returns {void}
      */
     setProxyProtocol: function (protocol) {
         this.protocol = this.__toValidProtocol(protocol);

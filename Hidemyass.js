@@ -36,7 +36,7 @@ Hidemyass.prototype = {
     },
     /**
      * @param {Function} callback
-     * @returns void
+     * @returns {void}
      */
     getList: function (callback) {
         this.pull().then(function (response) {
@@ -94,7 +94,7 @@ Hidemyass.prototype = {
     },
     /**
      * @param {Element} dRow
-     * @returns void
+     * @returns {void}
      */
     __tableGenerator: function* (dRow) {
         var dCells = dRow.querySelectorAll("td");

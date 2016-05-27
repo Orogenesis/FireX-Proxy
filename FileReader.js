@@ -32,7 +32,7 @@ FileReader.prototype = {
     /**
      * Write to a file
      * @param {String} string
-     * @returns void
+     * @returns {void}
      */
     write: function (string) {
         this.streamWrite(FileUtils.openFileOutputStream(this.fObject, FileReader.MODE_WRONLY | FileReader.MODE_CREATE | FileReader.MODE_TRUNCATE), string);
@@ -40,7 +40,7 @@ FileReader.prototype = {
     /**
      * Append to a file
      * @param {String} string
-     * @returns void
+     * @returns {void}
      */
     append: function (string) {
         this.streamWrite(FileUtils.openFileOutputStream(this.fObject, FileReader.MODE_WRONLY | FileReader.MODE_CREATE | FileReader.MODE_APPEND), string);
@@ -48,7 +48,7 @@ FileReader.prototype = {
     /**
      * @param {FileUtils.nsIFileOutputStream} ostream
      * @param {String} string
-     * @returns void
+     * @returns {void}
      */
     streamWrite: function (ostream, string) {
         var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter);
@@ -77,7 +77,7 @@ FileReader.prototype = {
     },
     /**
      * @param {Function} callback
-     * @returns void
+     * @returns {void}
      */
     readAll: function (callback) {
         (function (self) {
@@ -92,7 +92,7 @@ FileReader.prototype = {
     },
     /**
      * @param {String} string
-     * @returns void
+     * @returns {void}
      */
     removeLine: function (string) {
         var __this = this;
@@ -104,7 +104,7 @@ FileReader.prototype = {
         });
     },
     /**
-     * @returns void
+     * @returns {void}
      */
     clearFile: function () {
         FileUtils.closeSafeFileOutputStream(FileUtils.openSafeFileOutputStream(this.fObject));

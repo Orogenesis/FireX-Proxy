@@ -19,7 +19,7 @@ TemplateManager.prototype = {
     },
     /**
      * @param {String} str
-     * @returns void
+     * @returns {void}
      */
     add: function (str) {
         this.tList.push(str);
@@ -28,7 +28,7 @@ TemplateManager.prototype = {
     },
     /**
      * @param {String} str
-     * @returns void
+     * @returns {void}
      */
     rm: function (str) {
         if ((__index = this.tList.indexOf(str)) !== -1) {
@@ -44,7 +44,7 @@ TemplateManager.prototype = {
         }
     },
     /**
-     * @returns void
+     * @returns {void}
      */
     load: function () {
         var __this = this;
@@ -55,7 +55,7 @@ TemplateManager.prototype = {
     },
     /**
      * @param {String} str
-     * @returns void
+     * @returns {void}
      * @private
      */
     __toFile: function (str) {
@@ -63,7 +63,7 @@ TemplateManager.prototype = {
     },
     /**
      * @param {String} str
-     * @returns void
+     * @returns {void}
      * @private
      */
     __rmLine: function (str) {
