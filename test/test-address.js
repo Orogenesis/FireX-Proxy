@@ -9,7 +9,7 @@ exports['test isRightProtocolSubstitution'] = function (assert) {
 exports['test isRightProtocol'] = function (assert) {
     var address = new Address();
     address.setProxyProtocol('https');
-    assert.ok(address.getProxyProtocol() == 'https');
+    assert.ok(address.getProxyProtocol() == 'http');
 };
 
 require("sdk/test").run(exports);

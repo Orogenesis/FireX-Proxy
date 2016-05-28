@@ -1,9 +1,10 @@
 const self = require('sdk/self');
-const { Hidemyass } = require('./Hidemyass.js');
-const { ActionButton } = require("sdk/ui/button/action");
-const { Panel } = require("sdk/panel");
-const { Address } = require('./Address.js');
-const { Connector } = require('./Connector.js');
+const {Hidemyass} = require('./Hidemyass.js');
+const {ActionButton} = require("sdk/ui/button/action");
+const {Panel} = require("sdk/panel");
+const {Address} = require('./Address.js');
+const {Connector} = require('./Connector.js');
+const {TemplateManager} = require('./TemplateManager.js');
 
 var panel = Panel({
     contentURL: './html/index.html',
@@ -15,6 +16,10 @@ var panel = Panel({
  * @type {Connector}
  */
 var connector;
+/**
+ * @type {TemplateManager}
+ */
+var tManager = new TemplateManager();
 
 panel.port.on("getList", function (response) {
     new Hidemyass().getList(function (list) {
@@ -25,6 +30,14 @@ panel.port.on("getList", function (response) {
     connector.start();
 }).on("disconnect", function () {
     connector.stop();
+}).on("addPattern", function (pattern) {
+    tManager.add(pattern);
+}).on("getPatterns", function () {
+    panel.port.emit("onPattern", tManager.all());
+}).on("deletePattern", function (patternId) {
+    tManager.rm(patternId);
+}).on("updatePattern", function (patternId, newState) {
+    tManager.modify(patternId, newState);
 });
 
 var button = ActionButton({

@@ -19,7 +19,7 @@ JReader.prototype.write = function (jObject) {
  */
 JReader.prototype.readAll = function (callback) {
     FileReader.prototype.readAll.call(this, function (data) {
-        callback(JSON.parse(data));
+        callback(JSON.parse(data.join("\n")));
     });
 };
 

@@ -9,8 +9,12 @@ $(function () {
         },
         initialize: function () {
             this.listenTo(FireX.Patterns, 'add', this.addOne);
+            this.listenTo(FireX.Patterns, 'reset', this.addAll);
 
-            FireX.Patterns.fetch();
+            if(!FireX.Patterns.length) {
+
+                FireX.Patterns.fetch();
+            }
         },
         render: function () {
             this.$el.html(this.template());
@@ -19,7 +23,8 @@ $(function () {
             this.input = this.$('input[name=address]');
             this.form = this.$('#new-entry');
 
-            if (FireX.Patterns.length) {
+            if(FireX.Patterns.length) {
+
                 FireX.Patterns.each(this.addOne, this);
             }
 
@@ -28,9 +33,14 @@ $(function () {
         create: function (event) {
             event.preventDefault();
 
-            FireX.Patterns.create(this.newPattern());
+            if (this.input.val().trim()) {
 
-            this.form[0].reset();
+                FireX.Patterns.create(this.newPattern());
+                this.form[0].reset();
+            }
+        },
+        addAll: function () {
+            FireX.Patterns.each(this.addOne, this);
         },
         addOne: function (pattern) {
             var view = new FireX.PatternView({
@@ -41,7 +51,7 @@ $(function () {
         },
         newPattern: function () {
             return {
-                iString: this.input.val().trim()
+                iUri: this.input.val().trim()
             }
         }
     });

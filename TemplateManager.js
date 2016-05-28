@@ -1,8 +1,12 @@
+const { JReader } = require('./JReader.js');
+
 function TemplateManager() {
     this.tList = [];
 
     this.load();
 }
+
+TemplateManager.TEMPLATE_FILE = "FireX-patterns.json";
 
 TemplateManager.prototype = {
     /**
@@ -18,30 +22,13 @@ TemplateManager.prototype = {
         this.tList = array;
     },
     /**
-     * @param {String} str
+     * @param {Object} jObject
      * @returns {void}
      */
-    add: function (str) {
-        this.tList.push(str);
-
-        this.__toFile(str);
-    },
-    /**
-     * @param {String} str
-     * @returns {void}
-     */
-    rm: function (str) {
-        if ((__index = this.tList.indexOf(str)) !== -1) {
-            /**
-             * Remove a template from the array
-             */
-            this.tList.splice(__index, 1);
-
-            /**
-             * Remove a template from the file
-             */
-            this.__rmLine(str);
-        }
+    add: function (jObject) {
+        this.tList.push(jObject);
+        console.error(this.tList);
+        new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
     },
     /**
      * @returns {void}
@@ -49,25 +36,42 @@ TemplateManager.prototype = {
     load: function () {
         var __this = this;
 
-        new FileReader().readAll(function (a) {
-             __this.set(a);
+        new JReader(TemplateManager.TEMPLATE_FILE).readAll(function (a) {
+            __this.set(a || []);
         });
     },
     /**
-     * @param {String} str
+     * @param {Number} id
+     * @param {Object} jObject
+     * @throws {Error}
      * @returns {void}
-     * @private
      */
-    __toFile: function (str) {
-        new FileReader().append(str);
+    modify: function (id, jObject) {
+        
+        if (this.tList[id] !== undefined) {
+
+            this.tList[id] = jObject;
+            new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
+            return;
+        }
+        
+        throw new Error();
     },
     /**
-     * @param {String} str
+     * @param {Number} id
+     * @throws {Error}
      * @returns {void}
-     * @private
      */
-    __rmLine: function (str) {
-        new FileReader().removeLine(str);
+    rm: function (id) {
+        
+        if (this.tList[id] !== undefined) {
+
+            this.tList.splice(id, 1);
+            new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
+            return;
+        }
+        
+        throw new Error();
     }
 };
 

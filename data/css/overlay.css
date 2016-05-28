@@ -200,7 +200,12 @@ textarea, select {
     vertical-align: top;
     color: #585858;
 }
-
+.d-set .edit {
+    display: none;
+}
+.d-set .edit.editing {
+    display: block;
+}
 #pattern .d-rm {
     float: right;
     width: 24px;

@@ -24,7 +24,7 @@ $(function () {
         },
         choose: function () {
             _.each(FireX.Menu.without(this.model), (function (entry) {
-                entry.save({
+                entry.set({
                     iActive: false
                 })
             }));

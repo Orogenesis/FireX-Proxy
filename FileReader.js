@@ -66,14 +66,14 @@ FileReader.prototype = {
                 if (!self.isSuccessCode(status)) {
                     return 1;
                 }
+
+                /**
+                 * Close file output stream
+                 */
+
+                FileUtils.closeSafeFileOutputStream(ostream);
             });
         })(this);
-
-        /**
-         * Close file output stream
-         */
-
-        FileUtils.closeSafeFileOutputStream(ostream);
     },
     /**
      * @param {Function} callback

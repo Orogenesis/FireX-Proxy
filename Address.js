@@ -82,7 +82,8 @@ Address.prototype = {
      */
     __protocolsList: function () {
         return {
-            socks: 'socks4/5'
+            socks: 'socks4/5',
+            http: 'https'
         };
     }
 };
