@@ -8,7 +8,7 @@ $(function () {
         },
         events: {
             'click .d-rm':      'destroy',
-            'dblclick .d-uri':  'edit',
+            'click .d-uri':     'edit',
             'blur .edit':       'done'
         },
         template: _.template($('#pattern-template').html()),
@@ -21,8 +21,6 @@ $(function () {
             this.$el.html(this.template(this.model.toJSON()));
 
             this.input = this.$('.edit');
-            this.label = this.$('.d-uri');
-            this.edit = false;
 
             return this;
         },
@@ -30,29 +28,22 @@ $(function () {
             this.model.destroy();
         },
         edit: function () {
-            this.edit = true;
-            
-            this.input.show();
-            this.label.hide();
+            this.model.toggleEditable();
             this.input.focus();
         },
         done: function () {
-            if (!this.edit) {
-                return;
+            if (this.model.isEditable()) {
+                var text = this.input.val().trim();
+
+                if (text) {
+                    this.model.save({
+                        iUri: text,
+                        iEditable: false
+                    });
+                } else {
+                    this.model.destroy();
+                }
             }
-
-            this.edit = false;
-            this.input.hide();
-            this.label.show();
-
-            if (this.input.val().trim()) {
-                this.model.save({
-                    iUri: this.input.val().trim()
-                });
-            } else {
-                this.model.destroy();
-            }
-
         }
     });
 });

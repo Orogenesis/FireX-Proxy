@@ -14,22 +14,16 @@ $(function () {
             FireX.Menu.create({
                 iTo: '#/index',
                 iIcon: 'list',
-                iText: 'Список прокси',
+                iText: 'Proxy list',
                 iActive: true
             });
 
             FireX.Menu.create({
                 iTo: '#/patterns',
                 iIcon: 'settings',
-                iText: 'Настройки'
+                iText: 'Blacklist'
             });
-
-            FireX.Menu.create({
-                iTo: '#/favorite',
-                iIcon: 'star',
-                iText: 'Избранное'
-            });
-
+            
             this.index();
         },
         index: function() {
@@ -37,9 +31,6 @@ $(function () {
         },
         patterns: function () {
             this.content.html(new FireX.PatternPageView().render().el);
-        },
-        favorite: function() {
-            this.content.empty();
         }
     });
 

@@ -3,13 +3,22 @@ var FireX = FireX || {};
 $(function () {
     FireX.PatternModel = Backbone.Model.extend({
         defaults: {
-            iUri: null
+            iUri: null,
+            iEditable: false
         },
         isNew: function() {
             return !this.isPresent;
         },
         initialize() {
             this.isPresent = false;
+        },
+        toggleEditable: function () {
+            this.set({
+                iEditable: this.isEditable() ^ 1
+            });
+        },
+        isEditable: function () {
+            return this.get('iEditable');
         },
         sync: function (method, model, options) {
             options = options || {};

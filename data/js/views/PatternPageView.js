@@ -5,13 +5,16 @@ $(function () {
         id: 'pattern',
         template: _.template($('#pattern-page-template').html()),
         events: {
-            'submit #new-entry': 'create'
+            'submit #new-entry': 'create',
+            'click .checkbox-square': 'toggleTemplates'
         },
         initialize: function () {
             this.listenTo(FireX.Patterns, 'add', this.addOne);
             this.listenTo(FireX.Patterns, 'reset', this.addAll);
 
-            if(!FireX.Patterns.length) {
+            FireX.templatesToggle || (FireX.templatesToggle = false);
+
+            if (!FireX.Patterns.length) {
                 FireX.Patterns.fetch();
             }
         },
@@ -21,13 +24,24 @@ $(function () {
             this.list   = this.$('.h-max');
             this.input  = this.$('input[name=address]');
             this.form   = this.$('#new-entry');
+            this.templateToggleButton = this.$('.checkbox-square');
 
-            if(FireX.Patterns.length) {
+            if (FireX.templatesToggle) {
+                this.templateToggleButton.addClass('active');
+            }
 
+            if (FireX.Patterns.length) {
                 FireX.Patterns.each(this.addOne, this);
             }
 
             return this;
+        },
+        toggleTemplates: function () {
+            FireX.templatesToggle = !FireX.templatesToggle;
+
+            this.templateToggleButton.toggleClass('active', FireX.templatesToggle);
+
+            addon.port.emit("toggleTemplate", FireX.templatesToggle);
         },
         create: function (event) {
             event.preventDefault();

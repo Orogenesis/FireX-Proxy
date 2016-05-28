@@ -37,6 +37,9 @@
 </script>
 <!-- LIST PAGE -->
 <script type="text/template" id="list-template">
+    <div class="h-manage">
+        <div class="checkbox-square"></div> Show favorites
+    </div>
     <div id="proxy-content">
         <div class="h-max">
             <table id="proxy-list-box"></table>
@@ -55,14 +58,23 @@
 </script>
 <!-- PATTERN TEMPLATE -->
 <script type="text/template" id="pattern-template">
-    <div class="d-uri"><%- iUri %></div>
+    <% if (!iEditable) { %>
+        <div class="d-uri"><%- iUri %></div>
+        <i class="editable"></i>
+    <% } %>
     <button class="d-rm">
         <i class="rm-button"></i>
     </button>
-    <input class="edit" value="<%- iUri %>">
+
+    <% if (iEditable) { %>
+        <input class="edit" type="text" maxlength="25" value="<%- iUri %>"/>
+    <% } %>
 </script>
 <!-- PATTERN PAGE TEMPLATE -->
 <script type="text/template" id="pattern-page-template">
+    <div class="h-manage">
+        <div class="checkbox-square"></div> Enable templates
+    </div>
     <div class="h-max">
     </div>
     <form id="new-entry">

@@ -2,11 +2,11 @@ const { Cc, Ci } = require('chrome');
 const nsIProtocolProxyService = Cc["@mozilla.org/network/protocol-proxy-service;1"].getService(Ci.nsIProtocolProxyService);
 
 /**
- * @param {Address} address
+ * @param {TemplateManager} tManager
  * @constructor
  */
-function Connector(address) {
-    this.address = address;
+function Connector(tManager) {
+    this.tManager = tManager;
     this.setState(false);
 }
 
@@ -18,12 +18,12 @@ Connector.prototype = {
         return (function (that) {
             return {
                 applyFilter: function (th, uri, proxy) {
-                    var __uri = uri.spec;
+                    var __uri = uri.host;
 
-                    if (!that.isEnabled() || (that.isTemplateEnabled() && __uri.indexOf(that.getUriList()) < 0)) {
+                    if (!that.isEnabled() || (that.tManager.isTemplateEnabled() && that.tManager.allLinks().indexOf(__uri) < 0)) {
                         return proxy;
                     }
-
+                    
                     return nsIProtocolProxyService.newProxyInfo(that.address.getProxyProtocol(), that.address.getIPAddress(), that.address.getPort(), 0, -1, null);
                 },
                 register: function () {
@@ -36,9 +36,11 @@ Connector.prototype = {
         })(this);
     },
     /**
+     * @param {Address} endpoint
      * @returns {void}
      */
-    start: function () {
+    start: function (endpoint) {
+        this.address = endpoint;
         this.service().register();
         this.setState(true);
     },
@@ -48,25 +50,6 @@ Connector.prototype = {
     stop: function () {
         this.service().unregister();
         this.setState(false);
-    },
-    /**
-     * @returns {Boolean}
-     */
-    isTemplateEnabled: function () {
-        return this.tEnabled;
-    },
-    /**
-     * @param {Boolean} state
-     * @returns {void}
-     */
-    setTemplateState: function (state) {
-        this.tEnabled = state;
-    },
-    /**
-     * @returns {Array}
-     */
-    getUriList: function () {
-        return this.uriList;
     },
     /**
      * @param {Boolean} state

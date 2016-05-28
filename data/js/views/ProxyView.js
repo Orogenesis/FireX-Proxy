@@ -16,7 +16,7 @@ $(function () {
             return this;
         },
         toggleActive: function () {
-            _.each(FireX.proxyList.without(this.model), (function (proxy) {
+            _.each(FireX.ProxyList.without(this.model), (function (proxy) {
                 proxy.set({
                     iActive: false
                 })

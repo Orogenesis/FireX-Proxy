@@ -155,9 +155,9 @@ textarea, select {
 }
 
 #menu {
-    background-color: #D8E8E7;
     display: block;
     height: 50px;
+    border-bottom: 1px solid #ddd;
 }
 
 #menu a {
@@ -192,6 +192,7 @@ textarea, select {
 
 #pattern .d-set {
     line-height: 30px;
+    height: 30px;
     padding: 10px;
 }
 
@@ -199,14 +200,6 @@ textarea, select {
     display: inline-block;
     vertical-align: top;
     color: #585858;
-}
-
-.d-set .edit {
-    display: none;
-}
-
-.d-set .edit.editing {
-    display: block;
 }
 
 #pattern .d-rm {
@@ -229,11 +222,37 @@ textarea, select {
     height: 210px;
 }
 
-#pattern input[type="text"] {
+#pattern input[name="address"] {
     width: 100%;
     height: 30px;
     display: inline-block;
     border: none;
     background: transparent;
     padding: 0 10px;
+}
+
+#pattern i.editable {
+    display: none;
+    height: 30px;
+    width: 24px;
+    background: url(../icons/edit-24.png) no-repeat center 5px;
+    margin-left: 10px;
+}
+
+#pattern .d-uri:hover ~ i.editable {
+    display: inline-block;
+}
+
+#pattern .edit {
+    border: 1px solid #78C0BD;
+    border-radius: 2px;
+    padding: 5px;
+}
+
+.h-manage {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    height: 50px;
+    line-height: 50px;
 }

@@ -50,13 +50,27 @@ Address.prototype = {
      * @returns {void}
      */
     setProxyProtocol: function (protocol) {
-        this.protocol = this.__toValidProtocol(protocol);
+        this.protocol = this.__toValidProtocol(protocol.toLowerCase());
+        this.setOriginalProtocol(protocol);
     },
     /**
      * @returns {String}
      */
     getProxyProtocol: function () {
         return this.protocol;
+    },
+    /**
+     * @param {String} protocol
+     * @returns {void}
+     */
+    setOriginalProtocol: function (protocol) {
+        this.originalProtocol = protocol;
+    },
+    /**
+     * @returns {String}
+     */
+    getOriginalProtocol: function () {
+        return this.originalProtocol;
     },
     /**
      * @param protocol

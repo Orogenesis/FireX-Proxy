@@ -2,7 +2,7 @@ const { JReader } = require('./JReader.js');
 
 function TemplateManager() {
     this.tList = [];
-
+    this.setTemplateState(false);
     this.load();
 }
 
@@ -16,10 +16,24 @@ TemplateManager.prototype = {
         return this.tList;
     },
     /**
+     * @returns {Array}
+     */
+    allLinks: function () {
+        return this.tList.map(function (n) {
+            return n.iUri;
+        });
+    },
+    /**
      * @param {Array} array
      */
     set: function (array) {
         this.tList = array;
+    },
+    /**
+     * @returns {JReader}
+     */
+    getReader: function () {
+        return new JReader(TemplateManager.TEMPLATE_FILE);
     },
     /**
      * @param {Object} jObject
@@ -28,7 +42,7 @@ TemplateManager.prototype = {
     add: function (jObject) {
         this.tList.push(jObject);
 
-        new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
+        this.getReader().write(this.tList);
     },
     /**
      * @returns {void}
@@ -36,7 +50,7 @@ TemplateManager.prototype = {
     load: function () {
         var __this = this;
 
-        new JReader(TemplateManager.TEMPLATE_FILE).readAll(function (a) {
+        this.getReader().readAll(function (a) {
             __this.set(a || []);
         });
     },
@@ -50,7 +64,7 @@ TemplateManager.prototype = {
         if (this.tList[id] !== undefined) {
             this.tList[id] = jObject;
 
-            new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
+            this.getReader().write(this.tList);
         } else {
             throw new Error();
         }
@@ -64,11 +78,24 @@ TemplateManager.prototype = {
         if (this.tList[id] !== undefined) {
             this.tList.splice(id, 1);
 
-            new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
+            this.getReader().write(this.tList);
         } else {
             throw new Error();
         }
-    }
+    },
+    /**
+     * @returns {Boolean}
+     */
+    isTemplateEnabled: function () {
+        return this.tEnabled;
+    },
+    /**
+     * @param {Boolean} state
+     * @returns {void}
+     */
+    setTemplateState: function (state) {
+        this.tEnabled = state;
+    },
 };
 
 exports.TemplateManager = TemplateManager;

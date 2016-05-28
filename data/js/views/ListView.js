@@ -66,7 +66,7 @@ $(function () {
             return {
                 iAddress: address.ipAddress,
                 iPort: address.port,
-                iProtocol: address.protocol,
+                iProtocol: address.originalProtocol,
                 iCountry: address.country
             }
         }
