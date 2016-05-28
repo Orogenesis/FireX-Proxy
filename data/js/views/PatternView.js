@@ -7,9 +7,9 @@ $(function () {
             'class': 'd-set'
         },
         events: {
-            'click .d-rm': 'destroy',
-            'dblclick .d-uri': 'edit',
-            'blur .edit': 'done'
+            'click .d-rm':      'destroy',
+            'dblclick .d-uri':  'edit',
+            'blur .edit':       'done'
         },
         template: _.template($('#pattern-template').html()),
         initialize: function () {

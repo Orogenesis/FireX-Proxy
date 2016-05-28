@@ -12,16 +12,15 @@ $(function () {
             this.listenTo(FireX.Patterns, 'reset', this.addAll);
 
             if(!FireX.Patterns.length) {
-
                 FireX.Patterns.fetch();
             }
         },
         render: function () {
             this.$el.html(this.template());
 
-            this.list = this.$('.h-max');
-            this.input = this.$('input[name=address]');
-            this.form = this.$('#new-entry');
+            this.list   = this.$('.h-max');
+            this.input  = this.$('input[name=address]');
+            this.form   = this.$('#new-entry');
 
             if(FireX.Patterns.length) {
 

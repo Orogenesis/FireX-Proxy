@@ -5,7 +5,6 @@ $(function () {
         model: FireX.PatternModel,
         isNew: false,
         initialize: function () {
-
             var that = this;
 
             addon.port.on("onPattern",function (pattern) {

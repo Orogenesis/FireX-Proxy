@@ -27,7 +27,7 @@ TemplateManager.prototype = {
      */
     add: function (jObject) {
         this.tList.push(jObject);
-        console.error(this.tList);
+
         new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
     },
     /**
@@ -47,15 +47,13 @@ TemplateManager.prototype = {
      * @returns {void}
      */
     modify: function (id, jObject) {
-        
         if (this.tList[id] !== undefined) {
-
             this.tList[id] = jObject;
+
             new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
-            return;
+        } else {
+            throw new Error();
         }
-        
-        throw new Error();
     },
     /**
      * @param {Number} id
@@ -63,15 +61,13 @@ TemplateManager.prototype = {
      * @returns {void}
      */
     rm: function (id) {
-        
         if (this.tList[id] !== undefined) {
-
             this.tList.splice(id, 1);
+
             new JReader(TemplateManager.TEMPLATE_FILE).write(this.tList);
-            return;
+        } else {
+            throw new Error();
         }
-        
-        throw new Error();
     }
 };
 
