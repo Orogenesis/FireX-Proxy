@@ -22,6 +22,7 @@ $(function () {
 
             this.input = this.$('.edit');
             this.label = this.$('.d-uri');
+            this.edit = false;
 
             return this;
         },
@@ -29,16 +30,19 @@ $(function () {
             this.model.destroy();
         },
         edit: function () {
-            this.input.addClass('editing');
+            this.edit = true;
+            
+            this.input.show();
             this.label.hide();
             this.input.focus();
         },
         done: function () {
-            if (!this.input.hasClass('editing')) {
+            if (!this.edit) {
                 return;
             }
 
-            this.input.removeClass('editing');
+            this.edit = false;
+            this.input.hide();
             this.label.show();
 
             if (this.input.val().trim()) {
