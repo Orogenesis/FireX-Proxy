@@ -78,12 +78,12 @@ textarea, select {
     background: url(../icons/loading.gif) no-repeat center center;
 }
 
-#proxy-list-box .active {
-    background-color: #D8E8E7;
-}
-
 #proxy-list-box tr {
     line-height: 30px;
+}
+
+#proxy-list-box tr.active {
+    background-color: #D8E8E7;
 }
 
 #proxy-list-box td {
@@ -94,8 +94,8 @@ textarea, select {
     text-transform: uppercase;
 }
 
-#proxy-list-box td.checkbox {
-    width: 20px;
+#proxy-list-box td.favorite {
+    width: 24px;
 }
 
 #proxy-list-box .country {
@@ -149,7 +149,7 @@ textarea, select {
     cursor: pointer;
 }
 
-.checkbox-square.active, #proxy-list-box .active .checkbox-square {
+.checkbox-square.active {
     background-color: #78C0BD;
     border-color: #6AB5B2;
 }
