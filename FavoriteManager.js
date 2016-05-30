@@ -6,13 +6,11 @@ function FavoriteManager() {
 
 FavoriteManager.prototype = Object.create(BaseRepository.prototype);
 
-FavoriteManager.prototype = {
-    /**
-     * @returns {String}
-     */
-    getFileName: function () {
-        return 'FireX-blacklist.json';
-    }
+/**
+ * @returns {String}
+ */
+FavoriteManager.prototype.getFileName = function () {
+    return 'FireX-blacklist.json';
 };
 
 exports.FavoriteManager = FavoriteManager;
