@@ -1,20 +1,14 @@
-const { JReader } = require('./JReader.js');
+const { BaseRepository } = require('./BaseRepository.js');
 
 function TemplateManager() {
-    this.tList = [];
+    BaseRepository.call(this);
+
     this.setTemplateState(false);
-    this.load();
 }
 
-TemplateManager.TEMPLATE_FILE = "FireX-patterns.json";
+TemplateManager.prototype = Object.create(BaseRepository.prototype);
 
 TemplateManager.prototype = {
-    /**
-     * @returns {Array}
-     */
-    all: function () {
-        return this.tList;
-    },
     /**
      * @returns {Array}
      */
@@ -22,66 +16,6 @@ TemplateManager.prototype = {
         return this.tList.map(function (n) {
             return n.iUri;
         });
-    },
-    /**
-     * @param {Array} array
-     */
-    set: function (array) {
-        this.tList = array;
-    },
-    /**
-     * @returns {JReader}
-     */
-    getReader: function () {
-        return new JReader(TemplateManager.TEMPLATE_FILE);
-    },
-    /**
-     * @param {Object} jObject
-     * @returns {void}
-     */
-    add: function (jObject) {
-        this.tList.push(jObject);
-
-        this.getReader().write(this.tList);
-    },
-    /**
-     * @returns {void}
-     */
-    load: function () {
-        var __this = this;
-
-        this.getReader().readAll(function (a) {
-            __this.set(a || []);
-        });
-    },
-    /**
-     * @param {Number} id
-     * @param {Object} jObject
-     * @throws {Error}
-     * @returns {void}
-     */
-    modify: function (id, jObject) {
-        if (this.tList[id] !== undefined) {
-            this.tList[id] = jObject;
-
-            this.getReader().write(this.tList);
-        } else {
-            throw new Error();
-        }
-    },
-    /**
-     * @param {Number} id
-     * @throws {Error}
-     * @returns {void}
-     */
-    rm: function (id) {
-        if (this.tList[id] !== undefined) {
-            this.tList.splice(id, 1);
-
-            this.getReader().write(this.tList);
-        } else {
-            throw new Error();
-        }
     },
     /**
      * @returns {Boolean}
@@ -96,6 +30,12 @@ TemplateManager.prototype = {
     setTemplateState: function (state) {
         this.tEnabled = state;
     },
+    /**
+     * @returns {String}
+     */
+    getFileName: function () {
+        return 'FireX-blacklist.json';
+    }
 };
 
 exports.TemplateManager = TemplateManager;
