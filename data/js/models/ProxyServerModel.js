@@ -7,7 +7,8 @@ $(function () {
             iPort:      -1,
             iProtocol:  null,
             iCountry:   null,
-            iActive:    false
+            iActive:    false,
+            iFavorite:  false
         },
         toggle: function () {
             this.set({
@@ -15,6 +16,13 @@ $(function () {
             });
             
             return this.get('iActive');
+        },
+        toggleFavorite: function () {
+            this.set({
+                iFavorite: !this.get('iFavorite')
+            });
+
+            return this.get('iFavorite');
         }
     });
 });

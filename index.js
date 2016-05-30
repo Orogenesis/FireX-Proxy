@@ -50,6 +50,12 @@ panel.port.on("getList", function (response) {
     tManager.modify(patternId, newState);
 }).on("toggleTemplate", function (state) {
     tManager.setTemplateState(state);
+}).on("onNewFavorite", function (proxy) {
+    // Write to favoritemanager;
+}).on("onDeleteFavorite", function (proxy) {
+    // delete from favoritemanager;
+}).on("getFavorites", function () {
+    // get favorites from favoritemanager
 });
 
 var button = ActionButton({

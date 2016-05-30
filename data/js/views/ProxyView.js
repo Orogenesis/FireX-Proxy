@@ -5,16 +5,14 @@ $(function () {
         tagName: 'tr',
         template: _.template($('#server-template').html()),
         events: {
-            'click': 'toggleActive',
-            'click .checkbox-square': 'addFavorite'
+            'click':                    'toggleActive',
+            'click .checkbox-square':   'addFavorite'
         },
         initialize: function () {
             this.listenTo(this.model, 'change', this.render);
         },
         render: function () {
             this.$el.html(this.template(this.model.toJSON())).toggleClass('active', this.model.get('iActive'));
-
-            this.addFavorite = this.$(".checkbox-square");
 
             return this;
         },
@@ -32,7 +30,11 @@ $(function () {
             }
         },
         addFavorite: function () {
-            this.addFavorite.toggleClass('active');
+            if(this.model.toggleFavorite()) {
+                addon.port.emit("onNewFavorite", this.model.toJSON());
+            } else {
+                addon.port.emit("onDeleteFavorite", this.model.toJSON());
+            }
 
             return false;
         }
