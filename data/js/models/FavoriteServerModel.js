@@ -13,6 +13,7 @@ $(function () {
         },
         sync: function (method, model, options) {
             options || (options = {});
+            
             switch (method) {
                 case "create" :
                     this.isPresent = true;
@@ -34,7 +35,9 @@ $(function () {
                 iActive:    this.get('iActive'),
                 iFavorite:  false
             });
+            
             this.destroy();
+            
             FireX.FavoriteServers.trigger('change');
         }
     });

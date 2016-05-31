@@ -26,7 +26,9 @@ $(function () {
                 iActive:    this.get('iActive'),
                 iFavorite:  true
             });
+
             this.destroy();
+            
             FireX.ProxyList.trigger('change');
         }
     });

@@ -13,6 +13,8 @@ $(function () {
         },
         render: function () {
             this.$el.html(this.template(this.model.toJSON())).toggleClass('active', this.model.get('iActive'));
+            
+            this.$('.checkbox-square').toggleClass('active', this.model.get('iFavorite'));
 
             return this;
         },

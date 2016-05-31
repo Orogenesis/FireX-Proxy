@@ -4,8 +4,8 @@ $(function () {
     FireX.ListView = Backbone.View.extend({
         template: _.template($('#list-template').html()),
         events: {
-            'click .refresh': 'update',
-            'click .h-manage' : 'toggleFavorites'
+            'click .refresh':   'update',
+            'click .h-manage':  'toggleFavorites'
         },
         initialize: function () {
             this.listenTo(FireX.ProxyList, 'add', this.onAdd);
@@ -24,16 +24,17 @@ $(function () {
                 that.onMenuOpen();
             });
 
-            if(!FireX.FavoriteServers.length) {
+            if (!FireX.FavoriteServers.length) {
                 FireX.FavoriteServers.fetch();
             }
         },
         render: function () {
-            this.$el.html(this.template({mode: FireX.listMode}));
+            this.$el.html(this.template());
 
             this.table = this.$('#proxy-list-box');
-
-            this.addAll((FireX.listMode)?FireX.FavoriteServers:FireX.ProxyList);
+            this.$('.checkbox-square').toggleClass('active', FireX.listMode);
+            
+            this.addAll((FireX.listMode) ? FireX.FavoriteServers : FireX.ProxyList);
 
             return this;
         },
@@ -49,7 +50,7 @@ $(function () {
             FireX.listMode = false;
             this.render();
 
-            if(this.table) {
+            if (this.table) {
                 this.table.addClass('spinner').empty();
             }
         },
@@ -66,15 +67,19 @@ $(function () {
             from.each(this.addOne, this);
         },
         onAdd: function (proxy) {
-            if(!FireX.listMode) this.addOne(proxy);
+            if (!FireX.listMode) {
+                this.addOne(proxy);
+            }
         },
         onReset: function () {
-            if(FireX.listMode) this.addAll(FireX.FavoriteServers);
+            if (FireX.listMode) {
+                this.addAll(FireX.FavoriteServers);
+            }
         },
         onList: function (list) {
             FireX.ProxyList.reset();
 
-            if(this.table) {
+            if (this.table) {
                 this.table.removeClass('spinner');
             }
 
