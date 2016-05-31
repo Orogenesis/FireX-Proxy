@@ -16,7 +16,7 @@ $(function () {
 
 
             var that = this;
-            this.mode = false; // false - default proxy list. true - favorite proxy list
+            FireX.listMode || (FireX.listMode = false); // false - default proxy list. true - favorite proxy list
 
             addon.port.on('onList', function (response) {
                 that.onList(response);
@@ -29,11 +29,11 @@ $(function () {
             }
         },
         render: function () {
-            this.$el.html(this.template({mode: this.mode}));
+            this.$el.html(this.template({mode: FireX.listMode}));
 
             this.table = this.$('#proxy-list-box');
 
-            this.addAll((this.mode)?FireX.FavoriteServers:FireX.ProxyList);
+            this.addAll((FireX.listMode)?FireX.FavoriteServers:FireX.ProxyList);
 
             return this;
         },
@@ -46,7 +46,7 @@ $(function () {
             addon.port.emit('getList');
 
             FireX.ProxyList.reset();
-            this.mode = false;
+            FireX.listMode = false;
             this.render();
 
             if(this.table) {
@@ -66,10 +66,10 @@ $(function () {
             from.each(this.addOne, this);
         },
         onAdd: function (proxy) {
-            if(!this.mode) this.addOne(proxy);
+            if(!FireX.listMode) this.addOne(proxy);
         },
         onReset: function () {
-            if(this.mode) this.addAll(FireX.FavoriteServers);
+            if(FireX.listMode) this.addAll(FireX.FavoriteServers);
         },
         onList: function (list) {
             FireX.ProxyList.reset();
@@ -85,7 +85,7 @@ $(function () {
             })(this);
         },
         toggleFavorites: function () {
-            this.mode = !this.mode;
+            FireX.listMode = !FireX.listMode;
             this.render();
         },
         addressToModel: function (address) {
