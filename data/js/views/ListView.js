@@ -24,6 +24,9 @@ $(function () {
                 that.onMenuOpen();
             });
 
+            if(!FireX.FavoriteServers.length) {
+                FireX.FavoriteServers.fetch();
+            }
         },
         render: function () {
             this.$el.html(this.template({mode: this.mode}));
