@@ -17,12 +17,17 @@ $(function () {
             
             return this.get('iActive');
         },
-        toggleFavorite: function () {
-            this.set({
-                iFavorite: !this.get('iFavorite')
+        favorite: function () {
+            FireX.FavoriteServers.create({
+                iAddress:   this.get('iAddress'),
+                iPort:      this.get('iPort'),
+                iProtocol:  this.get('iProtocol'),
+                iCountry:   this.get('iCountry'),
+                iActive:    this.get('iActive'),
+                iFavorite:  true
             });
-
-            return this.get('iFavorite');
+            this.destroy();
+            FireX.ProxyList.trigger('change');
         }
     });
 });

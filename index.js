@@ -5,6 +5,7 @@ const { Panel } = require("sdk/panel");
 const { Address } = require('./Address.js');
 const { Connector } = require('./Connector.js');
 const { TemplateManager } = require('./TemplateManager.js');
+const { FavoriteManager } = require('./FavoriteManager.js');
 
 var panel = Panel({
     contentURL: './html/index.html',
@@ -21,6 +22,11 @@ var tManager = new TemplateManager();
  * @type {Connector}
  */
 var connector = new Connector(tManager);
+
+/**
+ * @type {FavoriteManager}
+ */
+var fManager = new FavoriteManager();
 
 panel.port.on("getList", function (response) {
     connector.stop();

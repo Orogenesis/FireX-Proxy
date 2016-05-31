@@ -30,11 +30,7 @@ $(function () {
             }
         },
         addFavorite: function () {
-            if(this.model.toggleFavorite()) {
-                addon.port.emit("onNewFavorite", this.model.toJSON());
-            } else {
-                addon.port.emit("onDeleteFavorite", this.model.toJSON());
-            }
+            this.model.favorite();
 
             return false;
         }
