@@ -9,6 +9,8 @@ $(function () {
             "favorite": 'favorite'
         },
         initialize: function () {
+            FireX.increment = 0;
+
             new FireX.MenuView();
 
             FireX.Menu.create({
@@ -23,6 +25,8 @@ $(function () {
                 iIcon: 'settings',
                 iText: 'Blacklist'
             });
+            
+            FireX.ProxyList.fetch();
             
             this.index();
         },

@@ -13,4 +13,11 @@ FavoriteManager.prototype.getFileName = function () {
     return 'FireX-mylist.json';
 };
 
+
+FavoriteManager.prototype.rm = function (id) {
+    BaseRepository.prototype.rm.call(this, this.all().findIndex(function (elem, index, array) {
+        return elem.iId == id;
+    }));
+};
+
 exports.FavoriteManager = FavoriteManager;

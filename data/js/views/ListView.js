@@ -4,19 +4,20 @@ $(function () {
     FireX.ListView = Backbone.View.extend({
         template: _.template($('#list-template').html()),
         events: {
-            'click .refresh':   'update',
-            'click .h-manage':  'toggleFavorites'
+            'click .refresh':    'update',
+            'click .h-manage':   'toggleFavorites'
         },
         initialize: function () {
-            this.listenTo(FireX.ProxyList, 'add', this.onAdd);
-            this.listenTo(FireX.ProxyList, 'change', this.render);
-
-            this.listenTo(FireX.FavoriteServers, 'reset', this.onReset);
-            this.listenTo(FireX.FavoriteServers, 'change', this.render);
-
-
             var that = this;
-            FireX.listMode || (FireX.listMode = false); // false - default proxy list. true - favorite proxy list
+
+            this.listenTo(FireX.ProxyList, 'reset', this.addAll);
+            this.listenTo(FireX.ProxyList, 'change:iFavorite', function (model, value, options) {
+                if (!value) {
+                    that.addAll();
+                }
+            });
+
+            FireX.listMode || (FireX.listMode = false);
 
             addon.port.on('onList', function (response) {
                 that.onList(response);
@@ -24,17 +25,16 @@ $(function () {
                 that.onMenuOpen();
             });
 
-            if (!FireX.FavoriteServers.length) {
-                FireX.FavoriteServers.fetch();
-            }
         },
         render: function () {
             this.$el.html(this.template());
 
             this.table = this.$('#proxy-list-box');
-            this.$('.checkbox-square').toggleClass('active', FireX.listMode);
-            
-            this.addAll((FireX.listMode) ? FireX.FavoriteServers : FireX.ProxyList);
+            this.hBox = this.$('.h-box');
+            this.favoriteCheckbox = this.$('.checkbox-square');
+            this.favoriteCheckbox.toggleClass('active', FireX.listMode);
+
+            this.addAll();
 
             return this;
         },
@@ -46,13 +46,11 @@ $(function () {
         update: function () {
             addon.port.emit('getList');
 
-            FireX.ProxyList.reset();
             FireX.listMode = false;
-            this.render();
+            this.favoriteCheckbox.toggleClass('active', FireX.listMode);
 
-            if (this.table) {
-                this.table.addClass('spinner').empty();
-            }
+            this.hBox.addClass('spinner');
+            this.table.empty();
         },
         addOne: function (proxy) {
             var view = new FireX.ProxyView({
@@ -61,45 +59,24 @@ $(function () {
 
             this.table.append(view.render().el);
         },
-        addAll: function (from) {
+        addAll: function () {
             this.table.empty();
 
-            from.each(this.addOne, this);
-        },
-        onAdd: function (proxy) {
-            if (!FireX.listMode) {
-                this.addOne(proxy);
-            }
-        },
-        onReset: function () {
-            if (FireX.listMode) {
-                this.addAll(FireX.FavoriteServers);
-            }
+            _.each(FireX.ProxyList.where({
+                iFavorite: FireX.listMode
+            }), this.addOne, this);
         },
         onList: function (list) {
-            FireX.ProxyList.reset();
+            this.hBox.removeClass('spinner');
 
-            if (this.table) {
-                this.table.removeClass('spinner');
-            }
-
-            (function (that) {
-                _.each(list, function (value) {
-                    FireX.ProxyList.create(that.addressToModel(value));
-                });
-            })(this);
+            FireX.ProxyList.reset(FireX.ProxyList.where({
+                iFavorite: true
+            }).concat(list));
         },
         toggleFavorites: function () {
             FireX.listMode = !FireX.listMode;
-            this.render();
-        },
-        addressToModel: function (address) {
-            return {
-                iAddress: address.ipAddress,
-                iPort: address.port,
-                iProtocol: address.originalProtocol,
-                iCountry: address.country
-            }
+            this.favoriteCheckbox.toggleClass('active', FireX.listMode);
+            this.addAll();
         }
     });
 });

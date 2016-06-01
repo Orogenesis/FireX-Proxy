@@ -33,6 +33,8 @@ $(function () {
         },
         addFavorite: function () {
             this.model.favorite();
+            
+            this.$('.checkbox-square').toggleClass('active', this.model.get('iFavorite'));
 
             return false;
         }

@@ -39,7 +39,7 @@ panel.port.on("getList", function (response) {
         panel.port.emit("onList", list);
     });
 }).on("connect", function (server) {
-    connector.start(new Address(server.iAddress, server.iPort, server.iProtocol, server.iCountry));
+    connector.start(new Address(server.ipAddress, server.port, server.protocol, server.country));
 }).on("disconnect", function () {
     connector.stop();
 }).on("addPattern", function (pattern) {
@@ -57,11 +57,12 @@ panel.port.on("getList", function (response) {
 }).on("toggleTemplate", function (state) {
     tManager.setTemplateState(state);
 }).on("onNewFavorite", function (proxy) {
-    // Write to favoritemanager;
-}).on("onDeleteFavorite", function (proxy) {
-    // delete from favoritemanager;
+    fManager.add(proxy);
+}).on("onDeleteFavorite", function (id) {
+    fManager.rm(id);
 }).on("getFavorites", function () {
-    // get favorites from favoritemanager
+
+    panel.port.emit("onFavorites", fManager.all());
 });
 
 var button = ActionButton({

@@ -3,12 +3,34 @@ var FireX = FireX || {};
 $(function () {
     FireX.ProxyServerModel = Backbone.Model.extend({
         defaults: {
-            iAddress:   null,
-            iPort:      -1,
-            iProtocol:  null,
-            iCountry:   null,
-            iActive:    false,
-            iFavorite:  false
+            ipAddress:          null,
+            originalProtocol:   null,
+            country:            null,
+            iActive:            false,
+            iFavorite:          false,
+            port:               -1
+        },
+        initialize: function () {
+            this.isPresent = false;
+        },
+        isNew: function () {
+            return !this.isPresent;
+        },
+        sync: function (method, model, options) {
+            options || (options = {});
+            
+            switch (method) {
+                case "create":
+                    this.isPresent = true;
+                    addon.port.emit("onNewFavorite", model.toJSON());
+                    break;
+                case "update":
+                    this.isPresent = false;
+                    addon.port.emit("onDeleteFavorite", this.get('iId'));
+                    break;
+                default:
+                    break;
+            }
         },
         toggle: function () {
             this.set({
@@ -18,18 +40,16 @@ $(function () {
             return this.get('iActive');
         },
         favorite: function () {
-            FireX.FavoriteServers.create({
-                iAddress:   this.get('iAddress'),
-                iPort:      this.get('iPort'),
-                iProtocol:  this.get('iProtocol'),
-                iCountry:   this.get('iCountry'),
-                iActive:    this.get('iActive'),
-                iFavorite:  true
-            });
-
-            this.destroy();
-            
-            FireX.ProxyList.trigger('change');
+            if (this.get('iFavorite')) {
+                this.save({
+                    iFavorite: false
+                });
+            } else {
+                this.save({
+                    iId: ++FireX.increment,
+                    iFavorite: true
+                });
+            }
         }
     });
 });

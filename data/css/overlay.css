@@ -67,15 +67,19 @@ textarea, select {
 
 #proxy-list-box {
     width: 100%;
-    height: 100%;
     font-size: 12px;
     font-weight: 500;
     border-collapse: collapse;
     border-spacing: 0;
 }
 
-.spinner {
+.h-box.spinner {
     background: url(../icons/loading.gif) no-repeat center center;
+}
+
+#proxy-content .h-box {
+    height: 100%;
+    width: 100%;
 }
 
 #proxy-list-box tr {

@@ -8,12 +8,10 @@
     <script src="../libs/backbone.js" type="text/javascript"></script>
     <!-- MODELS -->
     <script src="../js/models/ProxyServerModel.js" type="text/javascript"></script>
-    <script src="../js/models/FavoriteServerModel.js" type="text/javascript"></script>
     <script src="../js/models/MenuEntryModel.js" type="text/javascript"></script>
     <script src="../js/models/PatternModel.js" type="text/javascript"></script>
     <!-- COLLECTIONS -->
     <script src="../js/collections/ProxyList.js" type="text/javascript"></script>
-    <script src="../js/collections/FavoriteServers.js" type="text/javascript"></script>
     <script src="../js/collections/Menu.js" type="text/javascript"></script>
     <script src="../js/collections/Patterns.js" type="text/javascript"></script>
     <!-- VIEWS -->
@@ -45,7 +43,9 @@
     </div>
     <div id="proxy-content">
         <div class="h-max">
-            <table id="proxy-list-box"></table>
+            <div class="h-box">
+                <table id="proxy-list-box"></table>
+            </div>
         </div>
         <button class="bottom-button refresh"></button>
     </div>
@@ -55,9 +55,9 @@
     <td class="favorite">
         <div class="checkbox-square"></div>
     </td>
-    <td><%- iAddress %></td>
-    <td><%- iProtocol %></td>
-    <td class="country"><%- iCountry %></td>
+    <td><%- ipAddress %></td>
+    <td><%- originalProtocol %></td>
+    <td class="country"><%- country %></td>
 </script>
 <!-- PATTERN TEMPLATE -->
 <script type="text/template" id="pattern-template">
