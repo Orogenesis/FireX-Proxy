@@ -83,7 +83,7 @@ FileReader.prototype = {
         (function (self) {
             NetUtil.asyncFetch(self.fObject, function (inputStream, status) {
                 if (!self.isSuccessCode(status)) {
-                    return callback(null);
+                    return callback([]);
                 }
 
                 return callback(NetUtil.readInputStreamToString(inputStream, inputStream.available()).split('\n'));

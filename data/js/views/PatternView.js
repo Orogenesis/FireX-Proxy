@@ -33,11 +33,11 @@ $(function () {
         },
         done: function () {
             if (this.model.isEditable()) {
-                var text = this.input.val().trim();
+                var iText = this.input.val().trim();
 
-                if (text) {
+                if (iText) {
                     this.model.save({
-                        iUri: text,
+                        iUri: iText,
                         iEditable: false
                     });
                 } else {

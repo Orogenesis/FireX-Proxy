@@ -30,6 +30,7 @@ $(function () {
             this.table = this.$('#proxy-list-box');
             this.hBox = this.$('.h-box');
             this.favoriteCheckbox = this.$('.checkbox-square');
+
             this.favoriteCheckbox.toggleClass('active', FireX.listMode);
 
             this.addAll();
@@ -68,7 +69,9 @@ $(function () {
         },
         toggleFavorites: function () {
             FireX.listMode = !FireX.listMode;
+            
             this.favoriteCheckbox.toggleClass('active', FireX.listMode);
+
             this.addAll();
         }
     });

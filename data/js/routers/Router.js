@@ -45,5 +45,4 @@ $(function () {
             this.content.html(this.currentView.render().el);
         }
     });
-
 });

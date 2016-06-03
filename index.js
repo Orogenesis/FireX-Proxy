@@ -66,7 +66,6 @@ panel.port.on("getList", function (response) {
 }).on("onDeleteFavorite", function (id) {
     fManager.rm(id);
 }).on("getFavorites", function () {
-
     panel.port.emit("onFavorites", fManager.all());
 });
 
@@ -84,6 +83,5 @@ var button = ActionButton({
         });
 
         panel.port.emit('onMenuOpen');
-
     }
 });
