@@ -5,7 +5,7 @@ $(function () {
         "en-US": {
             "blacklist" : "Blacklist",
             "favorites" : "Show favorites",
-            "proxymenu" : "Proxy list"
+            "proxymenu" : "List of proxies"
         },
         "ru-RU": {
             "blacklist" : "Черный список",
@@ -15,7 +15,7 @@ $(function () {
         "fr-FR": {
             "blacklist" : "La liste noire",
             "favorites" : "Afficher les favoris",
-            "proxymenu" : "Proxy liste"
+            "proxymenu" : "La liste de proxies"
         },
         "de-DE": {
             "blacklist" : "Schwarze Liste",
