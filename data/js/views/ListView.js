@@ -9,8 +9,7 @@ $(function () {
         },
         initialize: function () {
             var that = this;
-
-            this.listenTo(FireX.l10n, 'locale', this.render);
+            
             this.listenTo(FireX.ProxyList, 'reset', this.addAll);
             this.listenTo(FireX.ProxyList, 'change:iFavorite', function (model, value, options) {
                 if (!value) {
@@ -22,8 +21,6 @@ $(function () {
 
             addon.port.on('onList', function (response) {
                 that.onList(response);
-            }).on('onMenuOpen', function () {
-                that.onMenuOpen();
             });
 
         },
@@ -38,11 +35,6 @@ $(function () {
             this.addAll();
 
             return this;
-        },
-        onMenuOpen: function () {
-            if (!FireX.ProxyList.length) {
-                this.update();
-            }
         },
         update: function () {
             addon.port.emit('getList');

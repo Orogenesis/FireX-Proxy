@@ -30,13 +30,16 @@ var connector = new Connector(tManager);
  */
 var fManager = new FavoriteManager();
 
+panel.on('show', function () {
+    panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift());
+});
+
 panel.port.on("getList", function (response) {
     connector.stop();
 
     /**
      * Sends proxylist to frontend via port communication
      */
-
     new Hidemyass().getList(function (list) {
         panel.port.emit("onList", list);
     });
@@ -76,8 +79,6 @@ var button = ActionButton({
         "32": "./icons/icon-32.png"
     },
     onClick: function () {
-        panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift());
-
         panel.show({
             position: button
         });

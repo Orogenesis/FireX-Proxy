@@ -16,33 +16,33 @@ $(function () {
             FireX.Menu.create({
                 iTo: '#/index',
                 iIcon: 'list',
-                iText: function () {
-                    return FireX.l10n.t("proxymenu",{
-                        _:"Proxy list"
-                    });
-                },
+                iText: FireX.l10n.t("proxymenu", {
+                    _: "List of proxies"
+                }),
                 iActive: true
             });
 
             FireX.Menu.create({
                 iTo: '#/patterns',
                 iIcon: 'settings',
-                iText: function () {
-                    return FireX.l10n.t("blacklist",{
-                        _:"Blacklist"
-                    });
-                }
+                iText: FireX.l10n.t("blacklist", {
+                    _: "Blacklist"
+                })
             });
-            
+
             FireX.ProxyList.fetch();
-            
+
             this.index();
         },
-        index: function() {
-            this.content.html(new FireX.ListView().render().el);
+        index: function () {
+            this.currentView = new FireX.ListView();
+
+            this.content.html(this.currentView.render().el);
         },
         patterns: function () {
-            this.content.html(new FireX.PatternPageView().render().el);
+            this.currentView = new FireX.PatternPageView();
+
+            this.content.html(this.currentView.render().el);
         }
     });
 
