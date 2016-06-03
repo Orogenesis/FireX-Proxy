@@ -20,7 +20,7 @@ $(function () {
         "de-DE": {
             "blacklist" : "Schwarze Liste",
             "favorites" : "Favoriten anzeigen",
-            "proxymenu" : "Proxy-Liste"
+            "proxymenu" : "Liste der Proxy"
         }
     };
 });
