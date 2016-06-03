@@ -10,6 +10,7 @@ $(function () {
         initialize: function () {
             var that = this;
 
+            this.listenTo(FireX.l10n, 'locale', this.render);
             this.listenTo(FireX.ProxyList, 'reset', this.addAll);
             this.listenTo(FireX.ProxyList, 'change:iFavorite', function (model, value, options) {
                 if (!value) {

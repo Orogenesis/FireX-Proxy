@@ -13,6 +13,8 @@ var panel = Panel({
     width: 400
 });
 
+
+
 /**
  * @type {TemplateManager}
  */
@@ -74,10 +76,13 @@ var button = ActionButton({
         "32": "./icons/icon-32.png"
     },
     onClick: function () {
+        panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift());
+
         panel.show({
             position: button
         });
 
         panel.port.emit('onMenuOpen');
+
     }
 });

@@ -16,14 +16,22 @@ $(function () {
             FireX.Menu.create({
                 iTo: '#/index',
                 iIcon: 'list',
-                iText: 'Proxy list',
+                iText: function () {
+                    return FireX.l10n.t("proxymenu",{
+                        _:"Proxy list"
+                    });
+                },
                 iActive: true
             });
 
             FireX.Menu.create({
                 iTo: '#/patterns',
                 iIcon: 'settings',
-                iText: 'Blacklist'
+                iText: function () {
+                    return FireX.l10n.t("blacklist",{
+                        _:"Blacklist"
+                    });
+                }
             });
             
             FireX.ProxyList.fetch();
@@ -38,6 +46,4 @@ $(function () {
         }
     });
 
-    FireX.Router = new FireX.Router();
-    Backbone.history.start();
 });

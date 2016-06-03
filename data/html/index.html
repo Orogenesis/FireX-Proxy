@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <!-- LIBRARIES -->
     <script src="../libs/jquery.js" type="text/javascript"></script>
+    <script src="../libs/polyglot.js" type="text/javascript"></script>
     <script src="../libs/underscore.js" type="text/javascript"></script>
     <script src="../libs/backbone.js" type="text/javascript"></script>
+    <!-- LOCALES -->
+    <script src="../locale/locales.js" type="text/javascript"></script>
     <!-- MODELS -->
     <script src="../js/models/ProxyServerModel.js" type="text/javascript"></script>
     <script src="../js/models/MenuEntryModel.js" type="text/javascript"></script>
@@ -23,6 +26,8 @@
     <script src="../js/views/PatternPageView.js" type="text/javascript"></script>
     <!-- ROUTER -->
     <script src="../js/routers/Router.js" type="text/javascript"></script>
+    <!-- MAIN -->
+    <script src="../js/app.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
 </head>
 <body>
@@ -39,7 +44,7 @@
 <script type="text/template" id="list-template">
     <div class="h-manage">
         <div class="checkbox-square"></div><!--
-        -->Show favorites
+        --><%= FireX.l10n.t("favorites",{_:"Show favorites"}) %>
     </div>
     <div id="proxy-content">
         <div class="h-max">
@@ -76,7 +81,7 @@
 <script type="text/template" id="pattern-page-template">
     <div class="h-manage">
         <div class="checkbox-square"></div><!--
-        -->Blacklist
+        --><%= FireX.l10n.t("blacklist",{_:"Blacklist"}) %>
     </div>
     <div class="h-max">
     </div>
