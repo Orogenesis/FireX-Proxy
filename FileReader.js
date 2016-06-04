@@ -86,7 +86,7 @@ FileReader.prototype = {
                     return callback([]);
                 }
 
-                return callback(NetUtil.readInputStreamToString(inputStream, inputStream.available()).split('\n'));
+                return callback(NetUtil.readInputStreamToString(inputStream, inputStream.available()).split("\n"));
             });
         })(this);
     },

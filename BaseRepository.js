@@ -40,7 +40,7 @@ BaseRepository.prototype = {
         var __this = this;
 
         this.getReader().readAll(function (a) {
-            __this.set(a || []);
+            __this.set(a);
         });
     },
     /**
