@@ -31,7 +31,7 @@ var connector = new Connector(tManager);
 var fManager = new FavoriteManager();
 
 panel.on('show', function () {
-    panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift());
+    panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift().split('-').shift());
 });
 
 panel.port.on("getList", function (response) {

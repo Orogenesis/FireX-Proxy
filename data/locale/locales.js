@@ -2,22 +2,22 @@ var FireX = FireX || {};
 
 $(function () {
     FireX.Locales = {
-        "en-US": {
+        "en": {
             "blacklist" : "Blacklist",
             "favorites" : "Show favorites",
             "proxymenu" : "List of proxies"
         },
-        "ru-RU": {
+        "ru": {
             "blacklist" : "Черный список",
             "favorites" : "Показать избранное",
             "proxymenu" : "Список прокси"
         },
-        "fr-FR": {
+        "fr": {
             "blacklist" : "La liste noire",
             "favorites" : "Afficher les favoris",
             "proxymenu" : "La liste de proxies"
         },
-        "de-DE": {
+        "de": {
             "blacklist" : "Schwarze Liste",
             "favorites" : "Favoriten anzeigen",
             "proxymenu" : "Liste der Proxy"
