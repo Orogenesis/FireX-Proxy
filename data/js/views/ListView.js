@@ -63,8 +63,8 @@ $(function () {
         onList: function (list) {
             this.hBox.removeClass('spinner');
 
-            FireX.ProxyList.reset(FireX.ProxyList.where({
-                iFavorite: true
+            FireX.ProxyList.reset(FireX.ProxyList.filter(function (item) {
+                return item.get('iFavorite') || item.get('iActive');
             }).concat(list));
         },
         toggleFavorites: function () {
