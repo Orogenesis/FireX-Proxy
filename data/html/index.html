@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <!-- LIBRARIES -->
-    <script src="../libs/jquery.js" type="text/javascript"></script>
-    <script src="../libs/polyglot.js" type="text/javascript"></script>
-    <script src="../libs/underscore.js" type="text/javascript"></script>
-    <script src="../libs/backbone.js" type="text/javascript"></script>
+    <script src="../libs/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script src="../libs/polyglot.min.js" type="text/javascript"></script>
+    <script src="../libs/underscore-min.js" type="text/javascript"></script>
+    <script src="../libs/backbone-min.js" type="text/javascript"></script>
     <!-- LOCALES -->
     <script src="../locale/locales.js" type="text/javascript"></script>
     <!-- MODELS -->
@@ -44,7 +44,7 @@
 <script type="text/template" id="list-template">
     <div class="h-manage">
         <div class="checkbox-square"></div><!--
-        --><%= FireX.l10n.t("favorites",{_:"Show favorites"}) %>
+        --><%- FireX.l10n.t("favorites",{_:"Show favorites"}) %>
     </div>
     <div id="proxy-content">
         <div class="h-max">
@@ -81,7 +81,7 @@
 <script type="text/template" id="pattern-page-template">
     <div class="h-manage">
         <div class="checkbox-square"></div><!--
-        --><%= FireX.l10n.t("blacklist",{_:"Blacklist"}) %>
+        --><%- FireX.l10n.t("blacklist",{_:"Blacklist"}) %>
     </div>
     <div class="h-max">
     </div>
