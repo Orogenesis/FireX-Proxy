@@ -4,17 +4,22 @@ $(function () {
     FireX.Locales = {
         "en": {
             "blacklist" : "Blacklist",
-            "favorites" : "Show favorites",
-            "proxymenu" : "List of proxies"
+            "favorites" : "Favorites",
+            "proxymenu" : "Proxy list"
+        },
+        "uk": {
+            "blacklist" : "Чорний список",
+            "favorites" : "Показати обране",
+            "proxymenu" : "Список проксі"
         },
         "ru": {
-            "blacklist" : "Черный список",
-            "favorites" : "Показать избранное",
+            "blacklist" : "Чёрный список",
+            "favorites" : "Избранное",
             "proxymenu" : "Список прокси"
         },
         "fr": {
             "blacklist" : "La liste noire",
-            "favorites" : "Afficher les favoris",
+            "favorites" : "Les favoris",
             "proxymenu" : "La liste de proxies"
         },
         "de": {
