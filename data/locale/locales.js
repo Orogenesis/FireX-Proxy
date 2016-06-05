@@ -7,6 +7,11 @@ $(function () {
             "favorites" : "Favorites",
             "proxymenu" : "Proxy list"
         },
+        "be": {
+            "blacklist" : "Чорны спис",
+            "favorites" : "Абранае",
+            "proxymenu" : "Списак прокси"
+        },
         "uk": {
             "blacklist" : "Чорний список",
             "favorites" : "Показати обране",
