@@ -13,8 +13,6 @@ var panel = Panel({
     width: 400
 });
 
-
-
 /**
  * @type {TemplateManager}
  */
