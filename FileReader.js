@@ -2,6 +2,11 @@ const { Cc, Cu, Ci } = require("chrome");
 const { NetUtil } = Cu.import("resource://gre/modules/NetUtil.jsm");
 const { FileUtils } = Cu.import("resource://gre/modules/FileUtils.jsm");
 
+/**
+ * @param {String} fPath
+ * @constructor
+ * @returns {void}
+ */
 function FileReader(fPath) {
     this.fObject = FileUtils.getFile("ProfD", [fPath]);
 }
@@ -61,9 +66,9 @@ FileReader.prototype = {
 
         var istream = converter.convertToInputStream(string + '\n');
 
-        (function (self) {
+        (function (that) {
             NetUtil.asyncCopy(istream, ostream, function (status) {
-                if (!self.isSuccessCode(status)) {
+                if (!that.isSuccessCode(status)) {
                     return 1;
                 }
 
@@ -80,9 +85,9 @@ FileReader.prototype = {
      * @returns {void}
      */
     readAll: function (callback) {
-        (function (self) {
-            NetUtil.asyncFetch(self.fObject, function (inputStream, status) {
-                if (!self.isSuccessCode(status)) {
+        (function (that) {
+            NetUtil.asyncFetch(that.fObject, function (inputStream, status) {
+                if (!that.isSuccessCode(status)) {
                     return callback([]);
                 }
 

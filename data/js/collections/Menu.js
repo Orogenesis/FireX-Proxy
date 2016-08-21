@@ -1,10 +1,13 @@
-var FireX = FireX || {};
+import MenuEntryModel from '../models/MenuEntryModel';
 
-$(function () {
-    FireX.Menu = Backbone.Collection.extend({
-        model: FireX.MenuEntryModel,
-        url: '/menu'
-    });
+export default class Menu extends Backbone.Collection {
+    /**
+     * @returns {void}
+     */
+    constructor() {
+        super();
 
-    FireX.Menu = new FireX.Menu();
-});
+        this.model = MenuEntryModel;
+        this.url = '/menu';
+    }
+}

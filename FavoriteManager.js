@@ -1,23 +1,14 @@
 const { BaseRepository } = require('./BaseRepository.js');
 
-function FavoriteManager() {
-    BaseRepository.call(this);
+/**
+ * @param {JReader} io
+ * @constructor
+ * @returns {void}
+ */
+function FavoriteManager(io) {
+    BaseRepository.call(this, io);
 }
 
 FavoriteManager.prototype = Object.create(BaseRepository.prototype);
-
-/**
- * @returns {String}
- */
-FavoriteManager.prototype.getFileName = function () {
-    return 'FireX-mylist.json';
-};
-
-
-FavoriteManager.prototype.rm = function (id) {
-    BaseRepository.prototype.rm.call(this, this.all().findIndex(function (elem, index, array) {
-        return elem.iId == id;
-    }));
-};
 
 exports.FavoriteManager = FavoriteManager;

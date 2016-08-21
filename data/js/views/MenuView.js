@@ -1,15 +1,27 @@
-var FireX = FireX || {};
+export default class MenuView extends Backbone.View {
+    /**
+     * @returns {void}
+     */
+    constructor() {
+        super();
 
-$(function () {
-    FireX.MenuView = Backbone.View.extend({
-        el: '#menu',
-        initialize: function () {
-            this.listenTo(FireX.Menu, "add", this.addOne);
-        },
-        addOne: function (menu) {
-            this.$el.append(new FireX.MenuEntryView({
-                model: menu
-            }).render().el);
-        }
-    });
-});
+        this.el = '#menu';
+    }
+
+    /**
+     * @returns {void}
+     */
+    initialize() {
+        this.listenTo(Router.menuCollection, "add", this.addOne);
+    }
+
+    /**
+     * @param {Backbone.Model} menu
+     * @returns {void}
+     */
+    addOne(menu) {
+        this.$el.append(new MenuEntryView({
+            model: menu
+        }).render().el);
+    }
+}

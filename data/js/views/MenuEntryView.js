@@ -1,36 +1,55 @@
-var FireX = FireX || {};
+export default class MenuEntryView extends Backbone.View {
+    /**
+     * @returns {void}
+     */
+    constructor() {
+        super();
 
-$(function () {
-    FireX.MenuEntryView = Backbone.View.extend({
-        tagName: 'a',
-        template: _.template($("#menu-entry-template").html()),
-        events: {
+        this.tagName = 'a';
+        this.template = _.template($("#menu-entry-template").html());
+
+        this.events = {
             'click': 'choose'
-        },
+        };
+    }
 
-        initialize: function () {
-            this.listenTo(this.model, 'change', this.render);
-        },
-        render: function () {
-            this.$el.html(this.template(this.model.toJSON()));
+    /**
+     * @returns {void}
+     */
+    initialize() {
+        this.listenTo(this.model, 'change', this.render);
+    }
 
-            return this;
-        },
-        attributes: function () {
-            return {
-                href: this.model.get('iTo')
-            };
-        },
-        choose: function () {
-            _.each(FireX.Menu.without(this.model), (function (entry) {
-                entry.set({
-                    iActive: false
-                })
-            }));
+    /**
+     * @returns {MenuEntryView}
+     */
+    render() {
+        this.$el.html(this.template(this.model.toJSON()));
 
-            this.model.set({
-                iActive: true
-            });
-        }
-    });
-});
+        return this;
+    }
+
+    /**
+     * @returns {Object}
+     */
+    attributes() {
+        return {
+            href: this.model.get('iTo')
+        };
+    }
+
+    /**
+     * @returns {void}
+     */
+    choose() {
+        _.each(Router.menuCollection.without(this.model), (function (entry) {
+            entry.set({
+                iActive: false
+            })
+        }));
+
+        this.model.set({
+            iActive: true
+        });
+    }
+}

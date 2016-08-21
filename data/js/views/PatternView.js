@@ -1,49 +1,73 @@
-var FireX = FireX || {};
+class PatternView extends Backbone.View {
+    /**
+     * @returns {void}
+     */
+    constructor() {
+        super();
 
-$(function () {
-    FireX.PatternView = Backbone.View.extend({
-        tagName: 'div',
-        attributes: {
+        this.tagName = 'div';
+        this.template = _.template($('#pattern-template').html());
+
+        this.attributes = {
             'class': 'd-set'
-        },
-        events: {
-            'click .d-rm':      'destroy',
-            'click .d-uri':     'edit',
-            'blur .edit':       'done'
-        },
-        template: _.template($('#pattern-template').html()),
-        initialize: function () {
-            this.listenTo(this.model, 'change', this.render);
-            this.listenTo(this.model, 'destroy', this.remove);
+        };
 
-        },
-        render: function () {
-            this.$el.html(this.template(this.model.toJSON()));
+        this.events = {
+            'click .d-rm': 'destroy',
+            'click .d-uri': 'edit',
+            'blur .edit': 'done'
+        };
+    }
 
-            this.input = this.$('.edit');
+    /**
+     * @returns {void}
+     */
+    initialize() {
+        this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'destroy', this.remove);
+    }
 
-            return this;
-        },
-        destroy: function () {
-            this.model.destroy();
-        },
-        edit: function () {
-            this.model.toggleEditable();
-            this.input.focus();
-        },
-        done: function () {
-            if (this.model.isEditable()) {
-                var iText = this.input.val().trim();
+    /**
+     * @returns {PatternView}
+     */
+    render() {
+        this.$el.html(this.template(this.model.toJSON()));
 
-                if (iText) {
-                    this.model.save({
-                        iUri: iText,
-                        iEditable: false
-                    });
-                } else {
-                    this.model.destroy();
-                }
+        this.input = this.$('.edit');
+
+        return this;
+    }
+
+    /**
+     * @returns {void}
+     */
+    destroy() {
+        this.model.destroy();
+    }
+
+    /**
+     * @returns {void}
+     */
+    edit() {
+        this.model.toggleEditable();
+        this.input.focus();
+    }
+
+    /**
+     * @returns {void}
+     */
+    done() {
+        if (this.model.isEditable()) {
+            var iText = this.input.val().trim();
+
+            if (iText) {
+                this.model.save({
+                    iUri: iText,
+                    iEditable: false
+                });
+            } else {
+                this.destroy();
             }
         }
-    });
-});
+    }
+}

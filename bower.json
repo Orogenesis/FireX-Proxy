@@ -1,0 +1,23 @@
+{
+  "name": "firex-proxy",
+  "description": "FireX Proxy",
+  "main": "index.js",
+  "authors": [
+    "Exclumice"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "jetpack"
+  ],
+  "homepage": "https://github.com/Exclumice/FireX-Proxy",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "^2.2.0"
+  }
+}

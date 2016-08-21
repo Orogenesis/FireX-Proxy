@@ -1,7 +1,12 @@
 const { FileReader } = require('./FileReader.js');
 
+/**
+ * @param {String} fPath
+ * @constructor
+ * @returns {void}
+ */
 function JReader(fPath) {
-    FileReader.call(this, fPath);
+    FileReader.call(this, `${fPath}.json`);
 }
 
 JReader.prototype = Object.create(FileReader.prototype);

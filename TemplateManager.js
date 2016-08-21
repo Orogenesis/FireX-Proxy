@@ -1,7 +1,12 @@
 const { BaseRepository } = require('./BaseRepository.js');
 
-function TemplateManager() {
-    BaseRepository.call(this);
+/**
+ * @param {JReader} io
+ * @constructor
+ * @returns {void}
+ */
+function TemplateManager(io) {
+    BaseRepository.call(this, io);
 
     this.setTemplateState(false);
 }
@@ -29,12 +34,6 @@ TemplateManager.prototype.isTemplateEnabled = function () {
  */
 TemplateManager.prototype.setTemplateState = function (state) {
     this.tEnabled = state;
-};
-/**
- * @returns {String}
- */
-TemplateManager.prototype.getFileName = function () {
-    return 'FireX-blacklist.json';
 };
 
 exports.TemplateManager = TemplateManager;

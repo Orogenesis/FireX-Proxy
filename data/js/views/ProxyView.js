@@ -1,42 +1,61 @@
-var FireX = FireX || {};
+class ProxyView extends Backbone.View {
+    /**
+     * @returns {void}
+     */
+    constructor() {
+        super();
 
-$(function () {
-    FireX.ProxyView = Backbone.View.extend({
-        tagName: 'tr',
-        template: _.template($('#server-template').html()),
-        events: {
-            'click':                    'toggleActive',
-            'click .checkbox-square':   'addFavorite'
-        },
-        initialize: function () {
-            this.listenTo(this.model, 'change', this.render);
-        },
-        render: function () {
-            this.$el.html(this.template(this.model.toJSON())).toggleClass('active', this.model.get('iActive'));
-            
-            this.$('.checkbox-square').toggleClass('active', this.model.get('iFavorite'));
+        this.tagName = 'tr';
+        this.template = _.template($('#server-template').html());
 
-            return this;
-        },
-        toggleActive: function () {
-            _.each(FireX.ProxyList.without(this.model), (function (proxy) {
-                proxy.set({
-                    iActive: false
-                })
-            }));
+        this.events = {
+            'click': 'toggleActive',
+            'click .checkbox-square': 'addFavorite'
+        };
+    }
 
-            if (this.model.toggle()) {
-                addon.port.emit("connect", this.model.toJSON());
-            } else {
-                addon.port.emit("disconnect");
-            }
-        },
-        addFavorite: function () {
-            this.model.favorite();
-            
-            this.$('.checkbox-square').toggleClass('active', this.model.get('iFavorite'));
+    /**
+     * @returns {void}
+     */
+    initialize() {
+        this.listenTo(this.model, 'change', this.render);
+    }
 
-            return false;
+    /**
+     * @returns {ProxyView}
+     */
+    render() {
+        this.$el.html(this.template(this.model.toJSON())).toggleClass('active', this.model.get('iActive'));
+
+        this.$('.checkbox-square').toggleClass('active', this.model.get('iFavorite'));
+
+        return this;
+    }
+
+    /**
+     * @returns {void}
+     */
+    toggleActive() {
+        _.each(Router.proxyCollection.without(this.model), (function (proxy) {
+            proxy.set({
+                iActive: false
+            })
+        }));
+
+        if (this.model.toggle()) {
+            addon.port.emit("connect", this.model.toJSON());
+        } else {
+            addon.port.emit("disconnect");
         }
-    });
-});
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    addFavorite() {
+        this.model.favorite();
+        this.$('.checkbox-square').toggleClass('active', this.model.get('iFavorite'));
+
+        return false;
+    }
+}

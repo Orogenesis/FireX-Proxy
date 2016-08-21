@@ -1,71 +1,105 @@
-var FireX = FireX || {};
+import PatternView from './PatternView';
+import PatternModel from '../models/PatternModel';
 
-$(function () {
-    FireX.PatternPageView = Backbone.View.extend({
-        id: 'pattern',
-        template: _.template($('#pattern-page-template').html()),
-        events: {
+export default class PatternPageView extends Backbone.View {
+    /**
+     * @returns {void}
+     */
+    constructor() {
+        super();
+
+        this.id = 'pattern';
+        this.template = _.template($('#pattern-page-template').html());
+
+        this.events = {
             'submit #new-entry': 'create',
             'click .checkbox-square': 'toggleTemplates'
-        },
-        initialize: function () {
-            this.listenTo(FireX.Patterns, 'add', this.addOne);
-            this.listenTo(FireX.Patterns, 'reset', this.addAll);
+        };
+    }
 
-            FireX.templatesToggle || (FireX.templatesToggle = false);
+    /**
+     * @returns {void}
+     */
+    initialize() {
+        this.listenTo(Router.bCollection, 'add', this.addOne);
+        this.listenTo(Router.bCollection, 'reset', this.addAll);
 
-            if (!FireX.Patterns.length) {
-                FireX.Patterns.fetch();
-            }
-        },
-        render: function () {
-            this.$el.html(this.template());
+        Router.templatesToggle || (Router.templatesToggle = false);
 
-            this.list   = this.$('.h-max');
-            this.input  = this.$('input[name=address]');
-            this.form   = this.$('#new-entry');
-            this.templateToggleButton = this.$('.checkbox-square');
+        Router.bCollection.fetch();
+    }
 
-            if (FireX.templatesToggle) {
-                this.templateToggleButton.addClass('active');
-            }
+    /**
+     * @returns {PatternPageView}
+     */
+    render() {
+        this.$el.html(this.template());
 
-            if (FireX.Patterns.length) {
-                FireX.Patterns.each(this.addOne, this);
-            }
+        this.list = this.$('.h-max');
+        this.input = this.$('input[name=address]');
+        this.form = this.$('#new-entry');
+        this.templateToggleButton = this.$('.checkbox-square');
 
-            return this;
-        },
-        toggleTemplates: function () {
-            FireX.templatesToggle = !FireX.templatesToggle;
+        if (Router.templatesToggle) {
+            this.templateToggleButton.addClass('active');
+        }
 
-            this.templateToggleButton.toggleClass('active', FireX.templatesToggle);
+        Router.bCollection.each(this.addOne, this);
 
-            addon.port.emit("toggleTemplate", FireX.templatesToggle);
-        },
-        create: function (event) {
-            event.preventDefault();
+        return this;
+    }
 
-            if (this.input.val().trim()) {
+    /**
+     * @returns {void}
+     */
+    toggleTemplates() {
+        Router.templatesToggle = !Router.templatesToggle;
 
-                FireX.Patterns.create(this.newPattern());
-                this.form[0].reset();
-            }
-        },
-        addAll: function () {
-            FireX.Patterns.each(this.addOne, this);
-        },
-        addOne: function (pattern) {
-            var view = new FireX.PatternView({
-                model: pattern
+        this.templateToggleButton.toggleClass('active', Router.templatesToggle);
+
+        addon.port.emit("toggleTemplate", Router.templatesToggle);
+    }
+
+    /**
+     * @param {Object} event
+     * @returns {void}
+     */
+    create(event) {
+        event.preventDefault();
+
+        var createdValue = this.input.val().trim();
+
+        if (createdValue.length) {
+            var bPattern = new PatternModel({
+                iUri: createdValue
             });
 
-            this.list.append(view.render().el);
-        },
-        newPattern: function () {
-            return {
-                iUri: this.input.val().trim()
-            }
+            bPattern.save({
+                success() {
+                    Router.bCollection.add(bPattern);
+                }
+            });
+
+            this.form[0].reset();
         }
-    });
-});
+    }
+
+    /**
+     * @returns {void}
+     */
+    addAll() {
+        Router.bCollection.each(this.addOne, this);
+    }
+
+    /**
+     * @param {Backbone.Model} pattern
+     * @returns {void}
+     */
+    addOne(pattern) {
+        var view = new PatternView({
+            model: pattern
+        });
+
+        this.list.append(view.render().el);
+    }
+}

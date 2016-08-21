@@ -1,23 +1,20 @@
-var FireX = FireX || {};
+import PatternModel from '../models/PatternModel';
 
-$(function () {
-    FireX.Patterns = Backbone.Collection.extend({
-        model: FireX.PatternModel,
-        isNew: false,
-        initialize: function () {
-            var that = this;
+class Patterns extends Backbone.Collection {
+    /**
+     * @returns {void}
+     */
+    constructor() {
+        super();
 
-            addon.port.on("onPattern",function (pattern) {
-                that.onPattern(pattern);
-            });
-        },
-        sync: function(method, model, options) {
-            addon.port.emit("getPatterns");
-        },
-        onPattern: function (pattern) {
-            this.reset(pattern);
-        }
-    });
+        this.model = PatternModel;
+        this.port = 'blacklist';
+    }
 
-    FireX.Patterns = new FireX.Patterns();
-});
+    /**
+     * @returns {void}
+     */
+    initialize() {
+        addon.port.on("onPattern", (patterns) => this.reset(patterns));
+    }
+}

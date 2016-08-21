@@ -1,7 +1,12 @@
-const { JReader } = require('./JReader.js');
-
-function BaseRepository() {
+/**
+ * @param {JReader} io
+ * @constructor
+ * @returns {void}
+ */
+function BaseRepository(io) {
     this.tList = [];
+    this.io = io;
+
     this.load();
 }
 
@@ -19,19 +24,13 @@ BaseRepository.prototype = {
         this.tList = array;
     },
     /**
-     * @returns {JReader}
-     */
-    getReader: function () {
-        return new JReader(this.getFileName());
-    },
-    /**
      * @param {Object} jObject
      * @returns {void}
      */
     add: function (jObject) {
         this.tList.push(jObject);
 
-        this.getReader().write(this.tList);
+        this.io.write(this.tList);
     },
     /**
      * @returns {void}
@@ -39,7 +38,7 @@ BaseRepository.prototype = {
     load: function () {
         var __this = this;
 
-        this.getReader().readAll(function (a) {
+        this.io.readAll(function (a) {
             __this.set(a);
         });
     },
@@ -53,7 +52,7 @@ BaseRepository.prototype = {
         if (this.tList[id] !== undefined) {
             this.tList[id] = jObject;
 
-            this.getReader().write(this.tList);
+            this.io.write(this.tList);
         } else {
             throw new Error();
         }
@@ -64,10 +63,12 @@ BaseRepository.prototype = {
      * @returns {void}
      */
     rm: function (id) {
+        console.error(this.tList, id);
+
         if (this.tList[id] !== undefined) {
             this.tList.splice(id, 1);
 
-            this.getReader().write(this.tList);
+            this.io.write(this.tList);
         } else {
             throw new Error();
         }

@@ -6,6 +6,7 @@ const { Address } = require('./Address.js');
 const { Connector } = require('./Connector.js');
 const { TemplateManager } = require('./TemplateManager.js');
 const { FavoriteManager } = require('./FavoriteManager.js');
+const { JReader } = require('./JReader.js');
 
 var panel = Panel({
     contentURL: './html/index.html',
@@ -16,7 +17,7 @@ var panel = Panel({
 /**
  * @type {TemplateManager}
  */
-var tManager = new TemplateManager();
+var tManager = new TemplateManager(new JReader('firex-templates'));
 
 /**
  * @type {Connector}
@@ -26,7 +27,7 @@ var connector = new Connector(tManager);
 /**
  * @type {FavoriteManager}
  */
-var fManager = new FavoriteManager();
+var fManager = new FavoriteManager(new JReader('firex-proxy'));
 
 panel.on('show', function () {
     panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift().split('-').shift());
@@ -35,9 +36,6 @@ panel.on('show', function () {
 panel.port.on("getList", function (response) {
     connector.stop();
 
-    /**
-     * Sends proxylist to frontend via port communication
-     */
     new Hidemyass().getList(function (list) {
         panel.port.emit("onList", list);
     });
@@ -45,25 +43,21 @@ panel.port.on("getList", function (response) {
     connector.start(new Address(server.ipAddress, server.port, server.protocol, server.country));
 }).on("disconnect", function () {
     connector.stop();
-}).on("addPattern", function (pattern) {
+}).on("blacklist.create", function (pattern) {
     tManager.add(pattern);
-}).on("getPatterns", function () {
-    /**
-     * Sends array of templates to frontend via port communication
-     */
-
+}).on("blacklist.read", function () {
     panel.port.emit("onPattern", tManager.all());
-}).on("deletePattern", function (patternId) {
-    tManager.rm(patternId);
-}).on("updatePattern", function (patternId, newState) {
-    tManager.modify(patternId, newState);
+}).on("blacklist.delete", function (sync) {
+    tManager.rm(sync.id);
+}).on("blacklist.update", function (sync) {
+    tManager.modify(sync.id, sync);
 }).on("toggleTemplate", function (state) {
     tManager.setTemplateState(state);
-}).on("onNewFavorite", function (proxy) {
+}).on("favorite.create", function (proxy) {
     fManager.add(proxy);
-}).on("onDeleteFavorite", function (id) {
+}).on("favorite.delete", function (id) {
     fManager.rm(id);
-}).on("getFavorites", function () {
+}).on("favorite.read", function () {
     panel.port.emit("onFavorites", fManager.all());
 });
 

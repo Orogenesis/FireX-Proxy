@@ -1,78 +1,113 @@
-var FireX = FireX || {};
+import ProxyView from './ProxyView';
 
-$(function () {
-    FireX.ListView = Backbone.View.extend({
-        template: _.template($('#list-template').html()),
-        events: {
-            'click .refresh':    'update',
-            'click .h-manage':   'toggleFavorites'
-        },
-        initialize: function () {
-            var that = this;
-            
-            this.listenTo(FireX.ProxyList, 'reset', this.addAll);
-            this.listenTo(FireX.ProxyList, 'change:iFavorite', function (model, value, options) {
-                if (!value) {
-                    that.addAll();
-                }
-            });
+export default class ListView extends Backbone.View {
+    /**
+     * @returns {void}
+     */
+    constructor() {
+        super();
 
-            FireX.listMode || (FireX.listMode = false);
+        this.template = _.template($('#list-template').html());
+        this.events = {
+            'click .refresh': 'update',
+            'click .h-manage': 'toggleFavorites'
+        };
+    }
 
-            addon.port.on('onList', function (response) {
-                that.onList(response);
-            });
+    /**
+     * @returns {void}
+     */
+    initialize() {
+        this.listenTo(Router.ProxyList, 'reset', this.addAll);
+        this.listenTo(Router.ProxyList, 'change:iFavorite', this.onChange);
 
-        },
-        render: function () {
-            this.$el.html(this.template());
+        Router.listMode || (Router.listMode = false);
 
-            this.table = this.$('#proxy-list-box');
-            this.hBox = this.$('.h-box');
-            this.favoriteCheckbox = this.$('.checkbox-square');
+        addon.port.on('onList', (response) => this.onList(response));
+    }
 
-            this.favoriteCheckbox.toggleClass('active', FireX.listMode);
+    /**
+     * @returns {ListView}
+     */
+    render() {
+        this.$el.html(this.template());
 
-            this.addAll();
+        this.table = this.$('#proxy-list-box');
+        this.hBox = this.$('.h-box');
+        this.favoriteCheckbox = this.$('.checkbox-square');
 
-            return this;
-        },
-        update: function () {
-            addon.port.emit('getList');
+        this.favoriteCheckbox.toggleClass('active', Router.listMode);
 
-            FireX.listMode = false;
-            this.favoriteCheckbox.toggleClass('active', FireX.listMode);
+        this.addAll();
 
-            this.hBox.addClass('spinner');
-            this.table.empty();
-        },
-        addOne: function (proxy) {
-            var view = new FireX.ProxyView({
-                model: proxy
-            });
+        return this;
+    }
 
-            this.table.append(view.render().el);
-        },
-        addAll: function () {
-            this.table.empty();
+    /**
+     * @returns {void}
+     */
+    update() {
+        addon.port.emit('getList');
 
-            _.each(FireX.ProxyList.where({
-                iFavorite: FireX.listMode
-            }), this.addOne, this);
-        },
-        onList: function (list) {
-            this.hBox.removeClass('spinner');
+        Router.listMode = false;
+        this.favoriteCheckbox.toggleClass('active', Router.listMode);
 
-            FireX.ProxyList.reset(FireX.ProxyList.filter(function (item) {
-                return item.get('iFavorite') || item.get('iActive');
-            }).concat(list));
-        },
-        toggleFavorites: function () {
-            FireX.listMode = !FireX.listMode;
-            
-            this.favoriteCheckbox.toggleClass('active', FireX.listMode);
+        this.hBox.addClass('spinner');
+        this.table.empty();
+    }
 
+    /**
+     * @param {Backbone.Model} proxy
+     * @returns {void}
+     */
+    addOne(proxy) {
+        var view = new ProxyView({
+            model: proxy
+        });
+
+        this.table.append(view.render().el);
+    }
+
+    /**
+     * @returns {void}
+     */
+    addAll() {
+        this.table.empty();
+
+        _.each(Router.proxyCollection.where({
+            iFavorite: Router.listMode
+        }), this.addOne, this);
+    }
+
+    /**
+     * @returns {void}
+     */
+    onList(list) {
+        this.hBox.removeClass('spinner');
+
+        Router.proxyCollection.reset(Router.proxyCollection.filter((item) => item.get('iFavorite') || item.get('iActive')).concat(list));
+    }
+
+    /**
+     * @returns {void}
+     */
+    toggleFavorites() {
+        Router.listMode = !Router.listMode;
+
+        this.favoriteCheckbox.toggleClass('active', Router.listMode);
+
+        this.addAll();
+    }
+
+    /**
+     * @param {Backbone.Model} model
+     * @param {String} value
+     * @param {Array} options
+     * @returns {void}
+     */
+    onChange(model, value, options) {
+        if (!value) {
             this.addAll();
         }
-    });
-});
+    }
+}
