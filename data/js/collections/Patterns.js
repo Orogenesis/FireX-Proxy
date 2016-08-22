@@ -1,5 +1,3 @@
-import PatternModel from '../models/PatternModel';
-
 class Patterns extends Backbone.Collection {
     /**
      * @returns {void}
@@ -8,13 +6,44 @@ class Patterns extends Backbone.Collection {
         super();
 
         this.model = PatternModel;
-        this.port = 'blacklist';
+        this.iCounter = 0;
+    }
+
+    /**
+     * @returns {string}
+     */
+    get port() {
+        return 'blacklist';
     }
 
     /**
      * @returns {void}
      */
     initialize() {
-        addon.port.on("onPattern", (patterns) => this.reset(patterns));
+        this.bind('remove', this.onRemove, this);
+    }
+
+    /**
+     * @param {Backbone.Model} model
+     * @param {Backbone.Collection} collection
+     * @param {Object} options
+     * @returns {void}
+     */
+    onRemove(model, collection, options) {
+        --this.iCounter;
+
+        this.decrease(model);
+    }
+
+    /**
+     * @param {Backbone.Model} model
+     * @returns {void}
+     */
+    decrease(model) {
+        this.each((b) => {
+            if (b.get('id') > model.get('id')) {
+                b.set('id', b.get('id') - 1);
+            }
+        });
     }
 }

@@ -1,18 +1,32 @@
 class PatternView extends Backbone.View {
     /**
-     * @returns {void}
+     * @returns {string}
      */
-    constructor() {
-        super();
+    get tagName() {
+        return 'div';
+    }
 
-        this.tagName = 'div';
-        this.template = _.template($('#pattern-template').html());
+    /**
+     * @returns {*}
+     */
+    get template() {
+        return _.template($('#pattern-template').html());
+    }
 
-        this.attributes = {
+    /**
+     * @returns {Object}
+     */
+    get attributes() {
+        return {
             'class': 'd-set'
         };
+    }
 
-        this.events = {
+    /**
+     * @returns {Object}
+     */
+    get events() {
+        return {
             'click .d-rm': 'destroy',
             'click .d-uri': 'edit',
             'blur .edit': 'done'

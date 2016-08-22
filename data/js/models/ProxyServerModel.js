@@ -1,11 +1,9 @@
-export default class ProxyServerModel extends Backbone.Model {
+class ProxyServerModel extends Backbone.Model {
     /**
-     * @returns {void}
+     * @returns {Object}
      */
-    constructor() {
-        super();
-
-        this.defaults = {
+    get defaults() {
+        return {
             ipAddress: null,
             originalProtocol: null,
             country: null,
@@ -13,17 +11,13 @@ export default class ProxyServerModel extends Backbone.Model {
             iFavorite: false,
             port: null
         };
-
-        this.port = 'favorite';
     }
 
     /**
-     * @returns {void}
+     * @returns {string}
      */
-    initialize() {
-        if (this.get('iFavorite')) {
-            this.set('id', Router.lCounter++);
-        }
+    get port() {
+        return 'favorite';
     }
 
     /**
@@ -35,24 +29,5 @@ export default class ProxyServerModel extends Backbone.Model {
         });
 
         return this.get('iActive');
-    }
-
-    /**
-     * @returns {void}
-     */
-    favorite() {
-        this.save({
-            iFavorite: !this.get('iFavorite')
-        });
-
-        if (!this.get('iFavorite')) {
-            --Router.lCounter;
-
-            this.unset('id');
-        } else {
-            ++Router.lCounter;
-
-            this.set('id', Router.lCounter - 1);
-        }
     }
 }

@@ -1,14 +1,16 @@
-import ProxyView from './ProxyView';
-
-export default class ListView extends Backbone.View {
+class ListView extends Backbone.View {
     /**
-     * @returns {void}
+     * @returns {*}
      */
-    constructor() {
-        super();
+    get template() {
+        return _.template($('#list-template').html());
+    }
 
-        this.template = _.template($('#list-template').html());
-        this.events = {
+    /**
+     * @returns {Object}
+     */
+    get events() {
+        return {
             'click .refresh': 'update',
             'click .h-manage': 'toggleFavorites'
         };
@@ -18,8 +20,8 @@ export default class ListView extends Backbone.View {
      * @returns {void}
      */
     initialize() {
-        this.listenTo(Router.ProxyList, 'reset', this.addAll);
-        this.listenTo(Router.ProxyList, 'change:iFavorite', this.onChange);
+        this.listenTo(this.collection, 'reset', this.addAll);
+        this.listenTo(this.collection, 'change:iFavorite', this.onChange);
 
         Router.listMode || (Router.listMode = false);
 
@@ -47,7 +49,7 @@ export default class ListView extends Backbone.View {
      * @returns {void}
      */
     update() {
-        addon.port.emit('getList');
+        this.collection.fetch();
 
         Router.listMode = false;
         this.favoriteCheckbox.toggleClass('active', Router.listMode);
@@ -61,8 +63,13 @@ export default class ListView extends Backbone.View {
      * @returns {void}
      */
     addOne(proxy) {
+        if (proxy.get('iFavorite')) {
+            proxy.set('id', this.collection.iCounter++);
+        }
+
         var view = new ProxyView({
-            model: proxy
+            model: proxy,
+            collection: this.collection
         });
 
         this.table.append(view.render().el);
@@ -74,7 +81,7 @@ export default class ListView extends Backbone.View {
     addAll() {
         this.table.empty();
 
-        _.each(Router.proxyCollection.where({
+        _.each(this.collection.where({
             iFavorite: Router.listMode
         }), this.addOne, this);
     }
@@ -85,7 +92,7 @@ export default class ListView extends Backbone.View {
     onList(list) {
         this.hBox.removeClass('spinner');
 
-        Router.proxyCollection.reset(Router.proxyCollection.filter((item) => item.get('iFavorite') || item.get('iActive')).concat(list));
+        this.collection.reset(this.collection.filter((item) => item.get('iActive')).concat(list));
     }
 
     /**
@@ -107,7 +114,12 @@ export default class ListView extends Backbone.View {
      */
     onChange(model, value, options) {
         if (!value) {
-            this.addAll();
+            model.destroy();
+            model.unset('id');
+
+            this.collection.decrease(model);
+        } else {
+            model.save();
         }
     }
 }

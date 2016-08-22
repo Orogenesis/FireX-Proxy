@@ -1,4 +1,3 @@
-const self = require('sdk/self');
 const { Hidemyass } = require('./Hidemyass.js');
 const { ActionButton } = require("sdk/ui/button/action");
 const { Panel } = require("sdk/panel");
@@ -8,60 +7,15 @@ const { TemplateManager } = require('./TemplateManager.js');
 const { FavoriteManager } = require('./FavoriteManager.js');
 const { JReader } = require('./JReader.js');
 
-var panel = Panel({
+const self = require('sdk/self');
+
+const panel = Panel({
     contentURL: './html/index.html',
     height: 350,
     width: 400
 });
 
-/**
- * @type {TemplateManager}
- */
-var tManager = new TemplateManager(new JReader('firex-templates'));
-
-/**
- * @type {Connector}
- */
-var connector = new Connector(tManager);
-
-/**
- * @type {FavoriteManager}
- */
-var fManager = new FavoriteManager(new JReader('firex-proxy'));
-
-panel.on('show', function () {
-    panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift().split('-').shift());
-});
-
-panel.port.on("getList", function (response) {
-    connector.stop();
-
-    new Hidemyass().getList(function (list) {
-        panel.port.emit("onList", list);
-    });
-}).on("connect", function (server) {
-    connector.start(new Address(server.ipAddress, server.port, server.protocol, server.country));
-}).on("disconnect", function () {
-    connector.stop();
-}).on("blacklist.create", function (pattern) {
-    tManager.add(pattern);
-}).on("blacklist.read", function () {
-    panel.port.emit("onPattern", tManager.all());
-}).on("blacklist.delete", function (sync) {
-    tManager.rm(sync.id);
-}).on("blacklist.update", function (sync) {
-    tManager.modify(sync.id, sync);
-}).on("toggleTemplate", function (state) {
-    tManager.setTemplateState(state);
-}).on("favorite.create", function (proxy) {
-    fManager.add(proxy);
-}).on("favorite.delete", function (id) {
-    fManager.rm(id);
-}).on("favorite.read", function () {
-    panel.port.emit("onFavorites", fManager.all());
-});
-
-var button = ActionButton({
+const actionButton = ActionButton({
     id: "firex-action",
     label: "FireX Proxy",
     icon: {
@@ -71,9 +25,45 @@ var button = ActionButton({
     },
     onClick: function () {
         panel.show({
-            position: button
+            position: actionButton
         });
-
-        panel.port.emit('onMenuOpen');
     }
 });
+
+/**
+ * @type {TemplateManager}
+ */
+const tManager = new TemplateManager(new JReader('firex-templates'));
+
+/**
+ * @type {Connector}
+ */
+const connector = new Connector(tManager);
+
+/**
+ * @type {FavoriteManager}
+ */
+const fManager = new FavoriteManager(new JReader('firex-proxy'));
+
+/**
+ * @type {Hidemyass}
+ */
+const hideMyAss = new Hidemyass();
+
+panel.on('show', function () {
+    panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift().split('-').shift());
+});
+
+panel.port.on("favorite.read", (response) => {
+    connector.stop();
+    hideMyAss.getList((list) => panel.port.emit("onList", list.concat(fManager.all())));
+}).on("connect", (server) => {
+    connector.start(new Address(server.ipAddress, server.port, server.protocol, server.country));
+}).on("disconnect", () => connector.stop())
+    .on("blacklist.create", (pattern) => tManager.add(pattern))
+    .on("blacklist.read", () => panel.port.emit("onPattern", tManager.all()))
+    .on("blacklist.delete", (sync) => tManager.rm(sync.id))
+    .on("blacklist.update", (sync) => tManager.modify(sync.id, sync))
+    .on("toggleTemplate", (state) => tManager.setTemplateState(state))
+    .on("favorite.create", (proxy) => fManager.add(proxy))
+    .on("favorite.delete", (sync) => fManager.rm(sync.id));

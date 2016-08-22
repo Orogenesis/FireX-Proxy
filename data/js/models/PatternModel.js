@@ -1,22 +1,20 @@
-export default class PatternModel extends Backbone.Model {
+class PatternModel extends Backbone.Model {
     /**
-     * @returns {void}
+     * @returns {string}
      */
-    constructor() {
-        super();
-
-        this.port = 'blacklist';
-        this.defaults = {
-            iUri: null,
-            iEditable: false
-        };
+    get port() {
+        return 'blacklist';
     }
 
     /**
-     * @returns {void}
+     *
+     * @returns {Object}
      */
-    initialize() {
-        this.set('id', Router.bCounter++);
+    get defaults() {
+        return {
+            iUri: null,
+            iEditable: false
+        };
     }
 
     /**

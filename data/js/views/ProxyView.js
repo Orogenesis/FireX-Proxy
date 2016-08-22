@@ -1,16 +1,25 @@
 class ProxyView extends Backbone.View {
     /**
-     * @returns {void}
+     * @returns {string}
      */
-    constructor() {
-        super();
+    get tagName() {
+        return 'tr';
+    }
 
-        this.tagName = 'tr';
-        this.template = _.template($('#server-template').html());
+    /**
+     * @returns {*}
+     */
+    get template() {
+        return _.template($('#server-template').html());
+    }
 
-        this.events = {
+    /**
+     * @returns {Object}
+     */
+    get events() {
+        return {
             'click': 'toggleActive',
-            'click .checkbox-square': 'addFavorite'
+            'click .checkbox-square': 'add'
         };
     }
 
@@ -19,6 +28,7 @@ class ProxyView extends Backbone.View {
      */
     initialize() {
         this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'destroy', this.remove);
     }
 
     /**
@@ -36,11 +46,11 @@ class ProxyView extends Backbone.View {
      * @returns {void}
      */
     toggleActive() {
-        _.each(Router.proxyCollection.without(this.model), (function (proxy) {
+        _.each(this.collection.without(this.model), (proxy) => {
             proxy.set({
                 iActive: false
             })
-        }));
+        });
 
         if (this.model.toggle()) {
             addon.port.emit("connect", this.model.toJSON());
@@ -52,9 +62,10 @@ class ProxyView extends Backbone.View {
     /**
      * @returns {boolean}
      */
-    addFavorite() {
-        this.model.favorite();
-        this.$('.checkbox-square').toggleClass('active', this.model.get('iFavorite'));
+    add() {
+        this.model.set({
+            iFavorite: !this.model.get('iFavorite')
+        });
 
         return false;
     }

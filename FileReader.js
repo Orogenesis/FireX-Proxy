@@ -100,13 +100,7 @@ FileReader.prototype = {
      * @returns {void}
      */
     removeLine: function (string) {
-        var __this = this;
-
-        this.readAll(function (received) {
-            __this.write(received.filter(function (n) {
-                return n !== string;
-            }).join('\n'));
-        });
+        this.readAll((response) => this.write(response.filter((n) => n !== string).join('\n')));
     },
     /**
      * @returns {void}

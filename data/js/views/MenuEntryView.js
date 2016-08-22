@@ -1,16 +1,25 @@
-export default class MenuEntryView extends Backbone.View {
+class MenuEntryView extends Backbone.View {
     /**
-     * @returns {void}
+     * @returns {string}
      */
-    constructor() {
-        super();
+    get tagName() {
+        return 'a';
+    }
 
-        this.tagName = 'a';
-        this.template = _.template($("#menu-entry-template").html());
-
-        this.events = {
+    /**
+     * @returns {Object}
+     */
+    get events() {
+        return {
             'click': 'choose'
         };
+    }
+
+    /**
+     * @returns {*}
+     */
+    get template() {
+        return _.template($("#menu-entry-template").html());
     }
 
     /**
@@ -42,7 +51,7 @@ export default class MenuEntryView extends Backbone.View {
      * @returns {void}
      */
     choose() {
-        _.each(Router.menuCollection.without(this.model), (function (entry) {
+        _.each(this.collection.without(this.model), (function (entry) {
             entry.set({
                 iActive: false
             })

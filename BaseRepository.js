@@ -63,8 +63,6 @@ BaseRepository.prototype = {
      * @returns {void}
      */
     rm: function (id) {
-        console.error(this.tList, id);
-
         if (this.tList[id] !== undefined) {
             this.tList.splice(id, 1);
 

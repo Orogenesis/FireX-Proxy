@@ -1,18 +1,16 @@
-export default class MenuView extends Backbone.View {
+class MenuView extends Backbone.View {
     /**
-     * @returns {void}
+     * @returns {string}
      */
-    constructor() {
-        super();
-
-        this.el = '#menu';
+    get el() {
+        return '#menu';
     }
 
     /**
      * @returns {void}
      */
     initialize() {
-        this.listenTo(Router.menuCollection, "add", this.addOne);
+        this.listenTo(this.collection, "add", this.addOne);
     }
 
     /**
@@ -21,7 +19,8 @@ export default class MenuView extends Backbone.View {
      */
     addOne(menu) {
         this.$el.append(new MenuEntryView({
-            model: menu
+            model: menu,
+            collection: this.collection
         }).render().el);
     }
 }

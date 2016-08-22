@@ -1,22 +1,16 @@
-import Backbone from 'Backbone';
-
-import PatternPageView from '../views/PatternPageView';
-import ListView from '../views/ListView';
-import MenuView from '../views/MenuView';
-
-import Menu from '../collections/Menu';
-import ProxyList from '../collections/ProxyList';
-import Patterns from '../collections/Patterns';
-
-export default class Router extends Backbone.Router {
+class Router extends Backbone.Router {
     /**
-     * @returns {void}
+     * @returns {jQuery}
      */
-    constructor() {
-        super();
+    get content() {
+        return $("#primary-content");
+    }
 
-        this.content = $('#primary-content');
-        this.routes = {
+    /**
+     * @returns {Object}
+     */
+    get routes() {
+        return {
             "index": 'index',
             "patterns": 'patterns',
             "favorite": 'favorite'
@@ -27,11 +21,9 @@ export default class Router extends Backbone.Router {
      * @returns {void}
      */
     initialize() {
-        this.menuCollection = new Menu();
-        this.proxyCollection = new ProxyList();
+        this.mCollection = new Menu();
+        this.pCollection = new ProxyList();
         this.bCollection = new Patterns();
-
-        this.proxyCollection.fetch();
 
         this.createMenu();
         this.index();
@@ -41,7 +33,10 @@ export default class Router extends Backbone.Router {
      * @returns {void}
      */
     index() {
-        this.currentView = new ListView();
+        this.currentView = new ListView({
+            collection: this.pCollection
+        });
+
         this.content.html(this.currentView.render().el);
     }
 
@@ -49,7 +44,10 @@ export default class Router extends Backbone.Router {
      * @returns {void}
      */
     patterns() {
-        this.currentView = new PatternPageView();
+        this.currentView = new PatternPageView({
+            collection: this.bCollection
+        });
+
         this.content.html(this.currentView.render().el);
     }
 
@@ -57,19 +55,21 @@ export default class Router extends Backbone.Router {
      * @returns {void}
      */
     createMenu() {
-        this.menuView = new MenuView();
+        this.menuView = new MenuView({
+            collection: this.mCollection
+        });
 
-        this.menuCollection.create({
+        this.mCollection.create({
             iTo: '#/index',
             iIcon: 'list',
-            iText: l10n.t("proxymenu", { _: "List of proxies" }),
+            iText: l10n.t("proxymenu", {_: "List of proxies"}),
             iActive: true
         });
 
-        this.menuCollection.create({
+        this.mCollection.create({
             iTo: '#/patterns',
             iIcon: 'settings',
-            iText: l10n.t("blacklist", { _: "Blacklist" })
+            iText: l10n.t("blacklist", {_: "Blacklist"})
         });
     }
 }

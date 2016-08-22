@@ -1,4 +1,4 @@
-export default Locales = {
+var Locales = {
     "en": {
         "blacklist": "Blacklist",
         "favorites": "Favorites",

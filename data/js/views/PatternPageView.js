@@ -1,17 +1,23 @@
-import PatternView from './PatternView';
-import PatternModel from '../models/PatternModel';
-
-export default class PatternPageView extends Backbone.View {
+class PatternPageView extends Backbone.View {
     /**
-     * @returns {void}
+     * @returns {string}
      */
-    constructor() {
-        super();
+    get id() {
+        return 'pattern';
+    }
 
-        this.id = 'pattern';
-        this.template = _.template($('#pattern-page-template').html());
+    /**
+     * @returns {*}
+     */
+    get template() {
+        return _.template($('#pattern-page-template').html());
+    }
 
-        this.events = {
+    /**
+     * @returns {Object}
+     */
+    get events() {
+        return {
             'submit #new-entry': 'create',
             'click .checkbox-square': 'toggleTemplates'
         };
@@ -21,12 +27,12 @@ export default class PatternPageView extends Backbone.View {
      * @returns {void}
      */
     initialize() {
-        this.listenTo(Router.bCollection, 'add', this.addOne);
-        this.listenTo(Router.bCollection, 'reset', this.addAll);
+        this.listenTo(this.collection, 'add', this.addOne);
+        this.listenTo(this.collection, 'reset', this.addAll);
 
         Router.templatesToggle || (Router.templatesToggle = false);
 
-        Router.bCollection.fetch();
+        this.collection.fetch();
     }
 
     /**
@@ -44,7 +50,7 @@ export default class PatternPageView extends Backbone.View {
             this.templateToggleButton.addClass('active');
         }
 
-        Router.bCollection.each(this.addOne, this);
+        this.collection.each(this.addOne, this);
 
         return this;
     }
@@ -58,6 +64,8 @@ export default class PatternPageView extends Backbone.View {
         this.templateToggleButton.toggleClass('active', Router.templatesToggle);
 
         addon.port.emit("toggleTemplate", Router.templatesToggle);
+
+        addon.port.on("onPattern", (patterns) => this.collection.reset(patterns));
     }
 
     /**
@@ -74,11 +82,10 @@ export default class PatternPageView extends Backbone.View {
                 iUri: createdValue
             });
 
-            bPattern.save({
-                success() {
-                    Router.bCollection.add(bPattern);
-                }
-            });
+            bPattern.save();
+
+            bPattern.set('id', this.collection.iCounter++);
+            this.collection.add(bPattern);
 
             this.form[0].reset();
         }
@@ -88,7 +95,7 @@ export default class PatternPageView extends Backbone.View {
      * @returns {void}
      */
     addAll() {
-        Router.bCollection.each(this.addOne, this);
+        this.collection.each(this.addOne, this);
     }
 
     /**
@@ -96,6 +103,8 @@ export default class PatternPageView extends Backbone.View {
      * @returns {void}
      */
     addOne(pattern) {
+        pattern.set('id', this.collection.iCounter++);
+
         var view = new PatternView({
             model: pattern
         });
