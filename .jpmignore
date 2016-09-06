@@ -1,0 +1,7 @@
+/node_modules/
+.git/
+.idea/
+*.xpi
+.gitignore
+.bowerrc
+.jpmignore
