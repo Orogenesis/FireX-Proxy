@@ -1,11 +1,10 @@
 $(() => {
     window.l10n = new Polyglot();
-    window.router = new Router();
 
     addon.port.once('onLocaleResponse', (locale) => {
-        window.l10n.extend(Locales[locale]);
-        window.router.currentView.update();
-    });
+        l10n.extend(Locales[locale]);
 
-    Backbone.history.start();
+        window.Router = new Router();
+        Backbone.history.start();
+    });
 });

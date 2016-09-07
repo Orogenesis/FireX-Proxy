@@ -33,6 +33,8 @@ class PatternPageView extends Backbone.View {
         Router.templatesToggle || (Router.templatesToggle = false);
 
         this.collection.fetch();
+
+        addon.port.on("onPattern", (patterns) => this.collection.reset(patterns));
     }
 
     /**
@@ -41,13 +43,13 @@ class PatternPageView extends Backbone.View {
     render() {
         this.$el.html(this.template());
 
-        this.list = this.$('.h-max');
-        this.input = this.$('input[name=address]');
-        this.form = this.$('#new-entry');
-        this.templateToggleButton = this.$('.checkbox-square');
+        this.$list = this.$('.h-max');
+        this.$input = this.$('input[name=address]');
+        this.$form = this.$('#new-entry');
+        this.$templateToggleButton = this.$('.checkbox-square');
 
         if (Router.templatesToggle) {
-            this.templateToggleButton.addClass('active');
+            this.$templateToggleButton.addClass('active');
         }
 
         this.collection.each(this.addOne, this);
@@ -61,11 +63,9 @@ class PatternPageView extends Backbone.View {
     toggleTemplates() {
         Router.templatesToggle = !Router.templatesToggle;
 
-        this.templateToggleButton.toggleClass('active', Router.templatesToggle);
+        this.$templateToggleButton.toggleClass('active', Router.templatesToggle);
 
         addon.port.emit("toggleTemplate", Router.templatesToggle);
-
-        addon.port.on("onPattern", (patterns) => this.collection.reset(patterns));
     }
 
     /**
@@ -75,7 +75,7 @@ class PatternPageView extends Backbone.View {
     create(event) {
         event.preventDefault();
 
-        var createdValue = this.input.val().trim();
+        var createdValue = this.$input.val().trim();
 
         if (createdValue.length) {
             var bPattern = new PatternModel({
@@ -84,10 +84,9 @@ class PatternPageView extends Backbone.View {
 
             bPattern.save();
 
-            bPattern.set('id', this.collection.iCounter++);
             this.collection.add(bPattern);
 
-            this.form[0].reset();
+            this.$form[0].reset();
         }
     }
 
@@ -109,6 +108,6 @@ class PatternPageView extends Backbone.View {
             model: pattern
         });
 
-        this.list.append(view.render().el);
+        this.$list.append(view.render().el);
     }
 }

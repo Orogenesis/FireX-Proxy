@@ -54,16 +54,17 @@ panel.on('show', function () {
     panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift().split('-').shift());
 });
 
-panel.port.on("favorite.read", (response) => {
+panel.port.on("favorite.read", () => {
     connector.stop();
     hideMyAss.getList((list) => panel.port.emit("onList", list.concat(fManager.all())));
-}).on("connect", (server) => {
-    connector.start(new Address(server.ipAddress, server.port, server.protocol, server.country));
-}).on("disconnect", () => connector.stop())
+});
+
+panel.port.on("connect", (server) => connector.start(new Address(server.ipAddress, server.port, server.protocol, server.country)))
+    .on("disconnect", () => connector.stop())
     .on("blacklist.create", (pattern) => tManager.add(pattern))
     .on("blacklist.read", () => panel.port.emit("onPattern", tManager.all()))
     .on("blacklist.delete", (sync) => tManager.rm(sync.id))
     .on("blacklist.update", (sync) => tManager.modify(sync.id, sync))
-    .on("toggleTemplate", (state) => tManager.setTemplateState(state))
     .on("favorite.create", (proxy) => fManager.add(proxy))
-    .on("favorite.delete", (sync) => fManager.rm(sync.id));
+    .on("favorite.delete", (sync) => fManager.rm(sync.id))
+    .on("toggleTemplate", (state) => tManager.setTemplateState(state));

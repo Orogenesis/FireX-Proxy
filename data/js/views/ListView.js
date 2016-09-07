@@ -34,13 +34,17 @@ class ListView extends Backbone.View {
     render() {
         this.$el.html(this.template());
 
-        this.table = this.$('#proxy-list-box');
-        this.hBox = this.$('.h-box');
-        this.favoriteCheckbox = this.$('.checkbox-square');
+        this.$table = this.$('#proxy-list-box');
+        this.$hBox = this.$('.h-box');
+        this.$fCheckbox = this.$('.checkbox-square');
 
-        this.favoriteCheckbox.toggleClass('active', Router.listMode);
+        this.$fCheckbox.toggleClass('active', Router.listMode);
 
         this.addAll();
+
+        if (this.$table.is(':empty')) {
+            this.update();
+        }
 
         return this;
     }
@@ -52,10 +56,10 @@ class ListView extends Backbone.View {
         this.collection.fetch();
 
         Router.listMode = false;
-        this.favoriteCheckbox.toggleClass('active', Router.listMode);
+        this.$fCheckbox.toggleClass('active', Router.listMode);
 
-        this.hBox.addClass('spinner');
-        this.table.empty();
+        this.$hBox.addClass('spinner');
+        this.$table.empty();
     }
 
     /**
@@ -72,14 +76,14 @@ class ListView extends Backbone.View {
             collection: this.collection
         });
 
-        this.table.append(view.render().el);
+        this.$table.append(view.render().el);
     }
 
     /**
      * @returns {void}
      */
     addAll() {
-        this.table.empty();
+        this.$table.empty();
 
         _.each(this.collection.where({
             iFavorite: Router.listMode
@@ -90,7 +94,7 @@ class ListView extends Backbone.View {
      * @returns {void}
      */
     onList(list) {
-        this.hBox.removeClass('spinner');
+        this.$hBox.removeClass('spinner');
 
         this.collection.reset(this.collection.filter((item) => item.get('iActive')).concat(list));
     }
@@ -101,7 +105,7 @@ class ListView extends Backbone.View {
     toggleFavorites() {
         Router.listMode = !Router.listMode;
 
-        this.favoriteCheckbox.toggleClass('active', Router.listMode);
+        this.$fCheckbox.toggleClass('active', Router.listMode);
 
         this.addAll();
     }
