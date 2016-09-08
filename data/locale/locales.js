@@ -1,4 +1,4 @@
-var Locales = {
+window.Locales = {
     "en": {
         "blacklist": "Blacklist",
         "favorites": "Favorites",
