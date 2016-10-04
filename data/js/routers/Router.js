@@ -25,6 +25,23 @@ class Router extends Backbone.Router {
         this.pCollection = new ProxyList();
         this.bCollection = new Patterns();
 
+        var patternStateModel = new PatternStateModel();
+        var proxyStateModel   = new ProxyStateModel();
+
+        this.menuView = new MenuView({
+            collection: this.mCollection
+        });
+
+        this.patternView = new PatternPageView({
+            collection: this.bCollection,
+            model: patternStateModel
+        });
+
+        this.listView = new ListView({
+            collection: this.pCollection,
+            model: proxyStateModel
+        });
+
         this.createMenu();
         this.index();
     }
@@ -33,32 +50,20 @@ class Router extends Backbone.Router {
      * @returns {void}
      */
     index() {
-        this.currentView = new ListView({
-            collection: this.pCollection
-        });
-
-        this.content.html(this.currentView.render().el);
+        this.content.html(this.listView.render().el);
     }
 
     /**
      * @returns {void}
      */
     patterns() {
-        this.currentView = new PatternPageView({
-            collection: this.bCollection
-        });
-
-        this.content.html(this.currentView.render().el);
+        this.content.html(this.patternView.render().el);
     }
 
     /**
      * @returns {void}
      */
     createMenu() {
-        this.menuView = new MenuView({
-            collection: this.mCollection
-        });
-
         this.mCollection.create({
             iTo: '#/index',
             iIcon: 'list',

@@ -30,11 +30,11 @@ class PatternPageView extends Backbone.View {
         this.listenTo(this.collection, 'add', this.addOne);
         this.listenTo(this.collection, 'reset', this.addAll);
 
-        Router.templatesToggle || (Router.templatesToggle = false);
+        this.listenTo(this.model, 'change:bCheckbox', this.onCheckboxChange);
 
         this.collection.fetch();
 
-        addon.port.on("onPattern", (patterns) => this.collection.reset(patterns));
+        addon.port.once("onPattern", (patterns) => this.collection.reset(patterns));
     }
 
     /**
@@ -42,17 +42,15 @@ class PatternPageView extends Backbone.View {
      */
     render() {
         this.$el.html(this.template());
+        this.delegateEvents();
 
         this.$list = this.$('.h-max');
         this.$input = this.$('input[name=address]');
         this.$form = this.$('#new-entry');
         this.$templateToggleButton = this.$('.checkbox-square');
 
-        if (Router.templatesToggle) {
-            this.$templateToggleButton.addClass('active');
-        }
-
-        this.collection.each(this.addOne, this);
+        this.addAll();
+        this.renderCheckbox();
 
         return this;
     }
@@ -61,11 +59,26 @@ class PatternPageView extends Backbone.View {
      * @returns {void}
      */
     toggleTemplates() {
-        Router.templatesToggle = !Router.templatesToggle;
+        this.model.set('bCheckbox', !this.model.get('bCheckbox'));
+    }
 
-        this.$templateToggleButton.toggleClass('active', Router.templatesToggle);
+    /**
+     * @param {Backbone.Model} model
+     * @param {String} value
+     * @param {Array} options
+     * @returns {void}
+     */
+    onCheckboxChange(model, value, options) {
+        addon.port.emit("toggleTemplate", value);
 
-        addon.port.emit("toggleTemplate", Router.templatesToggle);
+        this.renderCheckbox();
+    }
+
+    /**
+     * @returns {void}
+     */
+    renderCheckbox() {
+        this.$templateToggleButton.toggleClass('active', this.model.get('bCheckbox'));
     }
 
     /**

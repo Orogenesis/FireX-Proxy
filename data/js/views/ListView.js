@@ -1,5 +1,21 @@
 class ListView extends Backbone.View {
     /**
+     * @param {Object} options
+     * @returns {void}
+     */
+    constructor(options) {
+        super(options);
+
+        this.listenTo(this.collection, 'reset', this.addAll);
+        this.listenTo(this.collection, 'change:iFavorite', this.onChange);
+
+        this.listenTo(this.model, 'change:hCheckbox', this.onCheckboxChange);
+        this.listenTo(this.model, 'change:refreshProcess', this.onRefreshProcess);
+
+        addon.port.on('onList', (response) => this.onList(response));
+    }
+
+    /**
      * @returns {*}
      */
     get template() {
@@ -17,30 +33,18 @@ class ListView extends Backbone.View {
     }
 
     /**
-     * @returns {void}
-     */
-    initialize() {
-        this.listenTo(this.collection, 'reset', this.addAll);
-        this.listenTo(this.collection, 'change:iFavorite', this.onChange);
-
-        Router.listMode || (Router.listMode = false);
-
-        addon.port.on('onList', (response) => this.onList(response));
-    }
-
-    /**
      * @returns {ListView}
      */
     render() {
         this.$el.html(this.template());
+        this.delegateEvents();
 
         this.$table = this.$('#proxy-list-box');
         this.$hBox = this.$('.h-box');
         this.$fCheckbox = this.$('.checkbox-square');
 
-        this.$fCheckbox.toggleClass('active', Router.listMode);
-
         this.addAll();
+        this.$fCheckbox.toggleClass('active', this.model.get('hCheckbox'));
 
         if (this.$table.is(':empty')) {
             this.update();
@@ -54,11 +58,8 @@ class ListView extends Backbone.View {
      */
     update() {
         this.collection.fetch();
+        this.model.startRefreshProcess();
 
-        Router.listMode = false;
-        this.$fCheckbox.toggleClass('active', Router.listMode);
-
-        this.$hBox.addClass('spinner');
         this.$table.empty();
     }
 
@@ -86,7 +87,7 @@ class ListView extends Backbone.View {
         this.$table.empty();
 
         _.each(this.collection.where({
-            iFavorite: Router.listMode
+            iFavorite: this.model.get('hCheckbox')
         }), this.addOne, this);
     }
 
@@ -94,19 +95,36 @@ class ListView extends Backbone.View {
      * @returns {void}
      */
     onList(list) {
-        this.$hBox.removeClass('spinner');
-
         this.collection.reset(this.collection.filter((item) => item.get('iActive')).concat(list));
+        this.model.stopRefreshProcess();
+    }
+
+    /**
+     * @param {Backbone.Model} model
+     * @param {String} value
+     * @param {Array} options
+     * @returns {void}
+     */
+    onCheckboxChange(model, value, options) {
+        this.$fCheckbox.toggleClass('active', value);
+        this.addAll();
+    }
+
+    /**
+     * @param {Backbone.Model} model
+     * @param {String} value
+     * @param {Array} options
+     * @returns {void}
+     */
+    onRefreshProcess(model, value, options) {
+        this.$hBox.toggleClass('spinner', value);
     }
 
     /**
      * @returns {void}
      */
     toggleFavorites() {
-        Router.listMode = !Router.listMode;
-
-        this.$fCheckbox.toggleClass('active', Router.listMode);
-
+        this.model.set('hCheckbox', !this.model.get('hCheckbox'));
         this.addAll();
     }
 
