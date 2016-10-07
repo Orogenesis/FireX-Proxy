@@ -145,8 +145,8 @@ textarea, select {
     background-repeat: no-repeat;
     background-position: center center;
     border-radius: 2px;
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
     display: inline-block;
     margin-right: 8px;
     vertical-align: -4px;
@@ -156,6 +156,10 @@ textarea, select {
 .checkbox-square.active {
     background-color: #78C0BD;
     border-color: #6AB5B2;
+}
+
+.checkbox-square.star {
+    background-image: url('../icons/star-12.png');
 }
 
 #menu {
@@ -198,6 +202,11 @@ textarea, select {
     line-height: 30px;
     height: 30px;
     padding: 10px;
+    cursor: pointer;
+}
+
+#pattern .d-set .validation {
+    display: inline-block;
 }
 
 #pattern .d-uri {
@@ -226,10 +235,9 @@ textarea, select {
     height: 210px;
 }
 
-#pattern input[name="address"] {
-    width: 100%;
+#address {
     height: 30px;
-    display: inline-block;
+    display: block;
     border: none;
     background: transparent;
     padding: 0 10px;
@@ -259,4 +267,26 @@ textarea, select {
     right: 10px;
     height: 50px;
     line-height: 50px;
+}
+
+.validation {
+    position: relative;
+}
+
+.validation .validation-state {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    height: 100%;
+    width: 24px;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.validation .validation-state.done {
+    background: url(../icons/done-16.png) no-repeat center center;
+}
+
+.validation .validation-state.failure {
+    background: url(../icons/failure-16.png) no-repeat center center;
 }

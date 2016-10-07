@@ -1,5 +1,5 @@
 .idea/
 /node_modules/
 /data/bower/
-/data/dist/
+/data/build/
 *.xpi

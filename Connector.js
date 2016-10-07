@@ -7,20 +7,19 @@ const nsIProtocolProxyService = Cc["@mozilla.org/network/protocol-proxy-service;
  */
 function Connector(tManager) {
     this.tManager = tManager;
+
     this.setState(false);
 }
 
 Connector.prototype = {
     /**
-     * @returns {{applyFilter, register, unregister}}
+     * @returns {Object}
      */
     service: function () {
         return (function (that) {
             return {
                 applyFilter: function (th, uri, proxy) {
-                    var __uri = uri.host;
-
-                    if (!that.isEnabled() || (that.tManager.isTemplateEnabled() && that.tManager.allLinks().indexOf(__uri) < 0)) {
+                    if (!that.isEnabled() || (that.tManager.isTemplateEnabled() && that.tManager.allLinks().indexOf(uri.prePath) < 0)) {
                         return proxy;
                     }
                     
@@ -41,6 +40,7 @@ Connector.prototype = {
      */
     start: function (endpoint) {
         this.address = endpoint;
+
         this.service().register();
         this.setState(true);
     },

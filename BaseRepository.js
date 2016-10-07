@@ -1,10 +1,11 @@
+const { uuid } = require('sdk/util/uuid');
+
 /**
  * @param {JReader} io
- * @constructor
  * @returns {void}
  */
 function BaseRepository(io) {
-    this.tList = [];
+    this.base = [];
     this.io = io;
 
     this.load();
@@ -15,32 +16,35 @@ BaseRepository.prototype = {
      * @returns {Array}
      */
     all: function () {
-        return this.tList;
+        return this.base;
     },
     /**
      * @param {Array} array
      */
     set: function (array) {
-        this.tList = array;
+        this.base = array;
     },
     /**
      * @param {Object} jObject
-     * @returns {void}
+     * @returns {Object}
      */
     add: function (jObject) {
-        this.tList.push(jObject);
+        jObject.id = this.uuid();
 
-        this.io.write(this.tList);
+        this.base.push(jObject);
+        this.io.write(this.base);
+
+        return jObject;
     },
     /**
      * @returns {void}
      */
     load: function () {
-        var __this = this;
-
-        this.io.readAll(function (a) {
-            __this.set(a);
-        });
+        (function (that) {
+            that.io.readAll(function (a) {
+                that.set(a);
+            });
+        })(this);
     },
     /**
      * @param {Number} id
@@ -49,13 +53,9 @@ BaseRepository.prototype = {
      * @returns {void}
      */
     modify: function (id, jObject) {
-        if (this.tList[id] !== undefined) {
-            this.tList[id] = jObject;
+        this.base[this.find(id)] = jObject;
 
-            this.io.write(this.tList);
-        } else {
-            throw new Error();
-        }
+        this.io.write(this.base);
     },
     /**
      * @param {Number} id
@@ -63,13 +63,31 @@ BaseRepository.prototype = {
      * @returns {void}
      */
     rm: function (id) {
-        if (this.tList[id] !== undefined) {
-            this.tList.splice(id, 1);
+        this.base.splice(this.find(id), 1);
+        this.io.write(this.base);
+    },
+    /**
+     * @param {String} id
+     * @returns {Number}
+     */
+    find: function (id) {
+        var index = this.base.findIndex(function (element, index, array) {
+            return element.id === id;
+        });
 
-            this.io.write(this.tList);
-        } else {
+        if (index == -1) {
             throw new Error();
         }
+
+        return index;
+    },
+    /**
+     * @returns {String}
+     */
+    uuid: function () {
+        let uuidLocal = String(uuid());
+
+        return uuidLocal.substring(1, uuidLocal.length - 1);
     }
 };
 

@@ -17,9 +17,7 @@ TemplateManager.prototype = Object.create(BaseRepository.prototype);
  * @returns {Array}
  */
 TemplateManager.prototype.allLinks = function () {
-    return this.tList.map(function (n) {
-        return n.iUri;
-    });
+    return this.base.map((n) => n.address);
 };
 
 /**

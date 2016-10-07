@@ -6,7 +6,9 @@ const { Connector } = require('./Connector.js');
 const { TemplateManager } = require('./TemplateManager.js');
 const { FavoriteManager } = require('./FavoriteManager.js');
 const { JReader } = require('./JReader.js');
+const { Template } = require('./Template.js');
 
+const locale = require('sdk/l10n/locale');
 const self = require('sdk/self');
 
 const panel = Panel({
@@ -30,41 +32,57 @@ const actionButton = ActionButton({
     }
 });
 
-/**
- * @type {TemplateManager}
- */
-const tManager = new TemplateManager(new JReader('firex-templates'));
-
-/**
- * @type {Connector}
- */
-const connector = new Connector(tManager);
-
-/**
- * @type {FavoriteManager}
- */
-const fManager = new FavoriteManager(new JReader('firex-proxy'));
-
-/**
- * @type {Hidemyass}
- */
-const hideMyAss = new Hidemyass();
+const templatesStream = new JReader('firex-templates');
+const proxyStream     = new JReader('firex-proxy');
+const tManager        = new TemplateManager(templatesStream);
+const connector       = new Connector(tManager);
+const fManager        = new FavoriteManager(proxyStream);
+const hideMyAss       = new Hidemyass();
 
 panel.on('show', function () {
-    panel.port.emit('onLocaleResponse', require('sdk/l10n/locale').getPreferedLocales(true).shift().split('-').shift());
+    var preferedLocales = locale.getPreferedLocales(true).shift();
+
+    panel.port.emit('onLocaleResponse', preferedLocales.split('-').shift());
 });
 
-panel.port.on("favorite.read", () => {
-    connector.stop();
-    hideMyAss.getList((list) => panel.port.emit("onList", list.concat(fManager.all())));
-});
+panel.port
+    .on("connect", (server) =>
+        connector.start(
+            new Address(
+                server.ipAddress,
+                server.port,
+                server.protocol,
+                server.country
+            )
+        )
+    ).on("disconnect", () =>
+        connector.stop()
+    ).on("blacklist.create", (pattern) =>
+        panel.port.emit('onCreatePattern', tManager.add(new Template(pattern.address)))
+    ).on("blacklist.read", () =>
+        panel.port.emit("onPattern", tManager.all())
+    ).on("blacklist.delete", (sync) =>
+        tManager.rm(sync.id)
+    ).on("blacklist.update", (sync) =>
+        tManager.modify(sync.id, new Template(sync))
+    ).on("favorite.read", () => {
+        connector.stop();
+        hideMyAss.getList((list) => panel.port.emit("onList", list.concat(fManager.all())));
+    }).on("favorite.create", (proxy) =>
+        panel.port.emit('onCreateFavorite', fManager.add(proxy))
+    ).on("favorite.delete", (sync) =>
+        fManager.rm(sync.id)
+    ).on("toggleTemplate", (state) =>
+        tManager.setTemplateState(state)
+    );
 
-panel.port.on("connect", (server) => connector.start(new Address(server.ipAddress, server.port, server.protocol, server.country)))
-    .on("disconnect", () => connector.stop())
-    .on("blacklist.create", (pattern) => tManager.add(pattern))
-    .on("blacklist.read", () => panel.port.emit("onPattern", tManager.all()))
-    .on("blacklist.delete", (sync) => tManager.rm(sync.id))
-    .on("blacklist.update", (sync) => tManager.modify(sync.id, sync))
-    .on("favorite.create", (proxy) => fManager.add(proxy))
-    .on("favorite.delete", (sync) => fManager.rm(sync.id))
-    .on("toggleTemplate", (state) => tManager.setTemplateState(state));
+exports.onUnload = function (reason) {
+    switch (reason) {
+        case 'uninstall':
+        case 'upgrade':
+            templatesStream.deleteFile();
+            proxyStream.deleteFile();
+
+            break;
+    }
+};

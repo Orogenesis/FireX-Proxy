@@ -2,35 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- LIBRARIES -->
     <script src="../bower/jquery/dist/jquery.min.js" type="text/javascript"></script>
     <script src="../bower/polyglot/build/polyglot.min.js" type="text/javascript"></script>
     <script src="../bower/underscore/underscore-min.js" type="text/javascript"></script>
     <script src="../bower/backbone/backbone.js" type="text/javascript"></script>
-    <script src="../js/synchronize.js" type="text/javascript"></script>
-    <!-- LOCALES -->
-    <script src="../locale/locales.js" type="text/javascript"></script>
-    <!-- MODELS -->
-    <script src="../js/models/ProxyServerModel.js" type="text/javascript"></script>
-    <script src="../js/models/MenuEntryModel.js" type="text/javascript"></script>
-    <script src="../js/models/PatternModel.js" type="text/javascript"></script>
-    <!-- COLLECTIONS -->
-    <script src="../js/collections/ProxyList.js" type="text/javascript"></script>
-    <script src="../js/collections/Menu.js" type="text/javascript"></script>
-    <script src="../js/collections/Patterns.js" type="text/javascript"></script>
-    <!-- VIEWS -->
-    <script src="../js/views/ProxyView.js" type="text/javascript"></script>
-    <script src="../js/views/ListView.js" type="text/javascript"></script>
-    <script src="../js/views/MenuEntryView.js" type="text/javascript"></script>
-    <script src="../js/views/MenuView.js" type="text/javascript"></script>
-    <script src="../js/views/PatternView.js" type="text/javascript"></script>
-    <script src="../js/views/PatternPageView.js" type="text/javascript"></script>
-    <script src="../js/models/PatternStateModel.js" type="text/javascript"></script>
-    <script src="../js/models/ProxyStateModel.js" type="text/javascript"></script>
-    <!-- ROUTER -->
-    <script src="../js/routers/Router.js" type="text/javascript"></script>
-    <!-- MAIN -->
-    <script src="../js/app.js" type="text/javascript"></script>
+    <script src="../bower/backbone.validation/dist/backbone-validation-min.js" type="text/javascript"></script>
+    <script src="../build/all.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="../css/overlay.css"/>
 </head>
 <body>
@@ -46,8 +23,12 @@
 <!-- LIST PAGE -->
 <script type="text/template" id="list-template">
     <div class="h-manage">
-        <div class="checkbox-square"></div><!--
-        --><%- l10n.t("favorites", {_:"Show favorites"}) %>
+        <% if (!hCheckbox) { %>
+        <div class="checkbox-square"></div>
+        <% } else { %>
+        <div class="checkbox-square active"></div>
+        <% } %>
+        <%- l10n.t("favorites", {_:"Show favorites"}) %>
     </div>
     <div id="proxy-content">
         <div class="h-max">
@@ -61,7 +42,7 @@
 <!-- LIST TEMPLATE -->
 <script type="text/template" id="server-template">
     <td class="favorite">
-        <div class="checkbox-square"></div>
+        <div class="checkbox-square star"></div>
     </td>
     <td><%- ipAddress %></td>
     <td><%- originalProtocol %></td>
@@ -69,27 +50,40 @@
 </script>
 <!-- PATTERN TEMPLATE -->
 <script type="text/template" id="pattern-template">
-    <% if (!iEditable) { %>
-        <div class="d-uri"><%- iUri %></div>
+    <% if (!editingState) { %>
+        <div class="d-uri"><%- address %></div>
         <i class="editable"></i>
     <% } %>
     <button class="d-rm">
         <i class="rm-button"></i>
     </button>
-    <% if (iEditable) { %>
-        <input class="edit" type="text" maxlength="25" value="<%- iUri %>" name="address"/>
+    <% if (editingState) { %>
+        <div class="validation">
+            <input class="edit" type="text" value="<%- address %>" name="address"/>
+            <div class="validation-state"></div>
+        </div>
     <% } %>
 </script>
 <!-- PATTERN PAGE TEMPLATE -->
 <script type="text/template" id="pattern-page-template">
     <div class="h-manage">
-        <div class="checkbox-square"></div><!--
-        --><%- l10n.t("blacklist", {_:"Blacklist"}) %>
+        <% if (!bCheckbox) { %>
+        <div class="checkbox-square"></div>
+        <% } else { %>
+        <div class="checkbox-square active"></div>
+        <% } %>
+        <%- l10n.t("blacklist", {_:"Blacklist"}) %>
     </div>
-    <div class="h-max">
-    </div>
-    <form id="new-entry">
-        <input type="text" name="address" placeholder="mozilla.org"/>
+    <div class="h-max"></div>
+    <div id="pattern-add-subview"></div>
+</script>
+<!-- PATTERN ADD TEMPLATE -->
+<script type="text/template" id="pattern-add-template">
+    <form action="#">
+        <div class="validation">
+            <input id="address" type="text" name="address" placeholder="https://mozilla.org"/>
+            <div class="validation-state"></div>
+        </div>
         <button class="bottom-button done"></button>
     </form>
 </script>

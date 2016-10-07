@@ -120,6 +120,14 @@ FileReader.prototype = {
      */
     isSuccessCode: function (returnCode) {
         return !(returnCode & 0x80000000);
+    },
+    /**
+     * @returns {void}
+     */
+    deleteFile: function () {
+        if (this.isExists()) {
+            this.fObject.remove(false);
+        }
     }
 };
 
