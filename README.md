@@ -36,8 +36,8 @@ Issues: https://github.com/Exclumice/FireX-Proxy/issues
 `git clone https://github.com/Exclumice/FireX-Proxy.git FireX-Proxy && cd $_`
 ### Development
 
-`npm install
-gulp --production`
+`npm install`  
+`gulp --production`
 
 ##### Create a branch
 `git branch feature/some-feature-name`
