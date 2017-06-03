@@ -1,10 +1,10 @@
-#FireX Proxy
+# FireX Proxy
 
 Firefox add-on: https://addons.mozilla.org/ru/firefox/addon/firex-proxy/  
 Wiki: https://github.com/Exclumice/FireX-Proxy/wiki  
 Issues: https://github.com/Exclumice/FireX-Proxy/issues
 
-#Contributing
+# Contributing
 
 ### Requirements
 
@@ -42,7 +42,7 @@ Issues: https://github.com/Exclumice/FireX-Proxy/issues
 ##### Create a branch
 `git branch feature/some-feature-name`
 ##### Fixup your commits into one
-`git reflog`
+`git rebase -i`
 
 https://www.atlassian.com/git/tutorials/rewriting-history/
 
