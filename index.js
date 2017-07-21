@@ -1,4 +1,4 @@
-const { Hidemyass } = require('./Hidemyass.js');
+const { FreeProxyList } = require('./FreeProxyList.js');
 const { ActionButton } = require("sdk/ui/button/action");
 const { Panel } = require("sdk/panel");
 const { Address } = require('./Address.js');
@@ -32,12 +32,12 @@ const actionButton = ActionButton({
     }
 });
 
-const templatesStream = new JReader('firex-templates');
-const proxyStream     = new JReader('firex-proxy');
-const tManager        = new TemplateManager(templatesStream);
-const connector       = new Connector(tManager);
-const fManager        = new FavoriteManager(proxyStream);
-const hideMyAss       = new Hidemyass();
+const templatesStream   = new JReader('firex-templates');
+const proxyStream       = new JReader('firex-proxy');
+const tManager          = new TemplateManager(templatesStream);
+const connector         = new Connector(tManager);
+const fManager          = new FavoriteManager(proxyStream);
+const proxyListProvider = new FreeProxyList();
 
 panel.on('show', function () {
     var preferedLocales = locale.getPreferedLocales(true).shift();
@@ -67,7 +67,7 @@ panel.port
         tManager.modify(sync.id, new Template(sync))
     ).on("favorite.read", () => {
         connector.stop();
-        hideMyAss.getList((list) => panel.port.emit("onList", list.concat(fManager.all())));
+        proxyListProvider.getList((list) => panel.port.emit("onList", list.concat(fManager.all())));
     }).on("favorite.create", (proxy) =>
         panel.port.emit('onCreateFavorite', fManager.add(proxy))
     ).on("favorite.delete", (sync) =>
