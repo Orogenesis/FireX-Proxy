@@ -31,13 +31,14 @@ Issues: https://github.com/Exclumice/FireX-Proxy/issues
 `sudo apt-get install nodejs`  
 `sudo ln -s $(which nodejs) /usr/local/bin/node`
 
-`npm install -g jpm gulp`
+`npm install -g jpm gulp bower`
 
 `git clone https://github.com/Exclumice/FireX-Proxy.git FireX-Proxy && cd $_`
 ### Development
 
 `npm install`  
-`gulp --production`
+`gulp --production`  
+`bower install`
 
 ##### Create a branch
 `git branch feature/some-feature-name`
