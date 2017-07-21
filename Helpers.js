@@ -1,22 +1,29 @@
-var { IString } = require('./IString.js');
-
-exports.IArray = {
+exports.String = class StringHelper extends String {
     /**
-     * @param {Array} a
+     * @param {String} string
+     * @returns {boolean}
+     */
+    static isNumeric(string) {
+        return !(string % 1) && !isNaN(string) && isFinite(string);
+    }
+};
+
+exports.Array = class ArrayHelper extends Array {
+    /**
+     * @param {Array} array
      * @returns {Array}
      */
-    filterNumeric: function (a) {
-        return a.filter(function (n) {
-            return IString.isNumeric(n);
-        });
-    },
+    static filterNumeric(array) {
+        return array.filter(element => StringHelper.isNumeric(element));
+    }
+
     /**
      * @param {Array} keys
      * @param {Array} values
      * @returns {Object}
      * @throws {Error}
      */
-    fillKeys: function (keys, values) {
+    static fillKeys(keys, values) {
         if (keys.length === values.length) {
             for (var i = 0, fillKeysObject = {}; i < keys.length; ++i) {
                 fillKeysObject[keys[i]] = values[i];

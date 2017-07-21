@@ -1,20 +1,20 @@
 const { URL } = require("sdk/url");
 
-/**
- * @returns {void}
- */
-function Template(address) {
-    this.setAddress(address);
-}
+class Template {
+    /**
+     * @param {String} address
+     */
+    constructor(address) {
+        this.setAddress(address);
+    }
 
-Template.prototype = {
     /**
      * @param {String} address
      * @returns {void}
      */
-    setAddress: function (address) {
+    setAddress(address) {
         this.address = URL(address).origin;
     }
-};
+}
 
 exports.Template = Template;

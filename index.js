@@ -1,15 +1,14 @@
-const { FreeProxyList } = require('./FreeProxyList.js');
-const { ActionButton } = require("sdk/ui/button/action");
-const { Panel } = require("sdk/panel");
-const { Address } = require('./Address.js');
-const { Connector } = require('./Connector.js');
+const { FreeProxyList }   = require('./FreeProxyList.js');
+const { ActionButton }    = require("sdk/ui/button/action");
+const { Panel }           = require("sdk/panel");
+const { Address }         = require('./Address.js');
+const { Connector }       = require('./Connector.js');
 const { TemplateManager } = require('./TemplateManager.js');
 const { FavoriteManager } = require('./FavoriteManager.js');
-const { JReader } = require('./JReader.js');
-const { Template } = require('./Template.js');
-
-const locale = require('sdk/l10n/locale');
-const self = require('sdk/self');
+const { JReader }         = require('./JReader.js');
+const { Template }        = require('./Template.js');
+const locale              = require('sdk/l10n/locale');
+const self                = require('sdk/self');
 
 const panel = Panel({
     contentURL: './html/index.html',
@@ -25,22 +24,21 @@ const actionButton = ActionButton({
         "24": "./icons/icon-24.png",
         "32": "./icons/icon-32.png"
     },
-    onClick: function () {
+    onClick: () => {
         panel.show({
             position: actionButton
         });
     }
 });
 
-const templatesStream   = new JReader('firex-templates');
-const proxyStream       = new JReader('firex-proxy');
-const tManager          = new TemplateManager(templatesStream);
-const connector         = new Connector(tManager);
-const fManager          = new FavoriteManager(proxyStream);
-const proxyListProvider = new FreeProxyList();
+const templatesStream = new JReader('firex-templates');
+const proxyStream     = new JReader('firex-proxy');
+const templateManager = new TemplateManager(templatesStream);
+const connector       = new Connector(templateManager);
+const favoriteManager = new FavoriteManager(proxyStream);
 
-panel.on('show', function () {
-    var preferedLocales = locale.getPreferedLocales(true).shift();
+panel.on('show', () => {
+    let preferedLocales = locale.getPreferedLocales(true).shift();
 
     panel.port.emit('onLocaleResponse', preferedLocales.split('-').shift());
 });
@@ -58,22 +56,25 @@ panel.port
     ).on("disconnect", () =>
         connector.stop()
     ).on("blacklist.create", (pattern) =>
-        panel.port.emit('onCreatePattern', tManager.add(new Template(pattern.address)))
+        panel.port.emit('onCreatePattern', templateManager.add(new Template(pattern.address)))
     ).on("blacklist.read", () =>
-        panel.port.emit("onPattern", tManager.all())
+        panel.port.emit("onPattern", templateManager.all())
     ).on("blacklist.delete", (sync) =>
-        tManager.rm(sync.id)
+        templateManager.rm(sync.id)
     ).on("blacklist.update", (sync) =>
-        tManager.modify(sync.id, new Template(sync))
-    ).on("favorite.read", () => {
+        templateManager.modify(sync.id, new Template(sync))
+    ).on("favorite.read", async () => {
         connector.stop();
-        proxyListProvider.getList((list) => panel.port.emit("onList", list.concat(fManager.all())));
+
+        let proxyList = await FreeProxyList.getList();
+
+        panel.port.emit("onList", proxyList.concat(favoriteManager.all()));
     }).on("favorite.create", (proxy) =>
-        panel.port.emit('onCreateFavorite', fManager.add(proxy))
+        panel.port.emit('onCreateFavorite', favoriteManager.add(proxy))
     ).on("favorite.delete", (sync) =>
-        fManager.rm(sync.id)
+        favoriteManager.rm(sync.id)
     ).on("toggleTemplate", (state) =>
-        tManager.setTemplateState(state)
+        templateManager.setTemplateState(state)
     );
 
 exports.onUnload = function (reason) {
