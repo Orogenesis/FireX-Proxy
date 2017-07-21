@@ -37,7 +37,7 @@ Issues: https://github.com/Exclumice/FireX-Proxy/issues
 ### Development
 
 `npm install`  
-`gulp --production`
+`gulp --production`  
 `bower install`
 
 ##### Create a branch
