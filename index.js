@@ -5,7 +5,7 @@ const { Address }         = require('./Address.js');
 const { Connector }       = require('./Connector.js');
 const { TemplateManager } = require('./TemplateManager.js');
 const { FavoriteManager } = require('./FavoriteManager.js');
-const { JReader }         = require('./JReader.js');
+const { JsonReader }      = require('./JsonReader.js');
 const { Template }        = require('./Template.js');
 const locale              = require('sdk/l10n/locale');
 const self                = require('sdk/self');
@@ -31,8 +31,8 @@ const actionButton = ActionButton({
     }
 });
 
-const templatesStream = new JReader('firex-templates');
-const proxyStream     = new JReader('firex-proxy');
+const templatesStream = new JsonReader('firex-templates');
+const proxyStream     = new JsonReader('firex-proxy');
 const templateManager = new TemplateManager(templatesStream);
 const connector       = new Connector(templateManager);
 const favoriteManager = new FavoriteManager(proxyStream);

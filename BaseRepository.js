@@ -1,7 +1,7 @@
 const { uuid } = require('sdk/util/uuid');
 
 /**
- * @param {JReader} io
+ * @param {JsonReader} io
  * @returns {void}
  */
 function BaseRepository(io) {
