@@ -21,16 +21,16 @@ class Connector {
                     return proxy;
                 }
 
-                if (!this.isTemplateMatch(uri.prePath)) {
+                if (this.isTemplateNotMatch(uri.prePath)) {
                     return proxy;
                 }
 
                 return nsIProtocolProxyService.newProxyInfo(this.address.getProxyProtocol(), this.address.getIPAddress(), this.address.getPort(), 0, -1, null);
             },
-            register: () => {
+            register: function () {
                 nsIProtocolProxyService.registerFilter(this, 0);
             },
-            unregister: () => {
+            unregister: function () {
                 nsIProtocolProxyService.unregisterFilter(this);
             }
         };
@@ -80,8 +80,8 @@ class Connector {
      * @param {String} uri
      * @returns {boolean}
      */
-    isTemplateMatch(uri) {
-        return this.templateManager.isTemplateEnabled() && this.templateManager.allLinks().indexOf(uri) !== -1;
+    isTemplateNotMatch(uri) {
+        return this.templateManager.isTemplateEnabled() && this.templateManager.allLinks().indexOf(uri) === -1;
     }
 }
 

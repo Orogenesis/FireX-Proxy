@@ -6,7 +6,7 @@ const { uuid } = require('sdk/util/uuid');
  */
 function BaseRepository(io) {
     this.base = [];
-    this.io = io;
+    this.io   = io;
 
     this.load();
 }
@@ -25,35 +25,34 @@ BaseRepository.prototype = {
         this.base = array;
     },
     /**
-     * @param {Object} jObject
+     * @param {Object} jsonObject
      * @returns {Object}
      */
-    add: function (jObject) {
-        jObject.id = this.uuid();
+    add: function (jsonObject) {
+        jsonObject.id = this.uuid();
 
-        this.base.push(jObject);
+        this.base.push(jsonObject);
+
         this.io.write(this.base);
 
-        return jObject;
+        return jsonObject;
     },
     /**
      * @returns {void}
      */
-    load: function () {
-        (function (that) {
-            that.io.readAll(function (a) {
-                that.set(a);
-            });
-        })(this);
+    load: async function () {
+        this.set(
+            await this.io.readAll()
+        );
     },
     /**
      * @param {Number} id
-     * @param {Object} jObject
+     * @param {Object} jsonObject
      * @throws {Error}
      * @returns {void}
      */
-    modify: function (id, jObject) {
-        this.base[this.find(id)] = jObject;
+    modify: function (id, jsonObject) {
+        this.base[this.find(id)] = jsonObject;
 
         this.io.write(this.base);
     },
@@ -64,19 +63,19 @@ BaseRepository.prototype = {
      */
     rm: function (id) {
         this.base.splice(this.find(id), 1);
+
         this.io.write(this.base);
     },
     /**
-     * @param {String} id
+     * @param {Number} id
      * @returns {Number}
+     * @throws {Error}
      */
     find: function (id) {
-        var index = this.base.findIndex(function (element, index, array) {
-            return element.id === id;
-        });
+        let index = this.base.findIndex(element => element.id === id);
 
-        if (index == -1) {
-            throw new Error();
+        if (index === -1) {
+            throw new Error('The element not found.');
         }
 
         return index;

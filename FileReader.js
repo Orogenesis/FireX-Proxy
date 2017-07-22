@@ -79,24 +79,27 @@ FileReader.prototype = {
         });
     },
     /**
-     * @param {Function} callback
-     * @returns {void}
+     * @returns {Promise}
      */
-    readAll: function (callback) {
-        NetUtil.asyncFetch(this.fileObject, (inputStream, status) => {
-            if (!this.isSuccessCode(status)) {
-                return callback([]);
-            }
+    readAll: function () {
+        return new Promise(resolve => {
+            NetUtil.asyncFetch(this.fileObject, (inputStream, status) => {
+                if (!this.isSuccessCode(status)) {
+                    return resolve([]);
+                }
 
-            return callback(NetUtil.readInputStreamToString(inputStream, inputStream.available()).split("\n"));
+                return resolve(NetUtil.readInputStreamToString(inputStream, inputStream.available()).split("\n"));
+            });
         });
     },
     /**
      * @param {String} string
      * @returns {void}
      */
-    removeLine: function (string) {
-        this.readAll(response => this.write(response.filter(n => n !== string).join('\n')));
+    removeLine: async function (string) {
+        let response = await this.readAll();
+
+        this.write(response.filter(n => n !== string).join('\n'));
     },
     /**
      * @returns {void}

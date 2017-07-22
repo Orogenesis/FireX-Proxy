@@ -32,7 +32,7 @@ class FreeProxyList extends ProxyAdapter {
                         let tableRows = node.querySelectorAll('tbody tr');
 
                         tableRows.forEach(
-                            (currentRow, index) => {
+                            currentRow => {
                                 let rowValues = [...currentRow.querySelectorAll('td')]
                                     .map(column => column.textContent.trim());
 
@@ -48,7 +48,7 @@ class FreeProxyList extends ProxyAdapter {
                                         .setProxyProtocol(FreeProxyList.protocolConstant)
                                         .setCountry(proxyListObject.countryPretty)
                                         .setOriginalProtocol(
-                                            proxyListObject.isHttps
+                                            proxyListObject.isHttps === 'yes'
                                                 ? Address.httpsProtocolConstant : Address.httpProtocolConstant
                                         )
                                 );

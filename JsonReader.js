@@ -17,16 +17,18 @@ class JsonReader extends FileReader {
     }
 
     /**
-     * @param {Function} callback
-     * @returns {void}
+     * @returns {Promise}
      */
-    readAll(callback) {
-        super.readAll(data => {
-            if (!data.length) {
-                return callback([]);
-            }
+    readAll() {
+        return new Promise(resolve => {
+            super.readAll()
+                .then(response => {
+                    if (!response.length) {
+                        return resolve([]);
+                    }
 
-            return callback(JSON.parse(data.join('\n')));
+                    return resolve(JSON.parse(response.join('\n')));
+                });
         });
     }
 }

@@ -13,6 +13,14 @@ class Address {
         return 'HTTPS';
     }
 
+    constructor() {
+        this.ipAddress        = null;
+        this.port             = null;
+        this.country          = null;
+        this.protocol         = null;
+        this.originalProtocol = null;
+    }
+
     /**
      * @param {String} address
      * @returns {Address}

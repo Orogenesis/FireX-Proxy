@@ -46,12 +46,11 @@ panel.on('show', () => {
 panel.port
     .on("connect", (server) =>
         connector.start(
-            new Address(
-                server.ipAddress,
-                server.port,
-                server.protocol,
-                server.country
-            )
+            (new Address())
+                .setIPAddress(server.ipAddress)
+                .setPort(server.port)
+                .setProxyProtocol(server.protocol)
+                .setCountry(server.country)
         )
     ).on("disconnect", () =>
         connector.stop()
