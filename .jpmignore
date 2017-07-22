@@ -5,3 +5,12 @@
 .gitignore
 .bowerrc
 .jpmignore
+.npmignore
+.bower.json
+.jshintrc
+.eslintrc
+.travis.yml
+README.md
+LICENSE.md
+gulpfile.js
+bower.json
