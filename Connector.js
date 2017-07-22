@@ -1,68 +1,88 @@
-const { Cc, Ci } = require('chrome');
+const { Cc, Ci }              = require('chrome');
 const nsIProtocolProxyService = Cc["@mozilla.org/network/protocol-proxy-service;1"].getService(Ci.nsIProtocolProxyService);
 
-/**
- * @param {TemplateManager} tManager
- * @constructor
- */
-function Connector(tManager) {
-    this.tManager = tManager;
+class Connector {
+    /**
+     * @param {TemplateManager} templateManager
+     */
+    constructor(templateManager) {
+        this.templateManager  = templateManager;
+        this.connectorEnabled = false;
+        this.address          = null;
+    }
 
-    this.setState(false);
-}
-
-Connector.prototype = {
     /**
      * @returns {Object}
      */
-    service: function () {
-        return (function (that) {
-            return {
-                applyFilter: function (th, uri, proxy) {
-                    if (!that.isEnabled() || (that.tManager.isTemplateEnabled() && that.tManager.allLinks().indexOf(uri.prePath) < 0)) {
-                        return proxy;
-                    }
-                    
-                    return nsIProtocolProxyService.newProxyInfo(that.address.getProxyProtocol(), that.address.getIPAddress(), that.address.getPort(), 0, -1, null);
-                },
-                register: function () {
-                    nsIProtocolProxyService.registerFilter(this, 0);
-                },
-                unregister: function () {
-                    nsIProtocolProxyService.unregisterFilter(this);
+    service() {
+        return {
+            applyFilter: (th, uri, proxy) => {
+                if (!this.isEnabled()) {
+                    return proxy;
                 }
-            };
-        })(this);
-    },
+
+                if (this.isTemplateNotMatch(uri.prePath)) {
+                    return proxy;
+                }
+
+                return nsIProtocolProxyService.newProxyInfo(this.address.getProxyProtocol(), this.address.getIPAddress(), this.address.getPort(), 0, -1, null);
+            },
+            register: function () {
+                nsIProtocolProxyService.registerFilter(this, 0);
+            },
+            unregister: function () {
+                nsIProtocolProxyService.unregisterFilter(this);
+            }
+        };
+    }
+
     /**
      * @param {Address} endpoint
-     * @returns {void}
+     * @returns {Connector}
      */
-    start: function (endpoint) {
+    start(endpoint) {
         this.address = endpoint;
 
         this.service().register();
         this.setState(true);
-    },
+
+        return this;
+    }
+
     /**
-     * @returns {void}
+     * @returns {Connector}
      */
-    stop: function () {
+    stop() {
         this.service().unregister();
         this.setState(false);
-    },
-    /**
-     * @param {Boolean} state
-     */
-    setState: function (state) {
-        this.iEnabled = state;
-    },
-    /**
-     * @returns {Boolean}
-     */
-    isEnabled: function () {
-        return this.iEnabled;
+
+        return this;
     }
-};
+
+    /**
+     * @param {boolean} state
+     * @returns {Connector}
+     */
+    setState(state) {
+        this.connectorEnabled = state;
+
+        return this;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    isEnabled() {
+        return this.connectorEnabled;
+    }
+
+    /**
+     * @param {String} uri
+     * @returns {boolean}
+     */
+    isTemplateNotMatch(uri) {
+        return this.templateManager.isTemplateEnabled() && this.templateManager.allLinks().indexOf(uri) === -1;
+    }
+}
 
 exports.Connector = Connector;

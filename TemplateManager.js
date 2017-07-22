@@ -1,37 +1,36 @@
 const { BaseRepository } = require('./BaseRepository.js');
 
-/**
- * @param {JReader} io
- * @constructor
- * @returns {void}
- */
-function TemplateManager(io) {
-    BaseRepository.call(this, io);
+exports.TemplateManager = class extends BaseRepository {
+    /**
+     * @param {JsonReader} io
+     */
+    constructor(io) {
+        super(io);
 
-    this.setTemplateState(false);
-}
+        this.templateEnabled = false;
+    }
 
-TemplateManager.prototype = Object.create(BaseRepository.prototype);
+    /**
+     * @param {boolean} state
+     * @returns {TemplateManager}
+     */
+    setTemplateState(state) {
+        this.templateEnabled = state;
 
-/**
- * @returns {Array}
- */
-TemplateManager.prototype.allLinks = function () {
-    return this.base.map((n) => n.address);
+        return this;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    isTemplateEnabled () {
+        return this.templateEnabled;
+    }
+
+    /**
+     * @returns {Array}
+     */
+    allLinks() {
+        return this.base.map(n => n.address);
+    }
 };
-
-/**
- * @returns {Boolean}
- */
-TemplateManager.prototype.isTemplateEnabled = function () {
-    return this.tEnabled;
-};
-/**
- * @param {Boolean} state
- * @returns {void}
- */
-TemplateManager.prototype.setTemplateState = function (state) {
-    this.tEnabled = state;
-};
-
-exports.TemplateManager = TemplateManager;

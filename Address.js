@@ -1,105 +1,110 @@
-function Address(address, port, protocol, country) {
-    this.setIPAddress(address);
-    this.setPort(port);
-    this.setProxyProtocol(protocol);
-    this.setCountry(country);
-}
+class Address {
+    /**
+     * @returns {string}
+     */
+    static get httpProtocolConstant() {
+        return 'HTTP';
+    }
 
-Address.prototype = {
+    /**
+     * @returns {string}
+     */
+    static get httpsProtocolConstant() {
+        return 'HTTPS';
+    }
+
+    constructor() {
+        this.ipAddress        = null;
+        this.port             = null;
+        this.country          = null;
+        this.protocol         = null;
+        this.originalProtocol = null;
+    }
+
     /**
      * @param {String} address
-     * @returns {void}
+     * @returns {Address}
      */
-    setIPAddress: function (address) {
+    setIPAddress(address) {
         this.ipAddress = address;
-    },
+
+        return this;
+    }
+
     /**
-     * @returns {String|*}
+     * @returns {String}
      */
-    getIPAddress: function () {
+    getIPAddress() {
         return this.ipAddress;
-    },
+    }
+
     /**
      * @param {String} port
-     * @returns {void}
+     * @returns {Address}
      */
-    setPort: function (port) {
+    setPort(port) {
         this.port = port;
-    },
+
+        return this;
+    }
+
     /**
-     * @returns {String|*}
+     * @returns {Number}
      */
-    getPort: function () {
+    getPort() {
         return this.port;
-    },
+    }
+
     /**
      * @param {String} country
-     * @returns {void}
+     * @returns {Address}
      */
-    setCountry: function (country) {
+    setCountry(country) {
         this.country = country;
-    },
-    /**
-     * @returns {String|*}
-     */
-    getCountry: function () {
-        return this.country;
-    },
-    /**
-     * @param {String} protocol
-     * @returns {void}
-     */
-    setProxyProtocol: function (protocol) {
-        this.protocol = this.__toValidProtocol(protocol.toLowerCase());
-        this.setOriginalProtocol(protocol);
-    },
-    /**
-     * @returns {String}
-     */
-    getProxyProtocol: function () {
-        return this.protocol;
-    },
-    /**
-     * @param {String} protocol
-     * @returns {void}
-     */
-    setOriginalProtocol: function (protocol) {
-        this.originalProtocol = protocol;
-    },
-    /**
-     * @returns {String}
-     */
-    getOriginalProtocol: function () {
-        return this.originalProtocol;
-    },
-    /**
-     * @param protocol
-     * @returns {String}
-     * @private
-     */
-    __toValidProtocol: function (protocol) {
-        var list = this.__protocolsList();
 
-        for (var i in list) {
-            if (list.hasOwnProperty(i)) {
-                if (protocol == list[i]) {
-                    return i;
-                }
-            }
-        }
-
-        return protocol;
-    },
-    /**
-     * @returns {{socks: string}}
-     * @private
-     */
-    __protocolsList: function () {
-        return {
-            socks: 'socks4/5',
-            http: 'https'
-        };
+        return this;
     }
-};
+
+    /**
+     * @returns {String}
+     */
+    getCountry() {
+        return this.country;
+    }
+
+    /**
+     * @param {String} protocol
+     * @returns {Address}
+     */
+    setProxyProtocol(protocol) {
+        this.protocol = protocol;
+
+        return this;
+    }
+
+    /**
+     * @returns {String}
+     */
+    getProxyProtocol() {
+        return this.protocol;
+    }
+
+    /**
+     * @param {String} protocol
+     * @returns {Address}
+     */
+    setOriginalProtocol(protocol) {
+        this.originalProtocol = protocol;
+
+        return this;
+    }
+
+    /**
+     * @returns {String}
+     */
+    getOriginalProtocol() {
+        return this.originalProtocol;
+    }
+}
 
 exports.Address = Address;

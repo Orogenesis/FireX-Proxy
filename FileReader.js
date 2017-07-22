@@ -1,14 +1,14 @@
 const { Cc, Cu, Ci } = require("chrome");
-const { NetUtil } = Cu.import("resource://gre/modules/NetUtil.jsm");
-const { FileUtils } = Cu.import("resource://gre/modules/FileUtils.jsm");
+const { NetUtil }    = Cu.import("resource://gre/modules/NetUtil.jsm");
+const { FileUtils }  = Cu.import("resource://gre/modules/FileUtils.jsm");
 
 /**
- * @param {String} fPath
+ * @param {String} filePath
  * @constructor
  * @returns {void}
  */
-function FileReader(fPath) {
-    this.fObject = FileUtils.getFile("ProfD", [fPath]);
+function FileReader(filePath) {
+    this.fileObject = FileUtils.getFile("ProfD", [filePath]);
 }
 
 /**
@@ -40,7 +40,7 @@ FileReader.prototype = {
      * @returns {void}
      */
     write: function (string) {
-        this.streamWrite(FileUtils.openFileOutputStream(this.fObject, FileReader.MODE_WRONLY | FileReader.MODE_CREATE | FileReader.MODE_TRUNCATE), string);
+        this.streamWrite(FileUtils.openFileOutputStream(this.fileObject, FileReader.MODE_WRONLY | FileReader.MODE_CREATE | FileReader.MODE_TRUNCATE), string);
     },
     /**
      * Append to a file
@@ -48,7 +48,7 @@ FileReader.prototype = {
      * @returns {void}
      */
     append: function (string) {
-        this.streamWrite(FileUtils.openFileOutputStream(this.fObject, FileReader.MODE_WRONLY | FileReader.MODE_CREATE | FileReader.MODE_APPEND), string);
+        this.streamWrite(FileUtils.openFileOutputStream(this.fileObject, FileReader.MODE_WRONLY | FileReader.MODE_CREATE | FileReader.MODE_APPEND), string);
     },
     /**
      * @param {FileUtils.nsIFileOutputStream} ostream
@@ -56,63 +56,62 @@ FileReader.prototype = {
      * @returns {void}
      */
     streamWrite: function (ostream, string) {
-        var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter);
+        let converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"]
+            .createInstance(Ci.nsIScriptableUnicodeConverter);
 
         converter.charset = "UTF-8";
 
         /**
          * Copy a data from source input stream to an output stream
          */
+        let inputStream = converter.convertToInputStream(string + '\n');
 
-        var istream = converter.convertToInputStream(string + '\n');
+        NetUtil.asyncCopy(inputStream, ostream, (status) => {
+            if (!this.isSuccessCode(status)) {
+                return 1;
+            }
 
-        (function (that) {
-            NetUtil.asyncCopy(istream, ostream, function (status) {
-                if (!that.isSuccessCode(status)) {
-                    return 1;
-                }
+            /**
+             * Close file output stream
+             */
 
-                /**
-                 * Close file output stream
-                 */
-
-                FileUtils.closeSafeFileOutputStream(ostream);
-            });
-        })(this);
+            FileUtils.closeSafeFileOutputStream(ostream);
+        });
     },
     /**
-     * @param {Function} callback
-     * @returns {void}
+     * @returns {Promise}
      */
-    readAll: function (callback) {
-        (function (that) {
-            NetUtil.asyncFetch(that.fObject, function (inputStream, status) {
-                if (!that.isSuccessCode(status)) {
-                    return callback([]);
+    readAll: function () {
+        return new Promise(resolve => {
+            NetUtil.asyncFetch(this.fileObject, (inputStream, status) => {
+                if (!this.isSuccessCode(status)) {
+                    return resolve([]);
                 }
 
-                return callback(NetUtil.readInputStreamToString(inputStream, inputStream.available()).split("\n"));
+                return resolve(NetUtil.readInputStreamToString(inputStream, inputStream.available()).split("\n"));
             });
-        })(this);
+        });
     },
     /**
      * @param {String} string
      * @returns {void}
      */
-    removeLine: function (string) {
-        this.readAll((response) => this.write(response.filter((n) => n !== string).join('\n')));
+    removeLine: async function (string) {
+        let response = await this.readAll();
+
+        this.write(response.filter(n => n !== string).join('\n'));
     },
     /**
      * @returns {void}
      */
     clearFile: function () {
-        FileUtils.closeSafeFileOutputStream(FileUtils.openSafeFileOutputStream(this.fObject));
+        FileUtils.closeSafeFileOutputStream(FileUtils.openSafeFileOutputStream(this.fileObject));
     },
     /**
      * @returns {Boolean}
      */
     isExists: function () {
-        return this.fObject.exists();
+        return this.fileObject.exists();
     },
     /**
      * @param returnCode
@@ -126,7 +125,7 @@ FileReader.prototype = {
      */
     deleteFile: function () {
         if (this.isExists()) {
-            this.fObject.remove(false);
+            this.fileObject.remove(false);
         }
     }
 };
