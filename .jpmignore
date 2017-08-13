@@ -14,3 +14,11 @@ README.md
 LICENSE.md
 gulpfile.js
 bower.json
+data/coffee
+data/bower
+!data/bower/backbone/backbone.js
+!data/bower/backbone.validation/dist/backbone-validation-min.js
+!data/bower/jquery/dist/jquery.min.js
+!data/bower/polyglot/build/polyglot.min.js
+!data/bower/requirejs/require.js
+!data/bower/underscore/underscore-min.js
