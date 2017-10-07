@@ -1,7 +1,7 @@
 {
   "title": "FireX Proxy",
   "name": "firex-proxy",
-  "version": "5.0.9",
+  "version": "5.0.10",
   "id": "divanproger@gmail.com",
   "description": "FireX Proxy",
   "main": "index.js",
@@ -15,7 +15,8 @@
     "jetpack"
   ],
   "permissions": {
-    "multiprocess": true
+    "multiprocess": true,
+    "private-browsing": true
   },
   "devDependencies": {
     "bower": "^1.7.9",
