@@ -15,6 +15,8 @@ LICENSE.md
 gulpfile.js
 bower.json
 data/bower
+data/locale
+data/coffee
 !data/bower/backbone/backbone.js
 !data/bower/backbone.validation/dist/backbone-validation-min.js
 !data/bower/jquery/dist/jquery.min.js
