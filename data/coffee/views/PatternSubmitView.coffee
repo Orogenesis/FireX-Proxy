@@ -8,14 +8,14 @@ class PatternSubmitView extends Backbone.View
   render: ->
     $(@el).html @template
 
-    @$jAddressForm = $(@el).children()
-    @$jAddress     = @$ '#address'
+    @addressForm     = $(@el).children()
+    @addressTextarea = @$ '#address'
 
   create: (event) ->
     event.preventDefault()
 
     patternModel = new PatternModel
-    patternModel.set 'address', @$jAddress.val()
+    patternModel.set 'address', @addressTextarea.val()
 
     Backbone.Validation.bind @,
       model: patternModel
@@ -23,7 +23,7 @@ class PatternSubmitView extends Backbone.View
     if patternModel.isValid true
       patternModel.save()
 
-    @$jAddressForm.trigger 'reset'
+    @addressForm.trigger 'reset'
 
     Backbone.Validation.unbind @,
       model: patternModel

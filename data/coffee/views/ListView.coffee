@@ -4,74 +4,67 @@ class ListView extends Backbone.View
     @listenTo @collection, 'change:favoriteState', @onChange
     @listenTo @collection, 'change:activeState', @onStateChange
 
-    @listenTo @model, 'change:hCheckbox', @onCheckboxChange
+    @listenTo @model, 'change:isFavoriteEnabled', @onCheckboxChange
     @listenTo @model, 'change:refreshProcess', @onRefreshProcess
-
-    addon.port.on 'onList', (response) =>
-      @onList response
-
-    addon.port.on 'onCreateFavorite', (response) =>
-      @onCreateFavorite response
 
     @template = _.template $('#list-template').html()
 
   events: ->
-    'click .refresh'  : 'update'
-    'click .h-manage' : 'toggleFavorites'
+    'click .refresh'  : () => @update(true)
+    'click .checkbox' : 'toggleFavorites'
+    'click .filter'   : 'toggleFilters'
 
   render: ->
     $(@el).html @template @model.toJSON()
+
     @delegateEvents()
 
-    @$table = @$ '#proxy-list-box'
-    @$hBox  = @$ '.h-box'
+    @$table   = @$ '#proxy-list-box'
+    @$content = @$ '.content-wrapper'
+    @$filters = @$ '.filters'
 
     @addAll()
-    @update() if (!@collection.length and !@model.get 'hCheckbox')
+
+    @update() if not @collection.length
 
     return @
 
-  update: ->
-    @collection.fetch()
+  update: (force = false) ->
+    @collection.fetch(force)
+
     @model.startRefreshProcess()
 
     @$table.empty()
 
   addOne: (proxy) ->
     view = new ProxyView model: proxy
+
     @$table.append view.render().el
 
   addAll: ->
     @$table.empty()
 
-    _.each(@collection.where(favoriteState: @model.get 'hCheckbox'), @addOne, @)
+    _.each(@collection.where(favoriteState: @model.get 'isFavoriteEnabled'), @addOne, @)
 
-  onList: (list) ->
-    activeElement = @collection.filter (item) -> item.get 'activeState'
-
-    @collection.reset _.union activeElement, list
-    
     @model.stopRefreshProcess()
 
   onCreateFavorite: (proxy) ->
     @collection.add proxy
 
-  onCheckboxChange: (model, value, options) ->
+  onCheckboxChange: ->
     @render()
 
-  onRefreshProcess: (model, value, options) ->
-    @$hBox.toggleClass 'spinner', value
+  onRefreshProcess: (model, value) ->
+    @$content.toggleClass 'spinner', value
 
   toggleFavorites: ->
-    @model.set 'hCheckbox', !@model.get 'hCheckbox'
+    @model.set 'isFavoriteEnabled', !@model.get 'isFavoriteEnabled'
 
-  onStateChange: (model, value, options) ->
+  toggleFilters: ->
+    @$filters.toggle()
+
+  onStateChange: (model) ->
     _.each(@collection.without(model), (proxy) -> proxy.set 'activeState', false) if model.get 'activeState'
 
-  onChange: (model, value, options) ->
-    if value is true
-      model.save
-        activeState: false
-
-    model.destroy()
+  onChange: (model, value) ->
     @render()

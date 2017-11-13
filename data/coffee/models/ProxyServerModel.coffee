@@ -4,7 +4,8 @@ class ProxyServerModel extends Backbone.Model
 
   toggle: ->
     @set 'activeState', !@get 'activeState'
-    @get 'activeState'
+
+    return @get 'activeState'
 
   defaults: ->
     ipAddress         : null

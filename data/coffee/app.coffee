@@ -1,18 +1,57 @@
 $ ->
-  window.l10n = new Polyglot
+  _.extend Backbone.View,
+    initialize: ->
+      $('select')
+        .select2()
 
   _.extend Backbone.Validation.callbacks,
-    valid: (view, attr, selector) ->
-      view.$("*[#{selector}=#{attr}]").next()
-      .removeClass('failure')
-      .addClass('done')
-    invalid: (view, attr, error, selector) ->
-      view.$("*[#{selector}=#{attr}]").next()
-      .removeClass('done')
-      .addClass('failure')
+    valid: (view) ->
+      view
+        .$el
+        .find('.validation-state')
+        .removeClass('failure')
+        .addClass('done')
+    invalid: (view) ->
+      view
+        .$el
+        .find('.validation-state')
+        .removeClass('done')
+        .addClass('failure')
 
-  addon.port.once 'onLocaleResponse', (locale) ->
-      l10n.extend Locales[locale] unless Locales[locale] is undefined
+  i18next.init
+    lng: browser.i18n.getUILanguage()
+    resources:
+      en:
+        translation:
+          "blacklist": "Blacklist"
+          "favorites": "Favorites"
+          "proxymenu": "Proxy list"
+      ru:
+        translation:
+          "blacklist": "Чёрный список"
+          "favorites": "Избранное"
+          "proxymenu": "Список прокси"
+      be:
+        translation:
+          "blacklist": "Чорны спис"
+          "favorites": "Абранае"
+          "proxymenu": "Списак прокси"
+      uk:
+        translation:
+          "blacklist": "Чорний список"
+          "favorites": "Показати обране"
+          "proxymenu": "Список проксі"
+      fr:
+        translation:
+          "blacklist": "La liste noire"
+          "favorites": "Les favoris"
+          "proxymenu": "La liste de proxies"
+      de:
+        translation:
+          "blacklist": "Schwarze Liste"
+          "favorites": "Favoriten anzeigen"
+          "proxymenu": "Liste der Proxy"
+  , () ->
+    new Router()
 
-      router = new Router
-      Backbone.history.start()
+    Backbone.history.start()

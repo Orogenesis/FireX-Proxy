@@ -16,7 +16,7 @@ class MenuEntryView extends Backbone.View
     return @
 
   attributes: ->
-    'href': @model.get 'iTo'
+    'href': @model.get 'resource'
 
   choose: ->
-    @model.set 'iActive', true
+    @model.set 'isActive', true

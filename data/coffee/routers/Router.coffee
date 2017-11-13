@@ -11,19 +11,16 @@ class Router extends Backbone.Router
 
     @content = $('#primary-content')
 
-    patternStateModel = new PatternStateModel
-    proxyStateModel   = new ProxyStateModel
-
     @menuView = new MenuView
       collection: @mCollection
 
     @listView = new ListView
       collection: @pCollection
-      model: proxyStateModel
+      model: new ProxyStateModel
 
     @patternView = new PatternPageView
       collection: @bCollection
-      model: patternStateModel
+      model: new PatternStateModel
 
     @createMenu()
     @index()
@@ -36,12 +33,7 @@ class Router extends Backbone.Router
     
   createMenu: ->
     @mCollection.create
-      iTo     : '#/index'
-      iIcon   : 'list'
-      iText   : l10n.t "proxymenu", _: "Proxy list"
-      iActive : true
-
-    @mCollection.create
-      iTo     : '#/patterns'
-      iIcon   : 'settings'
-      iText   : l10n.t "blacklist", _: "Blacklist"
+      resource    : '#/index'
+      icon        : 'list'
+      placeholder : i18next.t "proxymenu"
+      isActive    : true

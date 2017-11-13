@@ -1,7 +1,7 @@
 {
   "title": "FireX Proxy",
   "name": "firex-proxy",
-  "version": "5.0.10",
+  "version": "5.0.9",
   "id": "divanproger@gmail.com",
   "description": "FireX Proxy",
   "main": "index.js",
@@ -15,13 +15,13 @@
     "jetpack"
   ],
   "permissions": {
-    "multiprocess": true,
-    "private-browsing": true
+    "multiprocess": true
   },
   "devDependencies": {
     "bower": "^1.7.9",
     "gulp": "^3.9.1",
     "gulp-coffee": "^2.3.2",
-    "gulp-concat": "^2.6.0"
+    "gulp-concat": "^2.6.0",
+    "gulp-sass": "^3.1.0"
   }
 }
