@@ -6,5 +6,5 @@ class ProxyStateModel extends Backbone.Model
     @set 'refreshProcess', false
     
   defaults: ->
-    hCheckbox: false
-    refreshProcess: false
+    isFavoriteEnabled : false
+    refreshProcess    : false

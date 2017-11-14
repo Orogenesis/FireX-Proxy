@@ -22,7 +22,8 @@
     "jquery": "2.2.4",
     "backbone": "1.1.2",
     "underscore": "1.8.3",
-    "polyglot": "^2.0.0",
-    "backbone.validation": "backbone-validation#^0.11.5"
+    "backbone.validation": "backbone-validation#^0.11.5",
+    "i18next": "^8.4.3",
+    "select2": "^4.0.3"
   }
 }

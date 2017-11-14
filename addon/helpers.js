@@ -1,4 +1,4 @@
-exports.String = class StringHelper extends String {
+class StringHelper extends String {
     /**
      * @param {String} string
      * @returns {boolean}
@@ -6,9 +6,9 @@ exports.String = class StringHelper extends String {
     static isNumeric(string) {
         return !(string % 1) && !isNaN(string) && isFinite(string);
     }
-};
+}
 
-exports.Array = class ArrayHelper extends Array {
+class ArrayHelper extends Array {
     /**
      * @param {Array} array
      * @returns {Array}
@@ -25,7 +25,9 @@ exports.Array = class ArrayHelper extends Array {
      */
     static fillKeys(keys, values) {
         if (keys.length === values.length) {
-            for (var i = 0, fillKeysObject = {}; i < keys.length; ++i) {
+            let fillKeysObject = {};
+
+            for (let i = 0; i < keys.length; ++i) {
                 fillKeysObject[keys[i]] = values[i];
             }
 
@@ -34,4 +36,4 @@ exports.Array = class ArrayHelper extends Array {
 
         throw new Error("Error: 'keys' length must match 'values' length.");
     }
-};
+}

@@ -1,7 +1,7 @@
 class ProxyView extends Backbone.View
   events: ->
-    'click': 'toggleActive'
-    'click .checkbox-square': 'add'
+    'click'           : 'toggleActive'
+    'click .checkbox' : 'add'
 
   tagName: ->
     'tr'
@@ -15,16 +15,16 @@ class ProxyView extends Backbone.View
   render: ->
     $(@el).html(@template @model.toJSON()).toggleClass 'active', @model.get 'activeState'
 
-    @$favoriteCheckbox = @$ '.checkbox-square'
+    @$favoriteCheckbox = @$('.checkbox')
     @$favoriteCheckbox.toggleClass 'active', @model.get 'favoriteState'
 
     return @
 
   toggleActive: ->
     if @model.toggle()
-      addon.port.emit 'connect', @model.toJSON()
+      browser.runtime.sendMessage(name: 'connect', message: @model.toJSON())
     else
-      addon.port.emit 'disconnect'
+      browser.runtime.sendMessage(name: 'disconnect')
 
   add: ->
     @model.set 'favoriteState', !@model.get 'favoriteState'

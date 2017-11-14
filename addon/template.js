@@ -1,5 +1,3 @@
-const { URL } = require("sdk/url");
-
 class Template {
     /**
      * @param {String} address
@@ -13,8 +11,6 @@ class Template {
      * @returns {void}
      */
     setAddress(address) {
-        this.address = URL(address).origin;
+        this.address = new URL(address).origin;
     }
 }
-
-exports.Template = Template;

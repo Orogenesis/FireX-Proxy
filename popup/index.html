@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../data/bower/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="../data/bower/i18next/i18next.min.js" type="text/javascript"></script>
+    <script src="../data/bower/underscore/underscore-min.js" type="text/javascript"></script>
+    <script src="../data/bower/backbone/backbone.js" type="text/javascript"></script>
+    <script src="../data/bower/backbone.validation/dist/backbone-validation-min.js" type="text/javascript"></script>
+    <script src="../data/bower/select2/dist/js/select2.min.js"></script>
+    <script src="../data/build/all.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../data/build/overlay.css">
+    <link rel="stylesheet" type="text/css" href="../data/bower/select2/dist/css/select2.min.css">
+</head>
+<body>
+<div id="menu"></div>
+<div id="primary-content"></div>
+<!-- MENU TEMPLATE -->
+<script type="text/template" id="menu-entry-template">
+    <i class="<%- icon %>"></i>
+    <% if (isActive) { %>
+    <%- placeholder %>
+    <% } %>
+</script>
+<!-- LIST PAGE -->
+<script type="text/template" id="list-template">
+    <div class="right-panel">
+        <i class="filter"></i>
+        <% if (!isFavoriteEnabled) { %>
+        <div class="checkbox"></div>
+        <% } else { %>
+        <div class="checkbox active"></div>
+        <% } %>
+        <%- i18next.t('favorites') %>
+    </div>
+    <div id="proxy-content">
+        <div class="content-wrapper">
+            <div class="filters"></div>
+            <table id="proxy-list-box"></table>
+        </div>
+        <button class="bottom-button refresh"></button>
+    </div>
+</script>
+<!-- LIST TEMPLATE -->
+<script type="text/template" id="server-template">
+    <td class="favorite">
+        <div class="checkbox star"></div>
+    </td>
+    <td class="ip-address"><%- ipAddress %></td>
+    <td class="protocol"><%- originalProtocol %></td>
+    <td class="country"><%- country %></td>
+</script>
+<!-- PATTERN TEMPLATE -->
+<script type="text/template" id="pattern-template">
+    <% if (!editingState) { %>
+    <div class="address"><%- address %></div>
+    <% } %>
+    <i class="remove"></i>
+    <% if (editingState) { %>
+    <div class="validation">
+        <input class="edit" type="text" value="<%- address %>" name="address"/>
+        <div class="validation-state"></div>
+    </div>
+    <% } %>
+</script>
+<!-- PATTERN PAGE TEMPLATE -->
+<script type="text/template" id="pattern-page-template">
+    <div class="right-panel">
+        <% if (!isBlacklistEnabled) { %>
+        <div class="checkbox"></div>
+        <% } else { %>
+        <div class="checkbox active"></div>
+        <% } %>
+        <%- i18next.t('blacklist') %>
+    </div>
+    <div class="content-wrapper"></div>
+    <div id="pattern-add-subview"></div>
+</script>
+<!-- PATTERN ADD TEMPLATE -->
+<script type="text/template" id="pattern-add-template">
+    <form action="#">
+        <div class="validation">
+            <input id="address" type="text" name="address" placeholder="https://mozilla.org"/>
+            <div class="validation-state"></div>
+        </div>
+        <button class="bottom-button done"></button>
+    </form>
+</script>
+</body>
+</html>

@@ -3,12 +3,12 @@ class PatternView extends Backbone.View
     'div'
 
   attributes: ->
-    'class': 'd-set'
+    'class': 'pattern'
 
   events: ->
-    'click .d-rm'  : 'destroy'
-    'click .d-uri' : 'edit'
-    'blur .edit'   : 'done'
+    'click .remove'  : 'destroy'
+    'click .address' : 'edit'
+    'blur .edit'     : 'done'
 
   initialize: ->
     @listenTo @model, 'change', @render
@@ -21,7 +21,7 @@ class PatternView extends Backbone.View
   render: ->
     $(@el).html @template @model.toJSON()
 
-    @editableIcon = @$ '.edit'
+    @editableTextarea = @$ '.edit'
 
     return @
 
@@ -30,11 +30,11 @@ class PatternView extends Backbone.View
 
   edit: ->
     @model.toggleEditing()
-    @editableIcon.focus()
+    @editableTextarea.focus()
 
   done: ->
     if @model.isEditing()
-      address = @editableIcon.val()
+      address = @editableTextarea.val()
 
       if @model.isValid true
         @model.save

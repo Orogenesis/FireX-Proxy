@@ -5,5 +5,4 @@ class Patterns extends Backbone.Collection
     @model = PatternModel
 
   initialize: ->
-    @iCounter = 0
-    @port     = 'blacklist'
+    @url = '#/blacklist'

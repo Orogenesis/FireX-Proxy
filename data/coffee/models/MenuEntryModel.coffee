@@ -1,6 +1,6 @@
 class MenuEntryModel extends Backbone.Model
   defaults: ->
-    iTo     : null
-    iIcon   : null
-    iText   : null
-    iActive : false
+    resource    : null
+    icon        : null
+    placeholder : null
+    isActive    : false

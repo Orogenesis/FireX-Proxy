@@ -1,0 +1,211 @@
+@import "fonts";
+@import "variables";
+@import "reset";
+@import "mixins";
+
+.content-wrapper {
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  &.spinner {
+    background: url(../icons/loading.gif) no-repeat center center;
+  }
+}
+
+#proxy-content {
+  height: 100%;
+  .content-wrapper {
+    position: relative;
+    height: 240px;
+    overflow-y: auto;
+    #proxy-list-box {
+      width: 100%;
+      font-size: 12px;
+      font-weight: 500;
+      border-collapse: collapse;
+      border-spacing: 0;
+      tr {
+        line-height: 30px;
+        &.active {
+          background-color: $primaryColorLight;
+        }
+      }
+      td {
+        padding: 10px 0;
+        cursor: pointer;
+        color: #585858;
+        text-transform: uppercase;
+        &.favorite {
+          width: 28px;
+        }
+        &.country {
+          background: url("../icons/planet.png") no-repeat 5px center;
+          padding-left: 32px;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+        &.ip-address {
+          width: 110px;
+        }
+        &.protocol {
+          width: 60px;
+        }
+        &:first-child {
+          padding-left: 10px;
+        }
+        &:last-child {
+          padding-right: 10px;
+        }
+      }
+    }
+  }
+  .filters {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+    display: none;
+    box-shadow: 0 0 8px 2px $primaryColorLight;
+  }
+}
+
+.bottom-button {
+  padding: 25px;
+  border: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  background: $primaryColorLight no-repeat center center;
+  width: 100%;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  &.refresh {
+    background-image: url(../icons/icon-refresh.png);
+  }
+  &.done {
+    background-image: url(../icons/icon-ok.png);
+  }
+  &:hover {
+    background-color: #D1E8E7;
+  }
+}
+
+.checkbox {
+  @include icon('../icons/icon-checked.png', 16px, 16px);
+  background-color: #D9D9D9;
+  border: 1px solid #CCCCCC;
+  border-radius: 2px;
+  margin-right: 8px;
+  vertical-align: -4px;
+  &.active {
+    background-color: #78C0BD;
+    border-color: $primaryColor;
+  }
+  &.star {
+    background-image: url('../icons/star-12.png');
+  }
+}
+
+#menu {
+  display: block;
+  height: 50px;
+  border-bottom: 1px solid #DDDDDD;
+  a {
+    height: 100%;
+    text-decoration: none;
+    color: $primaryColor;
+    display: inline-block;
+    line-height: 50px;
+    margin-right: 10px;
+  }
+  i {
+    display: inline-block;
+    height: 100%;
+    width: 16px;
+    cursor: pointer;
+    vertical-align: top;
+    padding-right: 15px;
+    &.settings {
+      background: url(../icons/settings-16-cyan.png) no-repeat 10px center;
+    }
+    &.list {
+      background: url(../icons/play-16-cyan.png) no-repeat 10px center;
+    }
+    &.star {
+      background: url(../icons/star-16-cyan.png) no-repeat 10px center;
+    }
+  }
+}
+
+#pattern {
+  .pattern {
+    line-height: 30px;
+    height: 30px;
+    padding: 10px;
+    .validation {
+      display: inline-block;
+      .validation-state {
+        right: 5px;
+      }
+    }
+    .address {
+      display: inline-block;
+      vertical-align: top;
+      color: #585858;
+      cursor: text;
+    }
+    i.remove {
+      @include icon('../icons/icon-remove.png', 24px, 24px);
+      float: right;
+    }
+    .edit {
+      border: 1px solid #78C0BD;
+      border-radius: 2px;
+      padding: 5px;
+    }
+  }
+  .content-wrapper {
+    height: 210px;
+  }
+}
+
+.right-panel {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  height: 50px;
+  line-height: 50px;
+  i.filter {
+    @include icon('../icons/filter-16.png', 16px, 16px);
+    vertical-align: -4px;
+    margin-right: 14px;
+  }
+}
+
+.validation {
+  position: relative;
+  .validation-state {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    height: 100%;
+    width: 24px;
+    border-radius: 50%;
+    color: #FFFFFF;
+    &.done {
+      background: url(../icons/done-16.png) no-repeat center center;
+    }
+    &.failure {
+      background: url(../icons/failure-16.png) no-repeat center center;
+    }
+  }
+  #address {
+    height: 30px;
+    display: block;
+    border: none;
+    background: transparent;
+    padding: 0 10px;
+  }
+}

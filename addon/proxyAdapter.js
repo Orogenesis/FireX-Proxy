@@ -1,6 +1,7 @@
 class ProxyAdapter {
     /**
      * @returns {Promise}
+     * @resolve {Addresses}
      */
     static getList() {
         throw new Error('Unimplemented');
@@ -13,5 +14,3 @@ class ProxyAdapter {
         throw new Error('Unimplemented');
     }
 }
-
-exports.ProxyAdapter = ProxyAdapter;

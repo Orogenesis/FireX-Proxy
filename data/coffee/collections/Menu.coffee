@@ -5,4 +5,4 @@ class Menu extends Backbone.Collection
     @model = MenuEntryModel
 
   initialize: ->
-    @url = '/menu'
+    @url = '#/menu'

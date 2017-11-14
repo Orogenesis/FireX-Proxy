@@ -19,6 +19,8 @@ class Address {
         this.country          = null;
         this.protocol         = null;
         this.originalProtocol = null;
+        this.activeState      = false;
+        this.favoriteState    = false;
     }
 
     /**
@@ -73,20 +75,10 @@ class Address {
     }
 
     /**
-     * @param {String} protocol
-     * @returns {Address}
+     * @returns {boolean}
      */
-    setProxyProtocol(protocol) {
-        this.protocol = protocol;
-
-        return this;
-    }
-
-    /**
-     * @returns {String}
-     */
-    getProxyProtocol() {
-        return this.protocol;
+    isActive() {
+        return this.activeState;
     }
 
     /**
@@ -105,6 +97,65 @@ class Address {
     getOriginalProtocol() {
         return this.originalProtocol;
     }
-}
 
-exports.Address = Address;
+    /**
+     * @returns {boolean}
+     */
+    getActiveState() {
+        return this.activeState;
+    }
+
+    /**
+     * @param {boolean} value
+     * @returns {Address}
+     */
+    setActiveState(value) {
+        this.activeState = value;
+
+        return this;
+    }
+
+    /**
+     * @returns {Address}
+     */
+    enable() {
+        this.setActiveState(true);
+
+        return this;
+    }
+
+    /**
+     * @returns {Address}
+     */
+    disable() {
+        this.setActiveState(false);
+
+        return this;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    isFavorite() {
+        return this.favoriteState;
+    }
+
+    /**
+     * @returns {Address}
+     */
+    toggleFavorite() {
+        this.setFavorite(Boolean(this.favoriteState ^ 1));
+
+        return this;
+    }
+
+    /**
+     * @param {boolean} state
+     * @returns {Address}
+     */
+    setFavorite(state) {
+        this.favoriteState = state;
+
+        return this;
+    }
+}
