@@ -8,36 +8,32 @@ Issues: https://github.com/Exclumice/FireX-Proxy/issues
 
 ### Requirements
 
-1. Firefox Developer Edition >= 48.0
-2. NodeJS >= 6.3.1
-3. Git
-4. JPM 1.0.7
-5. Gulp >= 3.9.1
+1. NodeJS >= 6.3.1
+2. Git
+3. Gulp >= 3.9.1
 
 ### Stack
 
-1. Firefox SDK
-2. CoffeeScript
-3. ES2016
-4. Gulp 3.9.1
-5. NodeJS 6.3.1
-6. Bower 1.7.9
-7. Backbone 1.1.2
-8. Underscore 1.8.3
-
+1. CoffeeScript
+2. Gulp 3.9.1
+3. NodeJS 6.3.1
+4. Bower 1.7.9
+5. Backbone 1.1.2
+6. Underscore 1.8.3
 
 ### Installation
 
 `sudo apt-get install nodejs`  
 `sudo ln -s $(which nodejs) /usr/local/bin/node`
 
-`npm install -g jpm gulp bower`
+`npm install -g gulp bower`
 
 `git clone https://github.com/Exclumice/FireX-Proxy.git FireX-Proxy && cd $_`
+
 ### Development
 
 `npm install`  
-`gulp --production`  
+`gulp` or `gulp watch`  
 `bower install`
 
 ##### Create a branch
@@ -50,5 +46,3 @@ https://www.atlassian.com/git/tutorials/rewriting-history/
 ##### Submit a pull request
 
 https://help.github.com/articles/creating-a-pull-request/
-
-##### Done. You're awesome!

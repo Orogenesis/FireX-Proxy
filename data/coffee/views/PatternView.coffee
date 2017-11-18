@@ -14,8 +14,6 @@ class PatternView extends Backbone.View
     @listenTo @model, 'change', @render
     @listenTo @model, 'destroy', @remove
 
-    @template = _.template $('#pattern-template').html()
-
     Backbone.Validation.bind @
 
   render: ->

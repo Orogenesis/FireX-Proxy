@@ -18,9 +18,9 @@ class Router extends Backbone.Router
       collection: @pCollection
       model: new ProxyStateModel
 
-    @patternView = new PatternPageView
-      collection: @bCollection
-      model: new PatternStateModel
+#    @patternView = new PatternPageView
+#      collection: @bCollection
+#      model: new PatternStateModel
 
     @createMenu()
     @index()
@@ -29,7 +29,7 @@ class Router extends Backbone.Router
     @content.html @listView.render().el
 
   patterns: ->
-    @content.html @patternView.render().el
+#    @content.html @patternView.render().el
     
   createMenu: ->
     @mCollection.create

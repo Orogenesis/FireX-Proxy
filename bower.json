@@ -6,9 +6,6 @@
     "Exclumice"
   ],
   "license": "MIT",
-  "keywords": [
-    "jetpack"
-  ],
   "homepage": "https://github.com/Exclumice/FireX-Proxy",
   "ignore": [
     "**/.*",
@@ -24,6 +21,6 @@
     "underscore": "1.8.3",
     "backbone.validation": "backbone-validation#^0.11.5",
     "i18next": "^8.4.3",
-    "select2": "^4.0.3"
+    "handlebars": "^4.0.11"
   }
 }

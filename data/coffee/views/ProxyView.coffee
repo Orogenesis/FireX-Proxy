@@ -7,10 +7,10 @@ class ProxyView extends Backbone.View
     'tr'
 
   initialize: ->
-    @template = _.template $('#server-template').html()
-
     @listenTo @model, 'change', @render
     @listenTo @model, 'destroy', @remove
+
+    @template = Handlebars.templates['proxyElement']
 
   render: ->
     $(@el).html(@template @model.toJSON()).toggleClass 'active', @model.get 'activeState'
