@@ -1,9 +1,4 @@
 $ ->
-  _.extend Backbone.View,
-    initialize: ->
-      $('select')
-        .select2()
-
   _.extend Backbone.Validation.callbacks,
     valid: (view) ->
       view
@@ -17,6 +12,8 @@ $ ->
         .find('.validation-state')
         .removeClass('done')
         .addClass('failure')
+
+  Handlebars.registerHelper 't', (key) -> new Handlebars.SafeString i18next.t key
 
   i18next.init
     lng: browser.i18n.getUILanguage()

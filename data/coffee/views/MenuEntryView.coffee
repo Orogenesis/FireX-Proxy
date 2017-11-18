@@ -6,9 +6,9 @@ class MenuEntryView extends Backbone.View
     'a'
 
   initialize: ->
-    @template = _.template $('#menu-entry-template').html()
-
     @listenTo @model, 'change', @render
+
+    @template = Handlebars.templates['menuEntry']
 
   render: ->
     $(@el).html(@template @model.toJSON())

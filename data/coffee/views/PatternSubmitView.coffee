@@ -2,9 +2,6 @@ class PatternSubmitView extends Backbone.View
   events: ->
     'submit': 'create'
     
-  initialize: ->
-    @template = _.template $('#pattern-add-template').html()
-
   render: ->
     $(@el).html @template
 

@@ -6,7 +6,6 @@ class PatternPageView extends Backbone.View
     'pattern'
 
   initialize: ->
-    @template = _.template $('#pattern-page-template').html()
     @submitSubView = new PatternSubmitView
 
     @listenTo @collection, 'add', @addOne

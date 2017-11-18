@@ -7,7 +7,7 @@ class ListView extends Backbone.View
     @listenTo @model, 'change:isFavoriteEnabled', @onCheckboxChange
     @listenTo @model, 'change:refreshProcess', @onRefreshProcess
 
-    @template = _.template $('#list-template').html()
+    @template = Handlebars.templates['proxyList']
 
   events: ->
     'click .refresh'  : () => @update(true)
