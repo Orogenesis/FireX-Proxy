@@ -17,8 +17,6 @@ class ListView extends Backbone.View
   render: ->
     $(@el).html @template @model.toJSON()
 
-    @delegateEvents()
-
     @$table   = @$ '#proxy-list-box'
     @$content = @$ '.content-wrapper'
     @$filters = @$ '.filters'
@@ -66,5 +64,5 @@ class ListView extends Backbone.View
   onStateChange: (model) ->
     _.each(@collection.without(model), (proxy) -> proxy.set 'activeState', false) if model.get 'activeState'
 
-  onChange: (model, value) ->
+  onChange: ->
     @render()

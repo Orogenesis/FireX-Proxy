@@ -1,4 +1,6 @@
 class Router extends Backbone.Router
+  container: "#primary-content"
+
   routes: ->
     'index'    : 'index',
     'patterns' : 'patterns',
@@ -9,29 +11,16 @@ class Router extends Backbone.Router
     @pCollection = new ProxyList
     @bCollection = new Patterns
 
-    @content = $('#primary-content')
-
-    @menuView = new MenuView
-      collection: @mCollection
-
-    @listView = new ListView
-      collection: @pCollection
-      model: new ProxyStateModel
-
-#    @patternView = new PatternPageView
-#      collection: @bCollection
-#      model: new PatternStateModel
-
     @createMenu()
     @index()
     
   index: ->
-    @content.html @listView.render().el
+    $(@container).html new ListView(collection: @pCollection, model: new ProxyStateModel).render().el
 
-  patterns: ->
-#    @content.html @patternView.render().el
-    
   createMenu: ->
+    new MenuView
+      collection: @mCollection
+
     @mCollection.create
       resource    : '#/index'
       icon        : 'list'
