@@ -12,6 +12,17 @@ class Connector {
         }, {
             toProxyScript: true
         });
+
+        /**
+         * Change icon color to green
+         */
+        browser.browserAction.setIcon({
+            path: {
+                "16": 'data/icons/icon-16-active.png',
+                "24": 'data/icons/icon-24-active.png',
+                "32": 'data/icons/icon-32-active.png',
+            }
+        });
     }
 
     /**
@@ -26,6 +37,17 @@ class Connector {
                 }, {
                     toProxyScript: true
                 }).then(resolve);
+
+                /**
+                 * Change icon color to black
+                 */
+                browser.browserAction.setIcon({
+                    path: {
+                        "16": 'data/icons/icon-16.png',
+                        "24": 'data/icons/icon-24.png',
+                        "32": 'data/icons/icon-32.png',
+                    }
+                });
             }
         );
     }
