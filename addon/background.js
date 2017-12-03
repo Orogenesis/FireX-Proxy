@@ -88,9 +88,6 @@ browser.runtime.onMessage.addListener(
                     );
                 }
 
-                /**
-                 * Toggle favorite state
-                 */
                 proxyListLocal
                     .byIpAddress(ipAddress)
                     .one()
