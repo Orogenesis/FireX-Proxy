@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "FireX Proxy",
-  "version": "5.0.13",
+  "version": "5.0.14",
   "description": "FireX Proxy",
   "icons": {
     "16": "data/icons/icon-16.png",
