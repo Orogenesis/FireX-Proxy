@@ -1,10 +1,12 @@
-const gulp       = require('gulp');
-const coffee     = require('gulp-coffee');
-const concat     = require('gulp-concat');
-const sass       = require('gulp-sass');
-const declare    = require('gulp-declare');
-const handlebars = require('gulp-handlebars');
-const wrap       = require('gulp-wrap');
+const gulp           = require('gulp');
+const coffee         = require('gulp-coffee');
+const concat         = require('gulp-concat');
+const sass           = require('gulp-sass');
+const declare        = require('gulp-declare');
+const handlebars     = require('gulp-handlebars');
+const wrap           = require('gulp-wrap');
+const zip            = require('gulp-zip');
+const mainBowerFiles = require('main-bower-files');
 
 gulp.task('coffee', () => {
     gulp
@@ -42,6 +44,28 @@ gulp.task('handlebars', () => {
         }))
         .pipe(concat('templates.js'))
         .pipe(gulp.dest('./data/build'));
+});
+
+gulp.task('bower', () => {
+    gulp
+        .src(mainBowerFiles())
+        .pipe(gulp.dest('./data/build/libs'));
+});
+
+gulp.task('build:firefox', ['bower'], () => {
+    gulp
+        .src([
+            'addon/*.js',
+            'popup/*',
+            'manifest.json',
+            'data/icons/*',
+            'data/fonts/*',
+            'data/build/**/*'
+        ], {
+            base: './'
+        })
+        .pipe(zip(`firex-proxy-firefox.xpi`))
+        .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('watch', () => {

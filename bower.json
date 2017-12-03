@@ -14,6 +14,23 @@
     "test",
     "tests"
   ],
+  "overrides": {
+    "jquery": {
+      "main": ["./dist/jquery.min.js"]
+    },
+    "handlebars": {
+      "main": ["./handlebars.runtime.min.js"]
+    },
+    "i18next": {
+      "main": ["./i18next.min.js"]
+    },
+    "underscore": {
+      "main": ["./underscore-min.js"]
+    },
+    "backbone.validation": {
+      "main": ["./dist/backbone-validation-min.js"]
+    }
+  },
   "dependencies": {
     "requirejs": "^2.2.0",
     "jquery": "2.2.4",
