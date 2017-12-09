@@ -53,6 +53,17 @@ class Addresses extends Array {
     }
 
     /**
+     * @returns {Addresses}
+     */
+    byExcludeFavorites() {
+        return this.create(
+            this.filter(
+                element => !element.isFavorite()
+            )
+        );
+    }
+
+    /**
      * @returns {Address}
      * @throws {Error}
      */

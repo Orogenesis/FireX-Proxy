@@ -1,7 +1,4 @@
-let
-    proxyListSession = new Addresses(),
-    proxyListLocal   = new Addresses()
-;
+let proxyListSession = new Addresses();
 
 /**
  * Local storage data
@@ -9,7 +6,7 @@ let
 browser.storage.local.get()
     .then(
         (storage) => {
-            proxyListLocal = new Addresses(
+            proxyListSession.concat(
                 ...(storage.favorites || [])
                     .map(element => Object.assign(new Address(), element))
             );
@@ -28,7 +25,7 @@ browser.runtime.onConnect.addListener(
                      * Get proxy list
                      */
                     case 'get-proxy-list':
-                        if (proxyListSession.isEmpty() || message.force) {
+                        if (proxyListSession.byExcludeFavorites().isEmpty() || message.force) {
                             /**
                              * Disconnect current proxy
                              */
@@ -37,10 +34,14 @@ browser.runtime.onConnect.addListener(
                             /**
                              * Get proxy list
                              */
-                            proxyListSession = await FreeProxyList.getList();
+                            proxyListSession = proxyListSession
+                                .byFavorite()
+                                .concat(
+                                    await FreeProxyList.getList()
+                                );
                         }
 
-                        port.postMessage(proxyListSession.concat(proxyListLocal));
+                        port.postMessage(proxyListSession);
 
                         break;
                 }
@@ -78,29 +79,16 @@ browser.runtime.onMessage.addListener(
              * Toggle favorite state
              */
             case 'toggle-favorite':
-                let ipAddress = request.message['ipAddress'];
-
-                if (proxyListLocal.byIpAddress(ipAddress).isEmpty()) {
-                    proxyListLocal.insert(
-                        proxyListSession
-                            .byIpAddress(ipAddress)
-                            .clone()
-                    );
-                }
-
-                proxyListLocal
-                    .byIpAddress(ipAddress)
+                proxyListSession
+                    .byIpAddress(request.message['ipAddress'])
                     .one()
                     .toggleFavorite();
-
-                proxyListLocal = proxyListLocal
-                    .byFavorite();
 
                 /**
                  * Store favorites
                  */
                 browser.storage.local.set({
-                    favorites: [...proxyListLocal]
+                    favorites: [...proxyListSession.byFavorite()]
                 });
 
                 break;

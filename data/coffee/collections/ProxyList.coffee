@@ -21,17 +21,8 @@ class ProxyList extends Backbone.Collection
 
     return Backbone.Collection.prototype.fetch.call(this, options)
 
-  byCountry: (countryName) ->
-    new this(
-      this.where
-        country: countryName
-    )
-
-  byProtocol: (protocolName) ->
-    new this(
-      this.where
-        originalProtocol: protocolName
-    )
+  comparator: (model) ->
+    -1 * model.get 'activeState'
 
   changeFavorite: (model) ->
     browser.runtime.sendMessage(name: 'toggle-favorite', message: model.toJSON())
