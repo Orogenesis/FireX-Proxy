@@ -6,7 +6,7 @@ let proxyListSession = new Addresses();
 browser.storage.local.get()
     .then(
         (storage) => {
-            proxyListSession.concat(
+            proxyListSession = proxyListSession.concat(
                 ...(storage.favorites || [])
                     .map(element => Object.assign(new Address(), element))
             );
@@ -35,13 +35,14 @@ browser.runtime.onConnect.addListener(
                              * Get proxy list
                              */
                             proxyListSession = proxyListSession
+                                .disableAll()
                                 .byFavorite()
                                 .concat(
                                     await FreeProxyList.getList()
                                 );
                         }
 
-                        port.postMessage(proxyListSession);
+                        port.postMessage(proxyListSession.unique());
 
                         break;
                 }
