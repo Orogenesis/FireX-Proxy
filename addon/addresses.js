@@ -1,12 +1,5 @@
 class Addresses extends Array {
     /**
-     * @param {...*} [args]
-     */
-    constructor(...args) {
-        super(...args);
-    }
-
-    /**
      * @param {Array.<Address>} args
      * @returns {Addresses}
      */
@@ -19,14 +12,6 @@ class Addresses extends Array {
      */
     isEmpty() {
         return this.length === 0;
-    }
-
-    /**
-     * @param {...Address} [items]
-     * @returns {Number}
-     */
-    insert(...items) {
-        return this.unshift(...items);
     }
 
     /**
@@ -81,6 +66,31 @@ class Addresses extends Array {
      */
     clone() {
         return Object.assign(new Address(), this.one());
+    }
+
+    /**
+     * @returns {Addresses}
+     */
+    unique() {
+        return this
+            .byFavorite()
+            .union(
+                this.byExcludeFavorites()
+            );
+    }
+
+    /**
+     * @param {Addresses} elements
+     * @returns {Addresses}
+     */
+    union(elements) {
+        return this.create(
+            this.concat(
+                elements.filter(
+                    element => this.findIndex(value => value.getIPAddress() === element.getIPAddress()) === -1
+                )
+            )
+        );
     }
 
     /**
