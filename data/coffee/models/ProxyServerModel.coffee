@@ -1,6 +1,11 @@
 class ProxyServerModel extends Backbone.Model
+  messagePassing:
+    'connect'    : 'connect'
+    'disconnect' : 'disconnect'
+    'toggle'     : 'toggle-favorite'
+
   initialize: ->
-    @port = 'favorite'
+    @on 'change:favoriteState', () => @sync 'toggle', @
 
   toggle: ->
     @set 'activeState', !@get 'activeState'

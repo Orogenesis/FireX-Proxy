@@ -16,19 +16,35 @@
   ],
   "overrides": {
     "jquery": {
-      "main": ["./dist/jquery.min.js"]
+      "main": [
+        "./dist/jquery.min.js"
+      ]
     },
     "handlebars": {
-      "main": ["./handlebars.runtime.min.js"]
+      "main": [
+        "./handlebars.runtime.min.js"
+      ]
     },
     "i18next": {
-      "main": ["./i18next.min.js"]
+      "main": [
+        "./i18next.min.js"
+      ]
     },
     "underscore": {
-      "main": ["./underscore-min.js"]
+      "main": [
+        "./underscore-min.js"
+      ]
     },
     "backbone.validation": {
-      "main": ["./dist/backbone-validation-min.js"]
+      "main": [
+        "./dist/backbone-validation-min.js"
+      ]
+    },
+    "select2": {
+      "main": [
+        "./dist/js/select2.min.js",
+        "./dist/css/select2.min.css"
+      ]
     }
   },
   "dependencies": {
@@ -38,6 +54,7 @@
     "underscore": "1.8.3",
     "backbone.validation": "backbone-validation#^0.11.5",
     "i18next": "^8.4.3",
-    "handlebars": "^4.0.11"
+    "handlebars": "^4.0.11",
+    "select2": "^4.0.5"
   }
 }

@@ -1,7 +1,8 @@
-@import "fonts";
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700');
 @import "variables";
 @import "reset";
 @import "mixins";
+@import "select2";
 
 .content-wrapper {
   overflow-y: auto;
@@ -21,7 +22,6 @@
     #proxy-list-box {
       width: 100%;
       font-size: 12px;
-      font-weight: 500;
       border-collapse: collapse;
       border-spacing: 0;
       tr {
@@ -58,15 +58,75 @@
         }
       }
     }
+    #no-proxy-list {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      margin: auto;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 200px;
+      height: 20px;
+      display: none;
+      text-align: center;
+      font-size: 14px;
+      .reset-button {
+        cursor: pointer;
+        color: $primaryColor;
+        text-decoration-style: solid;
+      }
+    }
   }
   .filters {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    background-color: #FFFFFF;
+    position: absolute;
+    top: 50px;
+    left: 0;
     display: none;
-    box-shadow: 0 0 8px 2px $primaryColorLight;
+    background-color: white;
+    border-top: 1px solid $primaryColorLight;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.10);
+    z-index: 500;
+    padding: 15px;
+    box-sizing: border-box;
+    &.visible {
+      display: block;
+    }
+    & > div {
+      float: left;
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      &:first-child {
+        margin-bottom: 15px;
+        text-align: center;
+      }
+      .select2-selection {
+        width: 100%;
+        border: 1px solid $primaryColorLight;
+        font-size: 12px;
+        box-sizing: border-box;
+        border-radius: 0;
+      }
+      button {
+        cursor: pointer;
+        background: none;
+        padding: 8px 15px;
+        border: 1px solid $primaryColorLight;
+        color: $primaryColor;
+        font-size: 12px;
+        box-sizing: border-box;
+        margin-right: 5px;
+        display: inline-block;
+        &.active {
+          background-color: $primaryColorLight;
+        }
+      }
+    }
   }
 }
 
@@ -177,35 +237,34 @@
   right: 10px;
   height: 50px;
   line-height: 50px;
+  font-weight: 400;
   i.filter {
     @include icon('../icons/filter-16.png', 16px, 16px);
+    position: relative;
     vertical-align: -4px;
     margin-right: 14px;
-  }
-}
-
-.validation {
-  position: relative;
-  .validation-state {
-    position: absolute;
-    right: 10px;
-    top: 0;
-    height: 100%;
-    width: 24px;
-    border-radius: 50%;
-    color: #FFFFFF;
-    &.done {
-      background: url(../icons/done-16.png) no-repeat center center;
+    &.active {
+      @include icon('../icons/filter-active-16.png', 16px, 16px);
     }
-    &.failure {
-      background: url(../icons/failure-16.png) no-repeat center center;
+    .counter {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      background: $primaryColor;
+      color: white;
+      border: 2px solid white;
+      border-radius: 50%;
+      text-align: center;
+      width: 12px;
+      height: 12px;
+      line-height: 12px;
+      font-size: 8px;
+      font-weight: bolder;
+      display: none;
     }
-  }
-  #address {
-    height: 30px;
-    display: block;
-    border: none;
-    background: transparent;
-    padding: 0 10px;
   }
 }

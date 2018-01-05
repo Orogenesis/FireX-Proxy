@@ -3,6 +3,3 @@ class Patterns extends Backbone.Collection
     super options
 
     @model = PatternModel
-
-  initialize: ->
-    @url = '#/blacklist'
