@@ -1,0 +1,20 @@
+{
+  "blacklist": {
+    "message": "Schwarze Liste"
+  },
+  "favorites": {
+    "message": "Favoriten"
+  },
+  "proxymenu": {
+    "message": "Liste der Proxy"
+  },
+  "country": {
+    "message": "Land"
+  },
+  "no-proxy": {
+    "message": "Keine proxies verfügbar. Probieren"
+  },
+  "reset-filters": {
+    "message": "filter zurücksetzen"
+  }
+}

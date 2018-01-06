@@ -1,18 +1,14 @@
 class PatternModel extends Backbone.Model
-  validation:
-    address:
-      pattern  : 'url'
-      required : true
-
-  initialize: ->
-    @port = 'blacklist'
-
-  toggleEditing: ->
-    @set 'editingState', !@isEditing()
-
-  isEditing: ->
-    @get 'editingState'
+  idAttribute: 'address'
 
   defaults: ->
-    address      : null
-    editingState : false
+    address   : null
+    isEnabled : true
+
+  validation: ->
+    address:
+      required: true
+
+  messagePassing:
+    'update': 'add-blacklist'
+    'delete': 'remove-blacklist'

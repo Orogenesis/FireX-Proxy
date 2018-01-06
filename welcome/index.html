@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FireX Proxy</title>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="../data/build/vendor.css">
+    <link type="text/css" rel="stylesheet" href="welcome.css">
+</head>
+<body>
+<section class="roadmap-container">
+    <div class="timeline-container">
+        <div class="timeline-block">
+            <div class="timeline-step-container active">
+                <div class="timeline-step"></div>
+            </div>
+            <div class="timeline-content">
+                <p>Blacklist</p>
+                <p>Jun 1, 2018</p>
+            </div>
+        </div>
+        <div class="timeline-block">
+            <div class="timeline-step-container">
+                <div class="timeline-step"></div>
+            </div>
+            <div class="timeline-content">
+                <p>X.Meter</p>
+                <p>Aug 1, 2018</p>
+            </div>
+        </div>
+        <div class="timeline-block">
+            <div class="timeline-step-container">
+                <div class="timeline-step"></div>
+            </div>
+            <div class="timeline-content">
+                <p>Your own proxy servers</p>
+                <p>Oct 1, 2018</p>
+            </div>
+        </div>
+        <div class="timeline-block">
+            <div class="timeline-step-container">
+                <div class="timeline-step"></div>
+            </div>
+            <div class="timeline-content">
+                <p>Chrome Extension</p>
+                <p>Jun 1, 2019</p>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="overlay">
+    <section class="overview swiper-container">
+        <div class="overview-content swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="overview-header">
+                    <img src="screenshot-1.png" alt="FireX-Proxy">
+                </div>
+                <div class="overview-preview">
+                    <h4>Welcome to the new version of FireX Proxy</h4>
+                    <p>
+                        We are pleased to introduce you to the new version of FireX Proxy!
+                    </p>
+                    <p>
+                        Now you can set up a list of websites for which the proxy will be enabled automatically. This
+                        feature is called the <strong>Blacklist</strong>.
+                    </p>
+                    <p>
+                        <a href="https://github.com/Orogenesis/FireX-Proxy" target="_blank">Follow us</a> on GitHub to
+                        be up to date for all the upcoming FireX Proxy changes! Your support is greatly appreciated.
+                    </p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="overview-header">
+                    <img src="screenshot-1.png" alt="FireX-Proxy">
+                </div>
+                <div class="overview-preview">
+                    <h4>Blacklist</h4>
+                    <p>
+                        You can use <a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank">glob</a>
+                        patterns to activate a proxy only when the pattern matches the website hostname.
+                    </p>
+                    <ul>
+                        <li>
+                            <code>*</code> &mdash; matches any number of any characters including none
+                        </li>
+                        <li>
+                            <code>?</code> &mdash; matches any single character
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <input class="button-close red" type="button" alt="Next" value="&times;" role="button">
+            <input class="button-next" type="button" alt="Next" value="&rarr;" role="button">
+            <div class="swiper-pagination"></div>
+        </footer>
+    </section>
+</div>
+<script type="text/javascript" src="../data/build/libs/swiper.min.js"></script>
+<script type="text/javascript" src="../data/build/libs/jquery.min.js"></script>
+<script type="text/javascript" src="welcome.js"></script>
+</body>
+</html>

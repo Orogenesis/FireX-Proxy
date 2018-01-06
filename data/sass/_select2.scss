@@ -10,11 +10,9 @@
       max-height: 100px;
     }
   }
-
   input {
     line-height: 24px;
   }
-
   .select2-results__option {
     padding: 10px;
     &[aria-selected="true"], &.select2-results__option--highlighted {
@@ -25,7 +23,7 @@
   .select2-selection--multiple {
     border-radius: 0;
     border: 1px solid $primaryColorLight;
-    .select2-selection__choice__remove:hover{
+    .select2-selection__choice__remove:hover {
       color: $primaryColorLight;
       cursor: pointer;
     }
@@ -36,7 +34,7 @@
       padding: 0 5px;
       width: 100%;
     }
-    .select2-selection__choice{
+    .select2-selection__choice {
       background-color: $primaryColorLight;
       color: $primaryColor;
       border: 1px solid $primaryColorLight;
@@ -47,7 +45,7 @@
       margin-right: 5px;
       margin-top: 5px;
     }
-    .select2-selection__choice__remove{
+    .select2-selection__choice__remove {
       &:hover {
         color: darken($primaryColor, 10%);
       }

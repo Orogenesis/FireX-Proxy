@@ -65,10 +65,12 @@ gulp.task('build:firefox', ['bower'], () => {
         .src([
             'addon/*.js',
             'popup/*',
+            'welcome/*',
             'manifest.json',
             'data/icons/*',
             'data/fonts/*',
-            'data/build/**/*'
+            'data/build/**/*',
+            '_locales/**/*'
         ], {
             base: './'
         })

@@ -137,7 +137,7 @@ class ListView extends Backbone.View
       .select2
         data                    : countries
         minimumResultsForSearch : -1
-        placeholder             : i18next.t 'country'
+        placeholder             : browser.i18n.getMessage 'country'
         multiple                : true
         maximumSelectionLength  : 10
         width                   : '100%'

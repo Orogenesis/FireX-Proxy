@@ -6,37 +6,24 @@ class PatternView extends Backbone.View
     'class': 'pattern'
 
   events: ->
-    'click .remove'  : 'destroy'
-    'click .address' : 'edit'
-    'blur .edit'     : 'done'
+    'click .remove' : 'destroy'
+    'click .power'  : 'toggle'
 
   initialize: ->
     @listenTo @model, 'change', @render
     @listenTo @model, 'destroy', @remove
 
-    Backbone.Validation.bind @
+    @template = Handlebars.templates['blacklistElement']
 
   render: ->
     $(@el).html @template @model.toJSON()
-
-    @editableTextarea = @$ '.edit'
 
     return @
 
   destroy: ->
     @model.destroy()
 
-  edit: ->
-    @model.toggleEditing()
-    @editableTextarea.focus()
-
-  done: ->
-    if @model.isEditing()
-      address = @editableTextarea.val()
-
-      if @model.isValid true
-        @model.save
-          address: address,
-          editingState: false
-      else
-        @destroy()
+  toggle: ->
+    @model.save {
+      isEnabled: @model.get('isEnabled') == false
+    }

@@ -36,7 +36,10 @@ messagePassingSync = (method, model, options = {}) ->
   return deferred && deferred.promise()
 
 getSyncMethod = (model) ->
-  if model.messagePassing || (model.collection && model.collection.messagePassing) then messagePassingSync else ajaxSync
+  if model.messagePassing || (model.collection && model.collection.messagePassing)
+    messagePassingSync
+  else
+    ajaxSync
 
 Backbone.sync = (method, model, options) ->
   getSyncMethod(model).apply @, [method, model, options]

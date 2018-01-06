@@ -1,17 +1,16 @@
-browser.proxy.register('addon/pac.js');
-
 class Connector {
     /**
      * @param {Address} address
      * @returns {void}
      */
     static connect(address) {
-        browser.runtime.sendMessage({
-            name:  'register',
-            proxy: `HTTP ${address.ipAddress}:${address.port}`
-        }, {
+        let configuration = {
             toProxyScript: true
-        });
+        };
+
+        browser.runtime.sendMessage({
+            proxy: `PROXY ${address.ipAddress}:${address.port}`
+        }, configuration);
 
         /**
          * Change icon color to green
@@ -31,12 +30,13 @@ class Connector {
     static disconnect() {
         return new Promise(
             resolve => {
-                browser.runtime.sendMessage({
-                    name: 'register',
-                    proxy: 'DIRECT'
-                }, {
+                let configuration = {
                     toProxyScript: true
-                }).then(resolve);
+                };
+
+                browser.runtime.sendMessage({
+                    proxy: 'DIRECT'
+                }, configuration).then(resolve);
 
                 /**
                  * Change icon color to black

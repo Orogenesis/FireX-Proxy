@@ -170,6 +170,9 @@
   &.star {
     background-image: url('../icons/star-12.png');
   }
+  &.power {
+    background-image: url('../icons/power-16.png');
+  }
 }
 
 #menu {
@@ -191,8 +194,8 @@
     cursor: pointer;
     vertical-align: top;
     padding-right: 15px;
-    &.settings {
-      background: url(../icons/settings-16-cyan.png) no-repeat 10px center;
+    &.blacklist {
+      background: url(../icons/blacklist-16-cyan.png) no-repeat 10px center;
     }
     &.list {
       background: url(../icons/play-16-cyan.png) no-repeat 10px center;
@@ -203,35 +206,38 @@
   }
 }
 
-#pattern {
+#blacklist-content {
   .pattern {
-    line-height: 30px;
-    height: 30px;
+    @include clearfix();
+    line-height: 24px;
     padding: 10px;
-    .validation {
-      display: inline-block;
-      .validation-state {
-        right: 5px;
+    .blacklist-element {
+      float: left;
+      .address {
+        color: #585858;
+        cursor: text;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        width: 310px;
+        vertical-align: top;
       }
-    }
-    .address {
-      display: inline-block;
-      vertical-align: top;
-      color: #585858;
-      cursor: text;
     }
     i.remove {
       @include icon('../icons/icon-remove.png', 24px, 24px);
       float: right;
     }
-    .edit {
-      border: 1px solid #78C0BD;
-      border-radius: 2px;
-      padding: 5px;
-    }
   }
   .content-wrapper {
     height: 210px;
+  }
+  .bottom-menu {
+    input[type="text"] {
+      width: 100%;
+      border: none;
+      padding: 5px 10px;
+    }
   }
 }
 
