@@ -46,10 +46,18 @@ gulp.task('handlebars', () => {
         .pipe(gulp.dest('./data/build'));
 });
 
-gulp.task('bower', () => {
+gulp.task('bower', ['bower-js', 'bower-css']);
+
+gulp.task('bower-js', () => {
     gulp
-        .src(mainBowerFiles())
+        .src(mainBowerFiles("**/*.js"))
         .pipe(gulp.dest('./data/build/libs'));
+});
+
+gulp.task('bower-css', function () {
+    gulp.src(mainBowerFiles("**/*.css"))
+        .pipe(concat('vendor.css'))
+        .pipe(gulp.dest('./data/build'));
 });
 
 gulp.task('build:firefox', ['bower'], () => {
@@ -74,4 +82,4 @@ gulp.task('watch', () => {
     gulp.watch('./data/handlebars/**/*.hbs', ['handlebars']);
 });
 
-gulp.task('default', ['coffee', 'sass', 'handlebars']);
+gulp.task('default', ['coffee', 'sass', 'handlebars', 'bower']);

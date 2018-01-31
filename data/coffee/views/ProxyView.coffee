@@ -21,10 +21,7 @@ class ProxyView extends Backbone.View
     return @
 
   toggleActive: ->
-    if @model.toggle()
-      browser.runtime.sendMessage(name: 'connect', message: @model.toJSON())
-    else
-      browser.runtime.sendMessage(name: 'disconnect')
+    if @model.toggle() then @model.sync('connect', @model) else @model.sync('disconnect', @model)
 
   add: ->
     @model.set 'favoriteState', !@model.get 'favoriteState'

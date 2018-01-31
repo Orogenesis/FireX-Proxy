@@ -3,6 +3,3 @@ class Menu extends Backbone.Collection
     super options
 
     @model = MenuEntryModel
-
-  initialize: ->
-    @url = '#/menu'

@@ -1,16 +1,20 @@
 <div class="right-panel">
-    <i class="filter"></i>
-    {{#if isFavoriteEnabled}}
-        <div class="checkbox active"></div>
-    {{else}}
-        <div class="checkbox"></div>
-    {{/if}}
-    {{t 'favorites'}}
+    <i class="filter">
+        <span class="counter">0</span>
+    </i><!--
+    --><div class="checkbox"></div><!--
+    -->{{t 'favorites'}}
 </div>
 <div id="proxy-content">
+    <div class="filters">
+        <div class="protocol-selector"></div>
+        <select id="country-filter" name="country" title="country-filter"></select>
+    </div>
     <div class="content-wrapper">
-        <div class="filters"></div>
         <table id="proxy-list-box"></table>
+        <div id="no-proxy-list">
+            {{t 'no-proxy'}} <span class="reset-button">{{t 'reset-filters'}}</span>
+        </div>
     </div>
     <button class="bottom-button refresh"></button>
 </div>

@@ -13,47 +13,40 @@ browser.storage.local.get()
         }
     );
 
-/**
- * Message queue
- */
-browser.runtime.onConnect.addListener(
-    port => {
-        port.onMessage.addListener(
-            async message => {
-                switch (message.name) {
-                    /**
-                     * Get proxy list
-                     */
-                    case 'get-proxy-list':
-                        if (proxyListSession.byExcludeFavorites().isEmpty() || message.force) {
-                            /**
-                             * Disconnect current proxy
-                             */
-                            await Connector.disconnect();
-
-                            /**
-                             * Get proxy list
-                             */
-                            proxyListSession = proxyListSession
-                                .disableAll()
-                                .byFavorite()
-                                .concat(
-                                    await FreeProxyList.getList()
-                                );
-                        }
-
-                        port.postMessage(proxyListSession.unique());
-
-                        break;
-                }
-            }
-        )
-    }
-);
-
 browser.runtime.onMessage.addListener(
-    async request => {
+    (request, sender, sendResponse) => {
         switch (request.name) {
+            /**
+             * Get proxy list
+             */
+            case 'get-proxy-list':
+                if (proxyListSession.byExcludeFavorites().isEmpty() || request.force) {
+                    /**
+                     * Disconnect current proxy
+                     */
+                    Connector
+                        .disconnect()
+                        .then(
+                            () => {
+                                FreeProxyList
+                                    .getList()
+                                    .then(
+                                        (response) => {
+                                            proxyListSession = proxyListSession
+                                                .disableAll()
+                                                .byFavorite()
+                                                .concat(response);
+
+                                            sendResponse(proxyListSession.unique());
+                                        }
+                                    );
+                            }
+                        );
+                } else {
+                    sendResponse(proxyListSession.unique());
+                }
+
+                break;
             /**
              * Proxy connect
              */
@@ -66,14 +59,20 @@ browser.runtime.onMessage.addListener(
                         .enable()
                 );
 
+                sendResponse(proxyListSession);
+
                 break;
             /**
              * Proxy disconnect
              */
             case 'disconnect':
-                await Connector.disconnect();
+                Connector
+                    .disconnect()
+                    .then(
+                        () => proxyListSession.disableAll()
+                    );
 
-                proxyListSession.disableAll();
+                sendResponse(proxyListSession);
 
                 break;
             /**
@@ -92,7 +91,11 @@ browser.runtime.onMessage.addListener(
                     favorites: [...proxyListSession.byFavorite()]
                 });
 
+                sendResponse(proxyListSession);
+
                 break;
         }
+
+        return true;
     }
 );
