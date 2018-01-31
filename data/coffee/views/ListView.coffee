@@ -134,7 +134,6 @@ class ListView extends Backbone.View
         selected : _.contains @model.get('countryFilter'), name
 
     @$countryFilter
-      .val []
       .select2
         data                    : countries
         minimumResultsForSearch : -1
@@ -151,6 +150,10 @@ class ListView extends Backbone.View
 
   resetFilters: ->
     @model.resetFilters()
+
+    @$countryFilter
+      .val []
+      .trigger 'change'
 
     @updateProtocols()
     @updateCountries()
