@@ -19,6 +19,7 @@
     position: relative;
     height: 240px;
     overflow-y: auto;
+    overflow-x: hidden;
     #proxy-list-box {
       width: 100%;
       font-size: 12px;
@@ -43,6 +44,9 @@
           padding-left: 32px;
           white-space: nowrap;
           overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 140px;
+          width: 140px;
         }
         &.ip-address {
           width: 110px;
