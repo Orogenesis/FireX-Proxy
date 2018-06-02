@@ -1,47 +1,53 @@
 class PatternPageView extends Backbone.View
   events: ->
-    'click .checkbox' : 'toggleTemplates'
+    'submit .bottom-menu'       : 'createElement'
+    'click .checkbox.blacklist' : 'toggleBlacklist'
 
   id: ->
     'pattern'
 
   initialize: ->
-    @submitSubView = new PatternSubmitView
-
     @listenTo @collection, 'add', @addOne
-    @listenTo @model, 'change:isBlacklistEnabled', @onCheckboxChange
+    @listenTo @collection, 'reset', @addAll
 
-    @collection.fetch()
+    @listenTo @model, 'change:isBlacklistEnabled', @render
+
+    @template = Handlebars.templates['blacklist']
+
+    Backbone.Validation.bind @
+
+    @model.fetch()
 
   render: ->
     $(@el).html @template @model.toJSON()
 
-    @submitSubView.setElement(@$ '#pattern-add-subview').render()
-
-    @delegateEvents()
-
-    @$listPatterns = @$ '.content-wrapper'
+    @$listPatterns      = @$ '.content-wrapper'
+    @$patternInput      = @$ 'input[name="blacklist-element"]'
+    @$blacklistCheckbox = @$ '.checkbox.blacklist'
 
     @addAll()
 
+    do @collection.fetch if not @collection.length
+
     return @
-
-  toggleTemplates: ->
-    @model.set 'isBlacklistEnabled', !@model.get 'isBlacklistEnabled'
-
-  onCheckboxChange: ->
-    @render()
 
   addAll: ->
     @collection.each @addOne, @
 
-  onLoadList: (patterns) ->
-    @collection.reset patterns
-
-  onCreatePattern: (pattern) ->
-    @collection.add pattern
-
   addOne: (pattern) ->
-    view = new PatternView model: pattern
+    @$listPatterns.append new PatternView(model: pattern).render().el
 
-    @$listPatterns.append view.render().el
+  createElement: (e) ->
+    e.preventDefault()
+
+    pattern = new PatternModel
+      address   : @$patternInput.val()
+      isEnabled : true
+
+    @collection.add pattern if do pattern.save
+
+    $(e.target).trigger 'reset'
+
+  toggleBlacklist: ->
+    @model.save
+      isBlacklistEnabled: false == @model.get('isBlacklistEnabled')

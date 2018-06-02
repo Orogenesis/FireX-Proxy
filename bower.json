@@ -25,11 +25,6 @@
         "./handlebars.runtime.min.js"
       ]
     },
-    "i18next": {
-      "main": [
-        "./i18next.min.js"
-      ]
-    },
     "underscore": {
       "main": [
         "./underscore-min.js"
@@ -45,16 +40,22 @@
         "./dist/js/select2.min.js",
         "./dist/css/select2.min.css"
       ]
+    },
+    "swiper": {
+      "main": [
+        "./dist/js/swiper.min.js",
+        "./dist/css/swiper.min.css"
+      ]
     }
   },
   "dependencies": {
     "requirejs": "^2.2.0",
-    "jquery": "2.2.4",
+    "jquery": "3.3.1",
     "backbone": "1.1.2",
     "underscore": "1.8.3",
     "backbone.validation": "backbone-validation#^0.11.5",
-    "i18next": "^8.4.3",
     "handlebars": "^4.0.11",
-    "select2": "^4.0.5"
+    "select2": "^4.0.5",
+    "swiper": "^4.3.2"
   }
 }

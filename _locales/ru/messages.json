@@ -1,0 +1,20 @@
+{
+  "blacklist": {
+    "message": "Чёрный список"
+  },
+  "favorites": {
+    "message": "Избранное"
+  },
+  "proxymenu": {
+    "message": "Список серверов"
+  },
+  "country": {
+    "message": "Страна"
+  },
+  "no-proxy": {
+    "message": "Прокси не найдены. Попробуйте"
+  },
+  "reset-filters": {
+    "message": "сбросить фильтры"
+  }
+}

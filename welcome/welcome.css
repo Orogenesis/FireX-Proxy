@@ -1,0 +1,228 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+input[type="button"]::-moz-focus-inner {
+    border: 0;
+}
+
+input[type="button"] {
+    border: 0;
+    outline: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+a {
+    color: #08AEEA;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #08769b;
+}
+
+code {
+    padding: 0 4px;
+    color: #d14;
+    white-space: nowrap;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+}
+
+body {
+    background: #000000;
+    font-family: Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.roadmap-container h1 {
+    text-align: center;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 62px;
+    margin-bottom: 40px;
+}
+
+.timeline-container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    height: 8em;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-image: linear-gradient(270deg, #08AEEA 0%, #2AF598 100%);
+}
+
+.timeline-container .timeline-block {
+    position: relative;
+    flex: 1;
+}
+
+.timeline-container .timeline-block .timeline-step-container {
+    background: rgba(8, 174, 234, 0.3);
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -8px;
+    margin-left: -9px;
+}
+
+.timeline-container .timeline-block .timeline-step-container.active {
+    background: rgba(42, 245, 152, 0.3);
+}
+
+.timeline-container .timeline-block .timeline-step-container.active .timeline-step {
+    background: #2AF598;
+}
+
+.timeline-container .timeline-block .timeline-step-container .timeline-step {
+    background: #08AEEA;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    margin-top: -5px;
+    margin-left: -5px;
+}
+
+.timeline-container .timeline-block .timeline-content {
+    position: absolute;
+    text-align: center;
+    color: #b2b3b5;
+    width: 100%;
+}
+
+.timeline-container .timeline-block:nth-child(odd) .timeline-content {
+    top: 0;
+}
+
+.timeline-container .timeline-block:nth-child(even) .timeline-content {
+    bottom: 0;
+}
+
+.timeline-container .timeline-block .timeline-content p:first-child {
+    color: #f5f5f7;
+}
+
+.timeline-container .timeline-block .timeline-content p:not(:first-child) {
+    font-size: 12px;
+}
+
+.overlay {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.overview {
+    flex-direction: column;
+    width: 440px;
+    background: #ffffff;
+    border-radius: 10px;
+    text-align: center;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.overview .overview-content .overview-header {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overview .overview-content .overview-header img {
+    width: 65%;
+    pointer-events: none;
+}
+
+.overview .overview-content .overview-preview {
+    padding: 15px;
+}
+
+.overview .overview-content .overview-preview h4 {
+    color: #1a1a1a;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.overview .overview-content .overview-preview p {
+    color: #72777c;
+    font-size: 13px;
+}
+
+.overview .overview-content .overview-preview ul {
+    color: #161616;;
+    font-size: 13px;
+    list-style-type: none;
+}
+
+.overview .overview-content .overview-preview ul li {
+    line-height: 25px;
+}
+
+.overview footer {
+    padding: 15px;
+}
+
+.overview footer input[type="button"] {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    background: #1054eb;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.overview footer input[type="button"].red {
+    background: #e74c3c;
+}
+
+.overview footer .swiper-pagination {
+    position: static;
+    display: inline-block;
+    vertical-align: 3px;
+}
+
+.overview footer .swiper-pagination .swiper-pagination-bullet {
+    background: #dce7fc;
+    width: 6px;
+    height: 6px;
+    opacity: 1;
+    margin: 0 2px;
+}
+
+.overview footer .swiper-pagination .swiper-pagination-bullet-active {
+    background: #1054eb;
+}
