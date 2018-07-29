@@ -1,18 +1,9 @@
+var pacDictionary = {
+    'HTTP': 'PROXY',
+    'SOCKS5': 'SOCKS'
+};
+
 class Address {
-    /**
-     * @returns {string}
-     */
-    static get httpProtocolConstant() {
-        return 'HTTP';
-    }
-
-    /**
-     * @returns {string}
-     */
-    static get httpsProtocolConstant() {
-        return 'HTTPS';
-    }
-
     constructor() {
         this.ipAddress        = null;
         this.port             = null;
@@ -157,5 +148,9 @@ class Address {
         this.favoriteState = state;
 
         return this;
+    }
+
+    getPacProtocol() {
+        return pacDictionary[this.originalProtocol];
     }
 }

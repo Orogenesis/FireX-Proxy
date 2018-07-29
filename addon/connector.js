@@ -9,7 +9,7 @@ class Connector {
         };
 
         browser.runtime.sendMessage({
-            proxy: `PROXY ${address.ipAddress}:${address.port}`
+            proxy: `${address.getPacProtocol()} ${address.ipAddress}:${address.port}`
         }, configuration);
 
         /**

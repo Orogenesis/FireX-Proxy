@@ -32,7 +32,6 @@
       "addon/addresses.js",
       "addon/connector.js",
       "addon/proxyAdapter.js",
-      "addon/freeProxyList.js",
       "addon/helpers.js",
       "addon/background.js"
     ]

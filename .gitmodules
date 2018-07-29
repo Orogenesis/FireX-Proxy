@@ -1,0 +1,3 @@
+[submodule "xscraperapi"]
+	path = xscraperapi
+	url = https://github.com/FireX-Proxy/X.Scraper.Api
