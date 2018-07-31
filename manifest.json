@@ -18,7 +18,7 @@
   "permissions": [
     "proxy",
     "storage",
-    "*://firexproxy.com:*/*"
+    "*://firexproxy.com:4040/*"
   ],
   "browser_action": {
     "browser_style": false,
