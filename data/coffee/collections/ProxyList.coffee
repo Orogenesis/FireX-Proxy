@@ -11,7 +11,7 @@ class ProxyList extends Backbone.Collection
     -1 * model.get 'activeState'
 
   byProtocol: (protos) ->
-    new ProxyList @filter (model) => protos[model.get 'originalProtocol']
+    new ProxyList @filter (model) => protos[model.get 'protocol']
 
   byFavorite: (favoriteState) ->
     new ProxyList @filter (model) => model.get('favoriteState') == favoriteState
@@ -20,4 +20,4 @@ class ProxyList extends Backbone.Collection
     new ProxyList @filter (model) => _.contains(countries, model.get('country')) || _.size(countries) == 0
 
   getProtocols: ->
-    _.uniq @pluck 'originalProtocol'
+    _.uniq @pluck 'protocol'

@@ -13,9 +13,9 @@ class ProxyServerModel extends Backbone.Model
     return @get 'activeState'
 
   defaults: ->
-    ipAddress        : null
-    originalProtocol : null
-    country          : null
-    port             : null
-    activeState      : false
-    favoriteState    : false
+    ipAddress     : null
+    protocol      : null
+    country       : null
+    port          : null
+    activeState   : false
+    favoriteState : false

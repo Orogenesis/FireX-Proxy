@@ -18,7 +18,7 @@
   "permissions": [
     "proxy",
     "storage",
-    "*://free-proxy-list.net/*"
+    "*://firexproxy.com:*/*"
   ],
   "browser_action": {
     "browser_style": false,
@@ -31,7 +31,6 @@
       "addon/address.js",
       "addon/addresses.js",
       "addon/connector.js",
-      "addon/proxyAdapter.js",
       "addon/helpers.js",
       "addon/background.js"
     ]

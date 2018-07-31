@@ -1,6 +1,6 @@
-var pacDictionary = {
-    'HTTP': 'PROXY',
-    'SOCKS5': 'SOCKS'
+const pacDictionary = {
+    'HTTP'   : 'PROXY',
+    'SOCKS5' : 'SOCKS'
 };
 
 class Address {
@@ -9,7 +9,6 @@ class Address {
         this.port             = null;
         this.country          = null;
         this.protocol         = null;
-        this.originalProtocol = null;
         this.activeState      = false;
         this.favoriteState    = false;
     }
@@ -76,8 +75,8 @@ class Address {
      * @param {String} protocol
      * @returns {Address}
      */
-    setOriginalProtocol(protocol) {
-        this.originalProtocol = protocol;
+    setProtocol(protocol) {
+        this.protocol = protocol;
 
         return this;
     }
@@ -85,8 +84,8 @@ class Address {
     /**
      * @returns {String}
      */
-    getOriginalProtocol() {
-        return this.originalProtocol;
+    getProtocol() {
+        return this.protocol;
     }
 
     /**
@@ -150,7 +149,15 @@ class Address {
         return this;
     }
 
+    /**
+     * @returns {string}
+     * @throws {Error}
+     */
     getPacProtocol() {
-        return pacDictionary[this.originalProtocol];
+        if (pacDictionary[this.getProtocol()] === undefined) {
+            throw new Error('This protocol unsupported by PAC')
+        }
+
+        return pacDictionary[this.getProtocol()];
     }
 }

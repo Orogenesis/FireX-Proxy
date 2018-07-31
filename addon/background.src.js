@@ -77,21 +77,24 @@ browser.runtime.onMessage.addListener(
                         .disconnect()
                         .then(
                             () => {
-                                proxyApi.getProxy(proxyClient, function (err,response) {
-                                    let result = response.map((proxy) => {
-                                            return (new Address())
-                                                .setIPAddress(proxy.server)
-                                                .setPort(proxy.port)
-                                                .setCountry(proxy.country)
-                                                .setOriginalProtocol(proxy.protocol);
-                                    });
-                                    proxyListSession = proxyListSession
-                                        .disableAll()
-                                        .byFavorite()
-                                        .concat(result);
+                                proxyApi
+                                    .getProxy(proxyClient, (err, response) => {
+                                        let result = response
+                                            .map(proxy => {
+                                                return (new Address())
+                                                    .setIPAddress(proxy.server)
+                                                    .setPort(proxy.port)
+                                                    .setCountry(proxy.country)
+                                                    .setProtocol(proxy.protocol);
+                                            });
 
-                                    sendResponse(proxyListSession.unique());
-                                })
+                                        proxyListSession = proxyListSession
+                                            .disableAll()
+                                            .byFavorite()
+                                            .concat(result);
+
+                                        sendResponse(proxyListSession.unique());
+                                    });
                             }
                         );
 
