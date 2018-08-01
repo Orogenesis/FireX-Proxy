@@ -28,7 +28,8 @@
   },
   "background": {
     "scripts": [
-      "addon/build/index.js"
+      "addon/build/index.js",
+      "addon/build/pac.js"
     ]
   }
 }

@@ -14,7 +14,7 @@ genericClient.basePath = 'http://firexproxy.com:4040/v1';
 let proxyApi = new swagger.DefaultApi(genericClient);
 let proxyClient = new swagger.ApiClient();
 
-browser.proxy.register('addon/pac.js');
+browser.proxy.register('addon/build/pac.js');
 
 let pacMessageConfiguration = {
     toProxyScript: true

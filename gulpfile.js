@@ -63,7 +63,7 @@ gulp.task('bower-css', function () {
         .pipe(gulp.dest('./data/build'));
 });
 
-gulp.task('build:firefox', ['browserify', 'bower'], () => {
+gulp.task('build:firefox', ['pac', 'browserify', 'bower'], () => {
     return gulp
         .src([
             'addon/build/*.js',
@@ -87,7 +87,11 @@ gulp.task('watch', () => {
     gulp.watch('./data/handlebars/**/*.hbs', ['handlebars']);
 });
 
-gulp.task('browserify', ['swagger'], () => {
+gulp.task('pac', () => {
+    return gulp.src('addon/pac.js').pipe(gulp.dest('addon/build'));
+});
+
+gulp.task('browserify', ['pac', 'swagger'], () => {
     let b = browserify({
         entries: 'addon/background.js',
         debug: true
