@@ -1,13 +1,17 @@
-const helpers = require('./helpers.js');
 const Connector = require('./connector.js');
+const Address = require('./address.js');
 const Addresses = require('./addresses.js');
+const helpers = require('./helpers.js');
+const swagger = require('./generated/xscraper/src');
 
 let proxyListSession  = new Addresses();
 let blacklistSession  = {};
 let blacklistSettings = {};
 
-let swagger = require('./xscrapergenerated/src');
-let proxyApi = new swagger.DefaultApi();
+let genericClient = new swagger.ApiClient();
+genericClient.basePath = 'http://firexproxy.com:4040/v1';
+
+let proxyApi = new swagger.DefaultApi(genericClient);
 let proxyClient = new swagger.ApiClient();
 
 browser.proxy.register('addon/pac.js');

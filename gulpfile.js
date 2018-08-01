@@ -9,6 +9,7 @@ const wrap           = require('gulp-wrap');
 const zip            = require('gulp-zip');
 const source         = require('vinyl-source-stream');
 const mainBowerFiles = require('main-bower-files');
+const exec           = require('child_process').exec;
 
 gulp.task('coffee', () => {
     return gulp
@@ -86,7 +87,7 @@ gulp.task('watch', () => {
     gulp.watch('./data/handlebars/**/*.hbs', ['handlebars']);
 });
 
-gulp.task('browserify', () => {
+gulp.task('browserify', ['swagger'], () => {
     let b = browserify({
         entries: 'addon/background.js',
         debug: true
@@ -96,6 +97,17 @@ gulp.task('browserify', () => {
         .bundle()
         .pipe(source('index.js'))
         .pipe(gulp.dest('./addon/build'));
+});
+
+gulp.task('swagger', (cb) => {
+    return exec(['docker run --rm -v ' + process.cwd() + ':/local swaggerapi/swagger-codegen-cli generate',
+        '    -i /local/xscraperapi/swagger.yml',
+        '    -l javascript',
+        '    -o /local/addon/generated/xscraper'].join(''), function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
 });
 
 gulp.task('default', ['browserify', 'coffee', 'sass', 'handlebars', 'bower']);
