@@ -1,4 +1,5 @@
 const gulp           = require('gulp');
+const browserify     = require('browserify');
 const coffee         = require('gulp-coffee');
 const concat         = require('gulp-concat');
 const sass           = require('gulp-sass');
@@ -6,10 +7,11 @@ const declare        = require('gulp-declare');
 const handlebars     = require('gulp-handlebars');
 const wrap           = require('gulp-wrap');
 const zip            = require('gulp-zip');
+const source         = require('vinyl-source-stream');
 const mainBowerFiles = require('main-bower-files');
 
 gulp.task('coffee', () => {
-    gulp
+    return gulp
         .src([
             './data/coffee/**/*.coffee'
         ])
@@ -21,7 +23,7 @@ gulp.task('coffee', () => {
 });
 
 gulp.task('sass', () => {
-    gulp
+    return gulp
         .src([
             './data/sass/**/*.scss'
         ])
@@ -30,7 +32,7 @@ gulp.task('sass', () => {
 });
 
 gulp.task('handlebars', () => {
-    gulp
+    return gulp
         .src([
             './data/handlebars/*.hbs'
         ])
@@ -49,21 +51,21 @@ gulp.task('handlebars', () => {
 gulp.task('bower', ['bower-js', 'bower-css']);
 
 gulp.task('bower-js', () => {
-    gulp
+    return gulp
         .src(mainBowerFiles("**/*.js"))
         .pipe(gulp.dest('./data/build/libs'));
 });
 
 gulp.task('bower-css', function () {
-    gulp.src(mainBowerFiles("**/*.css"))
+    return gulp.src(mainBowerFiles("**/*.css"))
         .pipe(concat('vendor.css'))
         .pipe(gulp.dest('./data/build'));
 });
 
-gulp.task('build:firefox', ['bower'], () => {
-    gulp
+gulp.task('build:firefox', ['browserify', 'bower'], () => {
+    return gulp
         .src([
-            'addon/*.js',
+            'addon/build/*.js',
             'popup/*',
             'welcome/*',
             'manifest.json',
@@ -84,4 +86,16 @@ gulp.task('watch', () => {
     gulp.watch('./data/handlebars/**/*.hbs', ['handlebars']);
 });
 
-gulp.task('default', ['coffee', 'sass', 'handlebars', 'bower']);
+gulp.task('browserify', () => {
+    let b = browserify({
+        entries: 'addon/background.js',
+        debug: true
+    });
+
+    return b
+        .bundle()
+        .pipe(source('index.js'))
+        .pipe(gulp.dest('./addon/build'));
+});
+
+gulp.task('default', ['browserify', 'coffee', 'sass', 'handlebars', 'bower']);

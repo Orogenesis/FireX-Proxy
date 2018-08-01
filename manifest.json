@@ -28,11 +28,7 @@
   },
   "background": {
     "scripts": [
-      "addon/address.js",
-      "addon/addresses.js",
-      "addon/connector.js",
-      "addon/helpers.js",
-      "addon/background.js"
+      "addon/build/index.js"
     ]
   }
 }

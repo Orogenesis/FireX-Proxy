@@ -20,6 +20,7 @@
     "gulp-zip": "^4.0.0",
     "handlebars": "^4.0.11",
     "main-bower-files": "^2.13.1",
-    "superagent": "^3.8.3"
+    "superagent": "^3.8.3",
+    "vinyl-source-stream": "^2.0.0"
   }
 }

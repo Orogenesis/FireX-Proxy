@@ -52,3 +52,5 @@ class Connector {
         );
     }
 }
+
+module.exports = Connector;

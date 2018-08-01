@@ -1,3 +1,5 @@
+const Address = require('./address.js');
+
 class Addresses extends Array {
     /**
      * @param {Array.<Address>} args
@@ -104,3 +106,5 @@ class Addresses extends Array {
         return this;
     }
 }
+
+module.exports = Addresses;

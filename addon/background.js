@@ -1,3 +1,7 @@
+const helpers = require('./helpers.js');
+const Connector = require('./connector.js');
+const Addresses = require('./addresses.js');
+
 let proxyListSession  = new Addresses();
 let blacklistSession  = {};
 let blacklistSettings = {};
@@ -51,7 +55,7 @@ browser.runtime.onInstalled.addListener(
 
         switch (reason) {
             case 'update':
-                if (versionCompare(previousVersion, browser.runtime.getManifest().version) === -1) {
+                if (helpers.versionCompare(previousVersion, browser.runtime.getManifest().version) === -1) {
                     browser.tabs.create({
                         url: '../welcome/index.html'
                     });
