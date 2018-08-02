@@ -33,6 +33,8 @@
       "addon/addresses.js",
       "addon/connector.js",
       "addon/helpers.js",
+      "addon/ProxyModel.js",
+      "addon/ProxyProvider.js",
       "addon/background.js"
     ]
   }

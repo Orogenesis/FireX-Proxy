@@ -1,20 +1,9 @@
-const Connector = require('./connector.js');
-const Address = require('./address.js');
-const Addresses = require('./addresses.js');
-const helpers = require('./helpers.js');
-const swagger = require('./generated/xscraper/src');
-
 let proxyListSession  = new Addresses();
 let blacklistSession  = {};
 let blacklistSettings = {};
 
-let genericClient = new swagger.ApiClient();
-genericClient.basePath = 'http://firexproxy.com:4040/v1';
-
-let proxyApi = new swagger.DefaultApi(genericClient);
-let proxyClient = new swagger.ApiClient();
-
-browser.proxy.register('addon/build/pac.js');
+let proxyProvider = new ProxyProvider();
+browser.proxy.register('addon/pac.js');
 
 let pacMessageConfiguration = {
     toProxyScript: true
@@ -59,7 +48,7 @@ browser.runtime.onInstalled.addListener(
 
         switch (reason) {
             case 'update':
-                if (helpers.versionCompare(previousVersion, browser.runtime.getManifest().version) === -1) {
+                if (versionCompare(previousVersion, browser.runtime.getManifest().version) === -1) {
                     browser.tabs.create({
                         url: '../welcome/index.html'
                     });
@@ -85,33 +74,27 @@ browser.runtime.onMessage.addListener(
                         .disconnect()
                         .then(
                             () => {
-                                proxyApi
-                                    .getProxy(proxyClient, (err, response) => {
-                                        let result = response
-                                            .map(proxy => {
-                                                return (new Address())
-                                                    .setIPAddress(proxy.server)
-                                                    .setPort(proxy.port)
-                                                    .setCountry(proxy.country)
-                                                    .setProtocol(proxy.protocol)
-                                                    .setPingTimeMs(proxy.pingTimeMs);
-                                            });
+                                proxyProvider.getProxies().then((response) => {
+                                    let result = response
+                                        .map(proxy => {
+                                            return (new Address())
+                                                .setIPAddress(proxy.server)
+                                                .setPort(proxy.port)
+                                                .setCountry(proxy.country)
+                                                .setProtocol(proxy.protocol)
+                                                .setPingTimeMs(proxy.pingTimeMs);
+                                        });
 
-                                        proxyListSession = proxyListSession
-                                            .disableAll()
-                                            .byFavorite()
-                                            .concat(result);
+                                    proxyListSession = proxyListSession
+                                        .disableAll()
+                                        .byFavorite()
+                                        .concat(result);
 
-                                        sendResponse(proxyListSession.unique());
-                                    });
+                                    sendResponse(proxyListSession.unique());
+                                });
                             }
                         );
-
-                    break;
                 }
-
-                sendResponse(proxyListSession.unique());
-
                 break;
             /**
              * Proxy connect

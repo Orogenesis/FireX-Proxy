@@ -1,4 +1,3 @@
-const Address = require('./address.js');
 
 class Addresses extends Array {
     /**
@@ -107,4 +106,3 @@ class Addresses extends Array {
     }
 }
 
-module.exports = Addresses;

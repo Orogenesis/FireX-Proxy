@@ -179,5 +179,3 @@ class Address {
         return pacDictionary[this.getProtocol()];
     }
 }
-
-module.exports = Address;

@@ -63,7 +63,7 @@ gulp.task('bower-css', function () {
 gulp.task('build:firefox', ['bower'], () => {
     return gulp
         .src([
-            'addon/build/*.js',
+            'addon/*.js',
             'popup/*',
             'welcome/*',
             'manifest.json',

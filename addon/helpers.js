@@ -33,7 +33,3 @@ function versionCompare(a, b) {
 
     return 0;
 }
-
-module.exports = {
-    versionCompare: versionCompare
-};
