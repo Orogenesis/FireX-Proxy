@@ -1,15 +1,12 @@
-const gulp = require('gulp');
-const browserify = require('browserify');
-const coffee = require('gulp-coffee');
-const concat = require('gulp-concat');
-const sass = require('gulp-sass');
-const declare = require('gulp-declare');
-const handlebars = require('gulp-handlebars');
-const wrap = require('gulp-wrap');
-const zip = require('gulp-zip');
-const source = require('vinyl-source-stream');
+const gulp           = require('gulp');
+const coffee         = require('gulp-coffee');
+const concat         = require('gulp-concat');
+const sass           = require('gulp-sass');
+const declare        = require('gulp-declare');
+const handlebars     = require('gulp-handlebars');
+const wrap           = require('gulp-wrap');
+const zip            = require('gulp-zip');
 const mainBowerFiles = require('main-bower-files');
-const exec = require('child_process').exec;
 
 gulp.task('coffee', () => {
     return gulp
@@ -63,7 +60,7 @@ gulp.task('bower-css', function () {
         .pipe(gulp.dest('./data/build'));
 });
 
-gulp.task('build:firefox', ['pac', 'browserify', 'bower'], () => {
+gulp.task('build:firefox', ['bower'], () => {
     return gulp
         .src([
             'addon/build/*.js',
@@ -87,15 +84,4 @@ gulp.task('watch', () => {
     gulp.watch('./data/handlebars/**/*.hbs', ['handlebars']);
 });
 
-gulp.task('pac', () => {
-    return gulp.src('addon/pac.js').pipe(gulp.dest('addon/build'));
-});
-
-gulp.task('browserify', ['pac'], () => {
-    return browserify({
-        entries: 'addon/background.js',
-        debug: true
-    }).bundle().pipe(source('index.js')).pipe(gulp.dest('./addon/build'));
-});
-
-gulp.task('default', ['browserify', 'coffee', 'sass', 'handlebars', 'bower']);
+gulp.task('default', ['coffee', 'sass', 'handlebars', 'bower']);
