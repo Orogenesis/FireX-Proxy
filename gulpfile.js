@@ -1,15 +1,15 @@
-const gulp           = require('gulp');
-const browserify     = require('browserify');
-const coffee         = require('gulp-coffee');
-const concat         = require('gulp-concat');
-const sass           = require('gulp-sass');
-const declare        = require('gulp-declare');
-const handlebars     = require('gulp-handlebars');
-const wrap           = require('gulp-wrap');
-const zip            = require('gulp-zip');
-const source         = require('vinyl-source-stream');
+const gulp = require('gulp');
+const browserify = require('browserify');
+const coffee = require('gulp-coffee');
+const concat = require('gulp-concat');
+const sass = require('gulp-sass');
+const declare = require('gulp-declare');
+const handlebars = require('gulp-handlebars');
+const wrap = require('gulp-wrap');
+const zip = require('gulp-zip');
+const source = require('vinyl-source-stream');
 const mainBowerFiles = require('main-bower-files');
-const exec           = require('child_process').exec;
+const exec = require('child_process').exec;
 
 gulp.task('coffee', () => {
     return gulp
@@ -91,27 +91,11 @@ gulp.task('pac', () => {
     return gulp.src('addon/pac.js').pipe(gulp.dest('addon/build'));
 });
 
-gulp.task('browserify', ['pac', 'swagger'], () => {
-    let b = browserify({
+gulp.task('browserify', ['pac'], () => {
+    return browserify({
         entries: 'addon/background.js',
         debug: true
-    });
-
-    return b
-        .bundle()
-        .pipe(source('index.js'))
-        .pipe(gulp.dest('./addon/build'));
-});
-
-gulp.task('swagger', (cb) => {
-    return exec(['docker run --rm -v ' + process.cwd() + ':/local swaggerapi/swagger-codegen-cli generate',
-        '    -i /local/xscraperapi/swagger.yml',
-        '    -l javascript',
-        '    -o /local/addon/generated/xscraper'].join(''), function (err, stdout, stderr) {
-        console.log(stdout);
-        console.log(stderr);
-        cb(err);
-    });
+    }).bundle().pipe(source('index.js')).pipe(gulp.dest('./addon/build'));
 });
 
 gulp.task('default', ['browserify', 'coffee', 'sass', 'handlebars', 'bower']);

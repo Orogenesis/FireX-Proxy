@@ -93,7 +93,8 @@ browser.runtime.onMessage.addListener(
                                                     .setIPAddress(proxy.server)
                                                     .setPort(proxy.port)
                                                     .setCountry(proxy.country)
-                                                    .setProtocol(proxy.protocol);
+                                                    .setProtocol(proxy.protocol)
+                                                    .setPingTimeMs(proxy.pingTimeMs);
                                             });
 
                                         proxyListSession = proxyListSession

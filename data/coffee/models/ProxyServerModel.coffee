@@ -19,3 +19,4 @@ class ProxyServerModel extends Backbone.Model
     port          : null
     activeState   : false
     favoriteState : false
+    pingTimeMs    : null

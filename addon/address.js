@@ -5,12 +5,13 @@ const pacDictionary = {
 
 class Address {
     constructor() {
-        this.ipAddress        = null;
-        this.port             = null;
-        this.country          = null;
-        this.protocol         = null;
-        this.activeState      = false;
-        this.favoriteState    = false;
+        this.ipAddress     = null;
+        this.port          = null;
+        this.country       = null;
+        this.protocol      = null;
+        this.activeState   = false;
+        this.favoriteState = false;
+        this.pingTimeMs    = null;
     }
 
     /**
@@ -145,6 +146,23 @@ class Address {
      */
     setFavorite(state) {
         this.favoriteState = state;
+
+        return this;
+    }
+
+    /**
+     * @returns {number}
+     */
+    getPingTimeMs() {
+        return this.pingTimeMs
+    }
+
+    /**
+     * @param {number} pingTimeMs
+     * @returns {Address}
+     */
+    setPingTimeMs(pingTimeMs) {
+        this.pingTimeMs = pingTimeMs;
 
         return this;
     }
