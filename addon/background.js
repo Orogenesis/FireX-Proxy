@@ -1,6 +1,7 @@
 let proxyListSession  = new Addresses();
 let blacklistSession  = {};
 let blacklistSettings = {};
+let proxyProvider     = new ProxyProvider();
 
 browser.proxy.register('addon/pac.js');
 
@@ -73,18 +74,24 @@ browser.runtime.onMessage.addListener(
                         .disconnect()
                         .then(
                             () => {
-                                FreeProxyList
-                                    .getList()
-                                    .then(
-                                        (response) => {
-                                            proxyListSession = proxyListSession
-                                                .disableAll()
-                                                .byFavorite()
-                                                .concat(response);
+                                proxyProvider.getProxies().then((response) => {
+                                    let result = response
+                                        .map(proxy => {
+                                            return (new Address())
+                                                .setIPAddress(proxy.server)
+                                                .setPort(proxy.port)
+                                                .setCountry(proxy.country)
+                                                .setProtocol(proxy.protocol)
+                                                .setPingTimeMs(proxy.pingTimeMs);
+                                        });
 
-                                            sendResponse(proxyListSession.unique());
-                                        }
-                                    );
+                                    proxyListSession = proxyListSession
+                                        .disableAll()
+                                        .byFavorite()
+                                        .concat(result);
+
+                                    sendResponse(proxyListSession.unique());
+                                });
                             }
                         );
 

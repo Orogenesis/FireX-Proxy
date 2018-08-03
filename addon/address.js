@@ -1,26 +1,17 @@
+const pacDictionary = {
+    'HTTP'   : 'PROXY',
+    'SOCKS5' : 'SOCKS'
+};
+
 class Address {
-    /**
-     * @returns {string}
-     */
-    static get httpProtocolConstant() {
-        return 'HTTP';
-    }
-
-    /**
-     * @returns {string}
-     */
-    static get httpsProtocolConstant() {
-        return 'HTTPS';
-    }
-
     constructor() {
-        this.ipAddress        = null;
-        this.port             = null;
-        this.country          = null;
-        this.protocol         = null;
-        this.originalProtocol = null;
-        this.activeState      = false;
-        this.favoriteState    = false;
+        this.ipAddress     = null;
+        this.port          = null;
+        this.country       = null;
+        this.protocol      = null;
+        this.activeState   = false;
+        this.favoriteState = false;
+        this.pingTimeMs    = null;
     }
 
     /**
@@ -85,8 +76,8 @@ class Address {
      * @param {String} protocol
      * @returns {Address}
      */
-    setOriginalProtocol(protocol) {
-        this.originalProtocol = protocol;
+    setProtocol(protocol) {
+        this.protocol = protocol;
 
         return this;
     }
@@ -94,8 +85,8 @@ class Address {
     /**
      * @returns {String}
      */
-    getOriginalProtocol() {
-        return this.originalProtocol;
+    getProtocol() {
+        return this.protocol;
     }
 
     /**
@@ -157,5 +148,34 @@ class Address {
         this.favoriteState = state;
 
         return this;
+    }
+
+    /**
+     * @returns {number}
+     */
+    getPingTimeMs() {
+        return this.pingTimeMs
+    }
+
+    /**
+     * @param {number} pingTimeMs
+     * @returns {Address}
+     */
+    setPingTimeMs(pingTimeMs) {
+        this.pingTimeMs = pingTimeMs;
+
+        return this;
+    }
+
+    /**
+     * @returns {string}
+     * @throws {Error}
+     */
+    getPacProtocol() {
+        if (pacDictionary[this.getProtocol()] === undefined) {
+            throw new Error('This protocol unsupported by PAC')
+        }
+
+        return pacDictionary[this.getProtocol()];
     }
 }

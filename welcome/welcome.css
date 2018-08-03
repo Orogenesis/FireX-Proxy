@@ -141,7 +141,7 @@ body {
 
 .overview {
     flex-direction: column;
-    width: 440px;
+    width: 50%;
     background: #ffffff;
     border-radius: 10px;
     text-align: center;
@@ -159,9 +159,10 @@ body {
     justify-content: center;
 }
 
-.overview .overview-content .overview-header img {
-    width: 65%;
+.overview .overview-content .overview-header img,
+.overview .overview-content .overview-header video {
     pointer-events: none;
+    height: 90%;
 }
 
 .overview .overview-content .overview-preview {
@@ -177,7 +178,8 @@ body {
 
 .overview .overview-content .overview-preview p {
     color: #72777c;
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 26px;
 }
 
 .overview .overview-content .overview-preview ul {
@@ -206,7 +208,7 @@ body {
 }
 
 .overview footer input[type="button"].red {
-    background: #e74c3c;
+    background: url(cancel-12.png) no-repeat center center #e74c3c;
 }
 
 .overview footer .swiper-pagination {

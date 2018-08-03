@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "FireX Proxy",
-  "version": "5.1.3",
+  "version": "5.1.4",
   "description": "FireX Proxy",
   "default_locale": "en",
   "icons": {
@@ -18,7 +18,8 @@
   "permissions": [
     "proxy",
     "storage",
-    "*://free-proxy-list.net/*"
+    "*://firexproxy.com:4040/*",
+    "*://firexproxy.com/*"
   ],
   "browser_action": {
     "browser_style": false,
@@ -31,9 +32,9 @@
       "addon/address.js",
       "addon/addresses.js",
       "addon/connector.js",
-      "addon/proxyAdapter.js",
-      "addon/freeProxyList.js",
       "addon/helpers.js",
+      "addon/ProxyModel.js",
+      "addon/ProxyProvider.js",
       "addon/background.js"
     ]
   }
