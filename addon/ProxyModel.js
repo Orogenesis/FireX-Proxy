@@ -1,13 +1,11 @@
-
 class ProxyModel {
-
-    constructor(json) {
-        this.server = String(json.server);
-        this.port = parseInt(json.port);
-        this.iso_code = String(json.iso_code);
-        this.country = String(json.country);
-        this.protocol = String(json.protocol);
-        this.ping_time_ms = parseInt(json.ping_time_ms);
-        this.loss_ratio = parseInt(json.loss_ratio);
+    constructor(raw = {}) {
+        this.server       = raw.server;
+        this.port         = parseInt(raw.port);
+        this.iso_code     = raw.iso_code;
+        this.country      = raw.country;
+        this.protocol     = raw.protocol;
+        this.ping_time_ms = parseInt(raw.ping_time_ms);
+        this.loss_ratio   = parseInt(raw.loss_ratio);
     }
 }

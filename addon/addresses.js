@@ -1,4 +1,3 @@
-
 class Addresses extends Array {
     /**
      * @param {Array.<Address>} args

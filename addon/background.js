@@ -1,8 +1,8 @@
 let proxyListSession  = new Addresses();
 let blacklistSession  = {};
 let blacklistSettings = {};
+let proxyProvider     = new ProxyProvider();
 
-let proxyProvider = new ProxyProvider();
 browser.proxy.register('addon/pac.js');
 
 let pacMessageConfiguration = {
@@ -94,7 +94,12 @@ browser.runtime.onMessage.addListener(
                                 });
                             }
                         );
+
+                    break;
                 }
+
+                sendResponse(proxyListSession.unique());
+
                 break;
             /**
              * Proxy connect
