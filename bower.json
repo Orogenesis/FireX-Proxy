@@ -49,7 +49,6 @@
     }
   },
   "dependencies": {
-    "requirejs": "^2.2.0",
     "jquery": "3.3.1",
     "backbone": "1.1.2",
     "underscore": "1.8.3",
