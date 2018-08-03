@@ -201,14 +201,17 @@ body {
     height: 30px;
     width: 30px;
     cursor: pointer;
-    background: #1054eb;
     color: #ffffff;
     font-size: 18px;
     font-weight: bold;
 }
 
-.overview footer input[type="button"].red {
+.overview footer input[type="button"].cancel {
     background: url(cancel-12.png) no-repeat center center #e74c3c;
+}
+
+.overview footer input[type="button"].next {
+    background: url(right-arrow-12.png) no-repeat center center #1054eb;
 }
 
 .overview footer .swiper-pagination {
