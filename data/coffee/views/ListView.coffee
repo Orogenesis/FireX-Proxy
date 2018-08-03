@@ -86,6 +86,7 @@ class ListView extends Backbone.View
     if not @model.isRefresh()
       @$filters.toggleClass 'visible'
       @$filterButton.toggleClass 'active'
+      @updateCountries() if (@$filters.hasClass('visible'))
 
   updateCountryFilter: ->
     @model.set 'countryFilter', @$countryFilter.val()
@@ -117,7 +118,6 @@ class ListView extends Backbone.View
 
   onReset: ->
     @updateProtocols()
-    @updateCountries()
 
     @addAll()
 

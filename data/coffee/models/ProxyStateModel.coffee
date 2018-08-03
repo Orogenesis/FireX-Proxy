@@ -38,7 +38,7 @@ class ProxyStateModel extends Backbone.Model
 
   resetFilters: ->
     @set 'countryFilter', []
-    @set 'protocolFilter', _.mapObject @get('protocolFilter'), () => true
+    @set 'protocolFilter', {}
 
     @save()
 
