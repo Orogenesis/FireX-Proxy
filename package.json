@@ -18,6 +18,7 @@
     "gulp-wrap": "^0.13.0",
     "gulp-zip": "^4.0.0",
     "handlebars": "^4.0.11",
-    "main-bower-files": "^2.13.1"
+    "main-bower-files": "^2.13.1",
+    "webextension-polyfill": "^0.3.0"
   }
 }

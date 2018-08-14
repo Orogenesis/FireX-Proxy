@@ -46,7 +46,7 @@ gulp.task('handlebars', () => {
         .pipe(gulp.dest('./data/build'));
 });
 
-gulp.task('bower', ['bower-js', 'bower-css']);
+gulp.task('bower', ['bower-js', 'bower-css', 'bower-flags']);
 
 gulp.task('bower-js', () => {
     return gulp
@@ -54,10 +54,23 @@ gulp.task('bower-js', () => {
         .pipe(gulp.dest('./data/build/libs'));
 });
 
-gulp.task('bower-css', function () {
-    return gulp.src(mainBowerFiles("**/*.css"))
+gulp.task('bower-css', () => {
+    return gulp
+        .src(mainBowerFiles("**/*.css"))
         .pipe(concat('vendor.css'))
-        .pipe(gulp.dest('./data/build'));
+        .pipe(gulp.dest('./data/build/libs'));
+});
+
+gulp.task('bower-flags', () => {
+    return gulp
+        .src('./data/bower/flag-icon-css/flags/**/*')
+        .pipe(gulp.dest('./data/build/flags'));
+});
+
+gulp.task('copy-polyfill', () => {
+    return gulp
+        .src('node_modules/webextension-polyfill/dist/browser-polyfill.js')
+        .pipe(gulp.dest('addon'));
 });
 
 gulp.task('build:firefox', ['bower'], () => {
@@ -84,4 +97,4 @@ gulp.task('watch', () => {
     gulp.watch('./data/handlebars/**/*.hbs', ['handlebars']);
 });
 
-gulp.task('default', ['coffee', 'sass', 'handlebars', 'bower']);
+gulp.task('default', ['coffee', 'sass', 'handlebars', 'bower', 'copy-polyfill']);

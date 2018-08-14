@@ -4,17 +4,26 @@
 @import "mixins";
 @import "select2";
 
+#wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  #primary-content {
+    flex: 1;
+  }
+  footer {
+    display: flex;
+  }
+}
+
 .content-wrapper {
   overflow-y: auto;
-  height: 100%;
-  width: 100%;
   &.spinner {
     background: url(../icons/loading.gif) no-repeat center center;
   }
 }
 
 #proxy-content {
-  height: 100%;
   .content-wrapper {
     position: relative;
     height: 240px;
@@ -25,40 +34,44 @@
       font-size: 12px;
       border-collapse: collapse;
       border-spacing: 0;
-      tr {
-        line-height: 30px;
+      .proxy-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        line-height: 60px;
+        padding: 0 10px;
         &.active {
           background-color: $primaryColorLight;
         }
-      }
-      td {
-        padding: 10px 0;
-        cursor: pointer;
-        color: #585858;
-        text-transform: uppercase;
-        &.favorite {
-          width: 28px;
+        .proxy-row-left {
+          min-width: 180px;
         }
-        &.country {
-          background: url("../icons/planet.png") no-repeat 5px center;
-          padding-left: 32px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-width: 140px;
-          width: 140px;
+        .proxy-row-right {
+          margin-left: auto;
         }
-        &.ip-address {
-          width: 110px;
-        }
-        &.protocol {
-          width: 60px;
-        }
-        &:first-child {
-          padding-left: 10px;
-        }
-        &:last-child {
-          padding-right: 10px;
+        .proxy-cell {
+          display: inline-block;
+          color: #585858;
+          &.favorite,
+          &.flag-icon {
+            width: 28px;
+          }
+          &.protocol {
+            width: 50px;
+          }
+          &.ping {
+            width: 70px;
+            &.green {
+              color: #2E7D32;
+            }
+            &.yellow {
+              color: #F9A825;
+            }
+            &.red {
+              color: #D84315;
+            }
+          }
         }
       }
     }
@@ -139,17 +152,20 @@
   border: none;
   -moz-appearance: none;
   cursor: pointer;
-  background: $primaryColorLight no-repeat center center;
   width: 100%;
   display: block;
   position: absolute;
   bottom: 0;
   z-index: 1;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: $primaryColorLight;
   &.refresh {
-    background-image: url(../icons/icon-refresh.png);
+    background-image: url(../icons/refresh.svg);
   }
   &.done {
-    background-image: url(../icons/icon-ok.png);
+    background-image: url(../icons/add.svg);
   }
   &:hover {
     background-color: #D1E8E7;
@@ -157,21 +173,25 @@
 }
 
 .checkbox {
-  @include icon('../icons/icon-checked.png', 16px, 16px);
-  background-color: #D9D9D9;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  cursor: pointer;
   border: 1px solid #CCCCCC;
   border-radius: 2px;
   margin-right: 8px;
   vertical-align: -4px;
+  background-image: url(../icons/checked.svg);
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-color: #D9D9D9;
+  background-position: center center;
   &.active {
     background-color: #78C0BD;
     border-color: $primaryColor;
   }
   &.star {
-    background-image: url('../icons/star-12.png');
-  }
-  &.power {
-    background-image: url('../icons/power-16.png');
+    background-image: url(../icons/star.svg);
   }
 }
 
@@ -179,6 +199,7 @@
   display: block;
   height: 50px;
   border-bottom: 1px solid #DDDDDD;
+  padding: 0 10px;
   a {
     height: 100%;
     text-decoration: none;
@@ -193,15 +214,15 @@
     width: 16px;
     cursor: pointer;
     vertical-align: top;
-    padding-right: 15px;
+    padding-right: 8px;
+    background-size: 14px 14px;
+    background-repeat: no-repeat;
+    background-position: center left;
     &.blacklist {
-      background: url(../icons/blacklist-16-cyan.png) no-repeat 10px center;
+      background-image: url(../icons/web.svg);
     }
     &.list {
-      background: url(../icons/play-16-cyan.png) no-repeat 10px center;
-    }
-    &.star {
-      background: url(../icons/star-16-cyan.png) no-repeat 10px center;
+      background-image: url(../icons/list.svg);
     }
   }
 }
@@ -225,7 +246,12 @@
       }
     }
     i.remove {
-      @include icon('../icons/icon-remove.png', 24px, 24px);
+      height: 24px;
+      width: 24px;
+      display: inline-block;
+      cursor: pointer;
+      background: url(../icons/remove.svg) no-repeat center center;
+      background-size: 16px 16px;
       float: right;
     }
   }
@@ -249,12 +275,19 @@
   line-height: 50px;
   font-weight: 400;
   i.filter {
-    @include icon('../icons/filter-16.png', 16px, 16px);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
     position: relative;
+    display: inline-block;
     vertical-align: -4px;
     margin-right: 14px;
+    background-image: url(../icons/filter-gray.svg);
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center center;
     &.active {
-      @include icon('../icons/filter-active-16.png', 16px, 16px);
+      background-image: url(../icons/filter-primary.svg);
     }
     .counter {
       -webkit-user-select: none;

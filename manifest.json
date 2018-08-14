@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "FireX Proxy",
-  "version": "5.1.4",
+  "version": "5.1.6",
   "description": "FireX Proxy",
   "default_locale": "en",
   "icons": {
@@ -18,7 +18,6 @@
   "permissions": [
     "proxy",
     "storage",
-    "*://firexproxy.com:4040/*",
     "*://firexproxy.com/*"
   ],
   "browser_action": {
@@ -29,12 +28,12 @@
   },
   "background": {
     "scripts": [
+      "addon/browser-polyfill.js",
       "addon/address.js",
       "addon/addresses.js",
       "addon/connector.js",
       "addon/helpers.js",
-      "addon/ProxyModel.js",
-      "addon/ProxyProvider.js",
+      "addon/proxyProvider.js",
       "addon/background.js"
     ]
   }

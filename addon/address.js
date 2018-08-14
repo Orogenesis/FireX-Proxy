@@ -12,6 +12,7 @@ class Address {
         this.activeState   = false;
         this.favoriteState = false;
         this.pingTimeMs    = null;
+        this.isoCode       = null;
     }
 
     /**
@@ -120,6 +121,23 @@ class Address {
      */
     disable() {
         this.setActiveState(false);
+
+        return this;
+    }
+
+    /**
+     * @returns {string}
+     */
+    getIsoCode() {
+        return this.isoCode;
+    }
+
+    /**
+     * @param {string} isoCode
+     * @returns {Address}
+     */
+    setIsoCode(isoCode) {
+        this.isoCode = isoCode;
 
         return this;
     }

@@ -1,16 +1,38 @@
 class Connector {
     /**
      * @param {Address} address
+     * @param {Array<String>} blacklist
+     * @param {Object} blacklistSettings
      * @returns {void}
      */
-    static connect(address) {
-        let configuration = {
-            toProxyScript: true
-        };
+    static connect(address, blacklist, blacklistSettings) {
+        let proxy = `${address.getPacProtocol()} ${address.ipAddress}:${address.port}`;
 
-        browser.runtime.sendMessage({
-            proxy: `${address.getPacProtocol()} ${address.ipAddress}:${address.port}`
-        }, configuration);
+        if (browser.proxy.settings) {
+            fetch(browser.runtime.getURL('addon/pac/chrome.dat'))
+                .then(response => response.text())
+                .then(response => {
+                    const data = response
+                        .replace(/@isBlacklistEnabled@/g, blacklistSettings.isBlacklistEnabled || false)
+                        .replace(/@proxy@/g, proxy)
+                        .replace(/@blacklist@/g, JSON.stringify(blacklist));
+
+                    browser.proxy.settings.set({
+                        value: {
+                            mode: "pac_script",
+                            pacScript: {
+                                data: data
+                            }
+                        }
+                    });
+                });
+        } else {
+            browser.runtime.sendMessage({
+                proxy: proxy
+            }, {
+                toProxyScript: true
+            });
+        }
 
         /**
          * Change icon color to green
@@ -30,17 +52,21 @@ class Connector {
     static disconnect() {
         return new Promise(
             resolve => {
-                let configuration = {
-                    toProxyScript: true
-                };
+                if (browser.proxy.settings) {
+                    browser.proxy.settings.set({
+                        value: {
+                            mode: 'system'
+                        },
+                        scope: 'regular'
+                    }, resolve);
+                } else {
+                    browser.runtime.sendMessage({
+                        proxy: 'DIRECT'
+                    }, {
+                        toProxyScript: true
+                    }).then(resolve);
+                }
 
-                browser.runtime.sendMessage({
-                    proxy: 'DIRECT'
-                }, configuration).then(resolve);
-
-                /**
-                 * Change icon color to black
-                 */
                 browser.browserAction.setIcon({
                     path: {
                         "16": 'data/icons/icon-16.png',
