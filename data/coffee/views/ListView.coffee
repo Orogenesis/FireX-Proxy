@@ -33,7 +33,7 @@ class ListView extends Backbone.View
     @$protocolButtons = @$ '.protocol-selector'
     @$filterCounter   = @$ 'i.filter .counter'
 
-    if @collection.size() then @addAll() else @update()
+    @update()
 
     return @
 
@@ -117,6 +117,7 @@ class ListView extends Backbone.View
     _.each(@collection.without(model), (proxy) -> proxy.set 'activeState', false) if model.get 'activeState'
 
   onReset: ->
+    @updateFilterCount()
     @updateProtocols()
 
     @addAll()

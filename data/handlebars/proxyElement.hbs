@@ -1,12 +1,19 @@
-<td class="favorite">
-    <div class="checkbox star"></div>
-</td>
-<td class="ip-address">
-    {{ipAddress}}
-</td>
-<td class="protocol">
-    {{protocol}}
-</td>
-<td class="country">
-    {{country}}
-</td>
+<div class="proxy-row {{#if activeState}}active{{/if}}">
+    <div class="proxy-row-left">
+        <span class="proxy-cell checkbox star {{#if favoriteState}}active{{/if}}"></span>
+        <span class="proxy-cell flag-icon flag-icon-{{lower isoCode}} flag-icon-circle"></span>
+        <span class="proxy-cell country">{{country}} </span>
+    </div>
+    <div class="proxy-row-right">
+        <span class="proxy-cell protocol">{{protocol}}</span>
+        {{#ifCond pingTimeMs "lt" 300}}
+            <span class="proxy-cell ping green">{{pingTimeMs}} ms</span>
+        {{else}}
+            {{#ifCond pingTimeMs "lt" 1000}}
+                <span class="proxy-cell ping yellow">{{pingTimeMs}} ms</span>
+            {{else}}
+                <span class="proxy-cell ping red">{{pingTimeMs}} ms</span>
+            {{/ifCond}}
+        {{/ifCond}}
+    </div>
+</div>

@@ -13,14 +13,19 @@
   margin: 0;
 }
 
+html,
+body {
+  height: $actionHeight;
+  width: $actionWidth;
+}
+
 body {
   font-family: $primaryFont;
   font-size: $defaultFontSize;
   font-weight: $defaultFontWeight;
   position: relative;
   background-color: white;
-  height: $actionHeight;
-  width: $actionWidth;
+  border-radius: 5px;
 }
 
 button,

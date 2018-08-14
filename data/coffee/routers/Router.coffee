@@ -3,21 +3,26 @@ class Router extends Backbone.Router
 
   routes: ->
     'blacklist' : 'blacklist'
-    'favorite'  : 'favorite'
-    '*actions'  : 'index'
+    'proxies'   : 'index'
+    '*actions'  : 'defaultRoute'
 
   initialize: ->
     @mCollection = new Menu
     @pCollection = new ProxyList
     @bCollection = new Patterns
+    @proxyState  = new ProxyStateModel;
+    @pattenState = new PatternStateModel;
 
     @createMenu()
 
   index: ->
-    $(@container).html new ListView(collection: @pCollection, model: new ProxyStateModel).render().el
+    $(@container).html new ListView(collection: @pCollection, model: @proxyState).render().el
 
   blacklist: ->
-    $(@container).html new PatternPageView(collection: @bCollection, model: new PatternStateModel).render().el
+    $(@container).html new PatternPageView(collection: @bCollection, model: @pattenState).render().el
+
+  defaultRoute: ->
+    this.navigate('proxies', true)
 
   createMenu: ->
     new MenuView
@@ -25,7 +30,7 @@ class Router extends Backbone.Router
 
     @mCollection.add(
       new MenuEntryModel
-        resource    : ''
+        resource    : '#/proxies'
         icon        : 'list'
         placeholder : browser.i18n.getMessage "proxymenu"
         isActive    : true
