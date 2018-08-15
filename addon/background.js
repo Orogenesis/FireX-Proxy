@@ -3,7 +3,7 @@ let blacklistSession  = {};
 let blacklistSettings = {};
 let proxyProvider     = new ProxyProvider();
 
-if (browser.proxy.register) {
+if (!isChrome() && browser.proxy.register) {
     browser.proxy.register('addon/pac/firefox.js');
 }
 
@@ -22,7 +22,7 @@ browser.storage.local.get()
             blacklistSession  = storage.blacklist || {};
             blacklistSettings = storage.blacklistSettings || {};
 
-            if (!browser.proxy.settings) {
+            if (!isChrome()) {
                 browser.runtime.sendMessage({
                     blacklist: blacklistSession,
                     isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
@@ -34,7 +34,7 @@ browser.storage.local.get()
 browser.storage.onChanged.addListener(
     newSettings => {
         if (newSettings.blacklistSettings || newSettings.blacklist) {
-            if (!browser.proxy.settings) {
+            if (!isChrome()) {
                 browser.runtime.sendMessage({
                     blacklist: blacklistSession,
                     isBlacklistEnabled: blacklistSettings.isBlacklistEnabled

@@ -8,7 +8,7 @@ class Connector {
     static connect(address, blacklist, blacklistSettings) {
         let proxy = `${address.getPacProtocol()} ${address.ipAddress}:${address.port}`;
 
-        if (browser.proxy.settings) {
+        if (isChrome()) {
             fetch(browser.runtime.getURL('addon/pac/chrome.dat'))
                 .then(response => response.text())
                 .then(response => {
@@ -26,10 +26,14 @@ class Connector {
                         }
                     });
                 });
+
+            return
         } else {
-            browser.runtime.sendMessage({
+            let message = {
                 proxy: proxy
-            }, {
+            };
+
+            browser.runtime.sendMessage(message, {
                 toProxyScript: true
             });
         }
@@ -52,7 +56,7 @@ class Connector {
     static disconnect() {
         return new Promise(
             resolve => {
-                if (browser.proxy.settings) {
+                if (isChrome()) {
                     browser.proxy.settings.set({
                         value: {
                             mode: 'system'
@@ -60,9 +64,11 @@ class Connector {
                         scope: 'regular'
                     }, resolve);
                 } else {
-                    browser.runtime.sendMessage({
+                    let message = {
                         proxy: 'DIRECT'
-                    }, {
+                    };
+
+                    browser.runtime.sendMessage(message, {
                         toProxyScript: true
                     }).then(resolve);
                 }

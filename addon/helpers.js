@@ -33,3 +33,10 @@ function versionCompare(a, b) {
 
     return 0;
 }
+
+/**
+ * @returns {boolean}
+ */
+function isChrome() {
+    return !window.browser && window.chrome;
+}

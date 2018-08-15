@@ -14,8 +14,8 @@ class ProxyProvider {
     /**
      * @param {string} remote
      */
-    constructor(remote) {
-        this.baseUrl = remote || 'http://firexproxy.com:4040/v1';
+    constructor(remote = 'http://firexproxy.com:4040/v1') {
+        this.baseUrl = remote;
     }
 
     /**
