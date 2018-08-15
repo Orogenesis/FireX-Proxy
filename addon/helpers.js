@@ -38,5 +38,5 @@ function versionCompare(a, b) {
  * @returns {boolean}
  */
 function isChrome() {
-    return /Chrome/.test(navigator.userAgent);
+    return navigator.userAgent.indexOf('Chrome') > -1;
 }

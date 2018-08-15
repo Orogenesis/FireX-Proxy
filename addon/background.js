@@ -27,14 +27,6 @@ browser.storage.local.get()
                     blacklist: blacklistSession,
                     isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
                 }, pacMessageConfiguration);
-            } else {
-                Connector.connect(
-                    proxyListSession
-                        .filterEnabled()
-                        .one(),
-                    blacklistSession,
-                    blacklistSettings
-                );
             }
         }
 );
@@ -48,13 +40,15 @@ browser.storage.onChanged.addListener(
                     isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
                 }, pacMessageConfiguration);
             } else {
-                Connector.connect(
-                    proxyListSession
-                        .filterEnabled()
-                        .one(),
-                    blacklistSession,
-                    blacklistSettings
-                );
+                let enabledArray = proxyListSession
+                    .filterEnabled();
+
+                if (enabledArray.length > 0)
+                    Connector.connect(
+                        enabledArray.one(),
+                        blacklistSession,
+                        blacklistSettings
+                    );
             }
         }
     }
