@@ -201,7 +201,7 @@
   border-bottom: 1px solid #DDDDDD;
   padding: 0 10px;
   a {
-    height: 100%;
+    height: inherit;
     text-decoration: none;
     color: $primaryColor;
     display: inline-block;
