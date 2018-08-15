@@ -11,7 +11,9 @@ function FindProxyForURL(url, host) {
         return '@proxy@';
     }
 
-    for (let pattern in @blacklist@) {
+    let blacklist = @blacklist@;
+
+    for (let pattern in blacklist) {
         if (!blacklist.hasOwnProperty(pattern)) {
             continue;
         }
