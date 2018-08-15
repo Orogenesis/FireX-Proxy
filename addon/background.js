@@ -27,6 +27,14 @@ browser.storage.local.get()
                     blacklist: blacklistSession,
                     isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
                 }, pacMessageConfiguration);
+            } else {
+                Connector.connect(
+                    proxyListSession
+                        .filterEnabled()
+                        .one(),
+                    blacklistSession,
+                    blacklistSettings
+                );
             }
         }
 );
@@ -39,6 +47,14 @@ browser.storage.onChanged.addListener(
                     blacklist: blacklistSession,
                     isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
                 }, pacMessageConfiguration);
+            } else {
+                Connector.connect(
+                    proxyListSession
+                        .filterEnabled()
+                        .one(),
+                    blacklistSession,
+                    blacklistSettings
+                );
             }
         }
     }
