@@ -94,6 +94,7 @@ gulp.task('build:chrome', ['bower', 'manifest:chrome'], () => {
     return gulp
         .src([
             'addon/*.js',
+            'addon/pac/chrome.dat',
             'popup/*',
             'welcome/*',
             'manifest.json',
@@ -118,6 +119,7 @@ gulp.task('build:firefox', ['bower', 'manifest:firefox'], () => {
     return gulp
         .src([
             'addon/*.js',
+            'addon/pac/firefox.js',
             'popup/*',
             'welcome/*',
             'manifest.json',
