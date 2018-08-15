@@ -39,6 +39,16 @@ browser.storage.onChanged.addListener(
                     blacklist: blacklistSession,
                     isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
                 }, pacMessageConfiguration);
+            } else {
+                let enabledArray = proxyListSession
+                    .filterEnabled();
+
+                if (enabledArray.length > 0)
+                    Connector.connect(
+                        enabledArray.one(),
+                        blacklistSession,
+                        blacklistSettings
+                    );
             }
         }
     }

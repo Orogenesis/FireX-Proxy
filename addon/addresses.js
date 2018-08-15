@@ -103,5 +103,11 @@ class Addresses extends Array {
 
         return this;
     }
+
+    filterEnabled() {
+        return this.filter(
+            element => element.isActive()
+        );
+    }
 }
 
