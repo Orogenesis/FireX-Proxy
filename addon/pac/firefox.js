@@ -26,8 +26,9 @@ function shExpMatch(str, shexp) {
     let len = str.length;
     let pieces = shexp.split('*');
     let start = 0;
+    let i = 0;
 
-    for (let i = 0; i < pieces.length; i++) {
+    for (; i < pieces.length; i++) {
         if (pieces[i] === "") {
             continue;
         }
@@ -60,9 +61,10 @@ function shExpMatch(str, shexp) {
  * @returns {boolean}
  */
 function isInNet(host, pattern, mask) {
-    let b = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(host);
+    let b = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/
+        .exec(host);
 
-    if (b[1] > 255 || b[2] > 255 || b[3] > 255 || b[4] > 255) {
+    if (!b || b[1] > 255 || b[2] > 255 || b[3] > 255 || b[4] > 255) {
         return false;
     }
 
@@ -70,7 +72,7 @@ function isInNet(host, pattern, mask) {
     let m = mask.split('.');
     let h = host.split('.');
 
-    if ((p.length === m.length) && (m.length === a.length)) {
+    if ((p.length === m.length) && (m.length === h.length)) {
         for (let i = 0; i < p.length; i++) {
             if ((p[i] & m[i]) !== (m[i] & h[i])) {
                 return false;
