@@ -7,6 +7,19 @@ const handlebars     = require('gulp-handlebars');
 const wrap           = require('gulp-wrap');
 const zip            = require('gulp-zip');
 const mainBowerFiles = require('main-bower-files');
+const mergeJSON      = require('gulp-merge-json');
+const runSequence    = require('run-sequence');
+
+var manifest ={
+    firefox: {
+        "applications": {
+            "gecko": {
+                "id": "divanproger@gmail.com",
+                "strict_min_version": "57.0"
+            }
+        }
+    }
+};
 
 gulp.task('coffee', () => {
     return gulp
@@ -73,7 +86,35 @@ gulp.task('copy-polyfill', () => {
         .pipe(gulp.dest('addon'));
 });
 
-gulp.task('build:firefox', ['bower'], () => {
+gulp.task('manifest:chrome', () => {
+    return gulp.src('./manifest/manifest.json').pipe(gulp.dest('./'));
+});
+
+gulp.task('build:chrome', ['bower', 'manifest:chrome'], () => {
+    return gulp
+        .src([
+            'addon/*.js',
+            'popup/*',
+            'welcome/*',
+            'manifest.json',
+            'data/icons/*',
+            'data/fonts/*',
+            'data/build/**/*',
+            '_locales/**/*'
+        ], {
+            base: './'
+        })
+        .pipe(zip(`firex-proxy-chrome.zip`))
+        .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('manifest:firefox', () => {
+    return gulp.src('./manifest/manifest.json')
+        .pipe(mergeJSON({ endObj: manifest.firefox, fileName: "manifest.json", jsonSpace: " ".repeat(4) }))
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('build:firefox', ['bower', 'manifest:firefox'], () => {
     return gulp
         .src([
             'addon/*.js',
@@ -91,10 +132,16 @@ gulp.task('build:firefox', ['bower'], () => {
         .pipe(gulp.dest('./dist'));
 });
 
+gulp.task('build', function (done) {
+    runSequence('build:firefox','build:chrome', function () {
+        done();
+    })
+});
+
 gulp.task('watch', () => {
     gulp.watch('./data/coffee/**/*.coffee', ['coffee']);
     gulp.watch('./data/sass/**/*.scss', ['sass']);
     gulp.watch('./data/handlebars/**/*.hbs', ['handlebars']);
 });
 
-gulp.task('default', ['coffee', 'sass', 'handlebars', 'bower', 'copy-polyfill']);
+gulp.task('default', ['coffee', 'sass', 'handlebars', 'bower', 'copy-polyfill', 'manifest:chrome']);
