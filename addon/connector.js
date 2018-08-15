@@ -26,8 +26,6 @@ class Connector {
                         }
                     });
                 });
-
-            return
         } else {
             let message = {
                 proxy: proxy
