@@ -105,8 +105,10 @@ class Addresses extends Array {
     }
 
     filterEnabled() {
-        return this.filter(
-            element => element.isActive()
+        return this.create(
+            this.filter(
+                element => element.isActive()
+            )
         );
     }
 }

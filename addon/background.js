@@ -40,10 +40,9 @@ browser.storage.onChanged.addListener(
                     isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
                 }, pacMessageConfiguration);
             } else {
-                let enabledArray = proxyListSession
-                    .filterEnabled();
+                let enabledArray = proxyListSession.filterEnabled();
 
-                if (enabledArray.length > 0)
+                if (!enabledArray.isEmpty())
                     Connector.connect(
                         enabledArray.one(),
                         blacklistSession,
