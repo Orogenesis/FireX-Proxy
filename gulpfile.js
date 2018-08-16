@@ -111,7 +111,8 @@ gulp.task('build:firefox', ['bower'], () => {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('build', ['build:firefox','build:chrome']);
+gulp.task('build', ['build:firefox','build:chrome'])
+
 gulp.task('watch', () => {
     gulp.watch('./data/coffee/**/*.coffee', ['coffee']);
     gulp.watch('./data/sass/**/*.scss', ['sass']);
