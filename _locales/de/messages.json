@@ -11,10 +11,10 @@
   "country": {
     "message": "Land"
   },
-  "no-proxy": {
+  "no_proxy": {
     "message": "Keine proxies verfügbar. Probieren"
   },
-  "reset-filters": {
+  "reset_filters": {
     "message": "filter zurücksetzen"
   }
 }

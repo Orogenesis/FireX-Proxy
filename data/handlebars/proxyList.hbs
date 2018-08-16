@@ -5,16 +5,18 @@
     --><div class="checkbox"></div><!--
     -->{{t 'favorites'}}
 </div>
-<div id="proxy-content">
+<section id="proxy-content">
     <div class="filters">
         <div class="protocol-selector"></div>
         <select id="country-filter" name="country" title="country-filter"></select>
     </div>
     <div class="content-wrapper">
-        <table id="proxy-list-box"></table>
+        <div id="proxy-list-box"></div>
         <div id="no-proxy-list">
-            {{t 'no-proxy'}} <span class="reset-button">{{t 'reset-filters'}}</span>
+            {{t 'no_proxy'}} <span class="reset-button">{{t 'reset_filters'}}</span>
         </div>
     </div>
+</section>
+<footer>
     <button class="bottom-button refresh"></button>
-</div>
+</footer>
