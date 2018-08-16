@@ -13,9 +13,9 @@ class Connector {
                 .then(response => response.text())
                 .then(response => {
                     const data = response
-                        .replace(/@isBlacklistEnabled@/g, blacklistSettings.isBlacklistEnabled || false)
-                        .replace(/@proxy@/g, proxy)
-                        .replace(/@blacklist@/g, JSON.stringify(blacklist));
+                        .replace(/%isBlacklistEnabled%/g, (blacklistSettings.isBlacklistEnabled || false).toString())
+                        .replace(/%proxy%/g, proxy)
+                        .replace(/%blacklist%/g, JSON.stringify(blacklist));
 
                     browser.proxy.settings.set({
                         value: {
@@ -41,9 +41,9 @@ class Connector {
          */
         browser.browserAction.setIcon({
             path: {
-                "16": 'data/icons/icon-16-active.png',
-                "24": 'data/icons/icon-24-active.png',
-                "32": 'data/icons/icon-32-active.png',
+                16: "data/icons/action/icon-16-active.png",
+                48: "data/icons/action/icon-48-active.png",
+                128: "data/icons/action/icon-128-active.png"
             }
         });
     }
@@ -73,9 +73,9 @@ class Connector {
 
                 browser.browserAction.setIcon({
                     path: {
-                        "16": 'data/icons/icon-16.png',
-                        "24": 'data/icons/icon-24.png',
-                        "32": 'data/icons/icon-32.png',
+                        16: "data/icons/action/icon-16.png",
+                        48: "data/icons/action/icon-48.png",
+                        128: "data/icons/action/icon-128.png"
                     }
                 });
             }

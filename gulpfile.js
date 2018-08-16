@@ -76,8 +76,7 @@ gulp.task('copy-polyfill', () => {
 gulp.task('build:chrome', ['bower'], () => {
     return gulp
         .src([
-            'addon/*.js',
-            'addon/pac/chrome.dat',
+            'addon/**/*.js',
             'popup/*',
             'welcome/*',
             'manifest.json',
@@ -95,8 +94,7 @@ gulp.task('build:chrome', ['bower'], () => {
 gulp.task('build:firefox', ['bower'], () => {
     return gulp
         .src([
-            'addon/*.js',
-            'addon/pac/firefox.js',
+            'addon/**/*.js',
             'popup/*',
             'welcome/*',
             'manifest.json',
@@ -111,7 +109,7 @@ gulp.task('build:firefox', ['bower'], () => {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('build', ['build:firefox','build:chrome'])
+gulp.task('build', ['build:firefox','build:chrome']);
 
 gulp.task('watch', () => {
     gulp.watch('./data/coffee/**/*.coffee', ['coffee']);

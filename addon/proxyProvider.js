@@ -24,24 +24,12 @@ class ProxyProvider {
     getProxies() {
         return new Promise(
             (resolve, reject) => {
-                let xmlHttpRequest = new XMLHttpRequest();
-
-                xmlHttpRequest.addEventListener('readystatechange', () => {
-                    if (xmlHttpRequest.readyState === XMLHttpRequest.DONE) {
-                        resolve(
-                            JSON.parse(xmlHttpRequest.responseText).map(
-                                raw => new ProxyModel(raw)
-                            )
-                        );
-                    }
-                });
-
-                xmlHttpRequest.addEventListener('error', () => {
-                    reject(xmlHttpRequest.statusText);
-                });
-
-                xmlHttpRequest.open('GET', [this.baseUrl, 'proxy'].join('/'));
-                xmlHttpRequest.send();
+                fetch(`${this.baseUrl}/proxy`)
+                    .then(response => response.json())
+                    .then(response => {
+                        resolve(response.map(raw => new ProxyModel(raw)));
+                    })
+                    .catch(reject);
             }
         );
     }
