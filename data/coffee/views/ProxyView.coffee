@@ -3,9 +3,6 @@ class ProxyView extends Backbone.View
     'click'           : 'toggleActive'
     'click .checkbox' : 'add'
 
-  tagName: ->
-    'tr'
-
   initialize: ->
     @listenTo @model, 'change', @render
     @listenTo @model, 'destroy', @remove
@@ -13,10 +10,11 @@ class ProxyView extends Backbone.View
     @template = Handlebars.templates['proxyElement']
 
   render: ->
-    $(@el).html(@template @model.toJSON()).toggleClass 'active', @model.get 'activeState'
-
-    @$favoriteCheckbox = @$('.checkbox')
-    @$favoriteCheckbox.toggleClass 'active', @model.get 'favoriteState'
+    # https://stackoverflow.com/questions/11594961/backbone-not-this-el-wrapping/11598543#11598543
+    $oldel = @.$el;
+    $newel = $(@template @model.toJSON());
+    @.setElement($newel);
+    $oldel.replaceWith($newel);
 
     return @
 

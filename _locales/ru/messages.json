@@ -11,10 +11,10 @@
   "country": {
     "message": "Страна"
   },
-  "no-proxy": {
+  "no_proxy": {
     "message": "Прокси не найдены. Попробуйте"
   },
-  "reset-filters": {
+  "reset_filters": {
     "message": "сбросить фильтры"
   }
 }
