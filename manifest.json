@@ -14,7 +14,7 @@
       "id": "divanproger@gmail.com",
       "strict_min_version": "57.0"
     }
-  }
+  },
   "permissions": [
     "proxy",
     "storage",
