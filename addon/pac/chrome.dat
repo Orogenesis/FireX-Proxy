@@ -1,0 +1,27 @@
+function FindProxyForURL(url, host) {
+    if (host === 'localhost' || shExpMatch(host, 'localhost.*') || shExpMatch(host, '*.local') || host === '127.0.0.1') {
+        return 'DIRECT';
+    }
+
+    if (isInNet(host, '10.0.0.0', '255.0.0.0') || isInNet(host, '192.168.0.0', '255.255.0.0')) {
+        return 'DIRECT';
+    }
+
+    if (!@isBlacklistEnabled@) {
+        return '@proxy@';
+    }
+
+    let blacklist = @blacklist@;
+
+    for (let pattern in blacklist) {
+        if (!blacklist.hasOwnProperty(pattern)) {
+            continue;
+        }
+
+        if (blacklist[pattern] && shExpMatch(host, pattern)) {
+            return '@proxy@';
+        }
+    }
+
+    return 'DIRECT';
+}
