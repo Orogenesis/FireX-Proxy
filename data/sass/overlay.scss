@@ -38,7 +38,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
         line-height: 60px;
         padding: 0 10px;
         &.active {
@@ -58,10 +57,10 @@
             width: 28px;
           }
           &.protocol {
-            width: 50px;
+            width: 55px;
           }
           &.ping {
-            width: 70px;
+            width: 65px;
             &.green {
               color: #2E7D32;
             }
@@ -70,6 +69,19 @@
             }
             &.red {
               color: #D84315;
+            }
+          }
+          &.apply {
+            width: 70px;
+            .apply-btn {
+              font-weight: 500;
+              text-align: center;
+              text-transform: uppercase;
+              padding: 7.5px 16px;
+              border-radius: 2px;
+              color: rgb(233, 30, 99);
+              border: none;
+              background: rgba(153, 153, 153, 0.2);
             }
           }
         }
@@ -92,7 +104,6 @@
       text-align: center;
       font-size: 14px;
       .reset-button {
-        cursor: pointer;
         color: $primaryColor;
         text-decoration-style: solid;
       }
@@ -130,7 +141,6 @@
         border-radius: 0;
       }
       button {
-        cursor: pointer;
         background: none;
         padding: 8px 15px;
         border: 1px solid $primaryColorLight;
@@ -151,7 +161,6 @@
   padding: 25px;
   border: none;
   -moz-appearance: none;
-  cursor: pointer;
   width: 100%;
   display: block;
   position: absolute;

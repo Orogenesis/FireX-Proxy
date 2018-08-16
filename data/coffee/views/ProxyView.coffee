@@ -1,7 +1,7 @@
 class ProxyView extends Backbone.View
   events: ->
-    'click'           : 'toggleActive'
-    'click .checkbox' : 'add'
+    'click .apply-btn' : 'toggleActive'
+    'click .checkbox'  : 'add'
 
   initialize: ->
     @listenTo @model, 'change', @render
@@ -10,7 +10,6 @@ class ProxyView extends Backbone.View
     @template = Handlebars.templates['proxyElement']
 
   render: ->
-    # https://stackoverflow.com/questions/11594961/backbone-not-this-el-wrapping/11598543#11598543
     $oldel = @.$el;
     $newel = $(@template @model.toJSON());
     @.setElement($newel);

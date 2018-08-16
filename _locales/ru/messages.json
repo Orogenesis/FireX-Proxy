@@ -16,5 +16,8 @@
   },
   "reset_filters": {
     "message": "сбросить фильтры"
+  },
+  "apply": {
+    "message": "Вкл."
   }
 }
