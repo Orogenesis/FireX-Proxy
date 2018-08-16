@@ -40,9 +40,6 @@
         justify-content: center;
         line-height: 60px;
         padding: 0 10px;
-        &.active {
-          background-color: $primaryColorLight;
-        }
         .proxy-row-left {
           min-width: 180px;
         }
@@ -79,9 +76,20 @@
               text-transform: uppercase;
               padding: 7.5px 16px;
               border-radius: 2px;
-              color: rgb(233, 30, 99);
+              color: $primaryColor;
+              background: $primaryColorLight;
               border: none;
-              background: rgba(153, 153, 153, 0.2);
+            }
+          }
+        }
+        &.active {
+          background-color: $primaryColorLight;
+          .proxy-cell {
+            &.apply {
+              .apply-btn {
+                background: #ff7970;
+                color: white;
+              }
             }
           }
         }

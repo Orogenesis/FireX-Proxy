@@ -1,13 +1,13 @@
 {
   "manifest_version": 2,
   "name": "FireX Proxy",
-  "version": "5.1.6",
+  "version": "5.1.7",
   "description": "FireX Proxy",
   "default_locale": "en",
   "icons": {
-    "16": "data/icons/icon-16.png",
-    "24": "data/icons/icon-24.png",
-    "32": "data/icons/icon-32.png"
+    "16": "data/icons/action/icon-16.png",
+    "48": "data/icons/action/icon-48.png",
+    "128": "data/icons/action/icon-128.png"
   },
   "applications": {
     "gecko": {
@@ -22,7 +22,6 @@
   ],
   "browser_action": {
     "browser_style": false,
-    "default_icon": "data/icons/icon-32.png",
     "default_title": "FireX Proxy",
     "default_popup": "popup/index.html"
   },
