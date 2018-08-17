@@ -10,8 +10,8 @@ class Router extends Backbone.Router
     @mCollection = new Menu
     @pCollection = new ProxyList
     @bCollection = new Patterns
-    @proxyState  = new ProxyStateModel;
-    @pattenState = new PatternStateModel;
+    @proxyState  = new ProxyStateModel
+    @pattenState = new PatternStateModel
 
     @createMenu()
 
