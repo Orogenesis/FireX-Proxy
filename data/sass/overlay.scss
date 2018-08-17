@@ -337,17 +337,25 @@
 .signal-bars {
   display: inline-block;
 
-  .bar.first-bar  { height: 3px; }
-  .bar.second-bar { height: 6px; }
-  .bar.third-bar  { height: 9px; }
-  .bar.fourth-bar { height: 12px; }
-
   .bar {
     width: 2px;
     margin-left: -2px;
     display: inline-block;
     background-color: $materialBlack;
     margin-bottom: -2px;
+
+    height: 3px;
+    &.second-bar {
+      height: 6px;
+    }
+
+    &.third-bar {
+      height: 9px;
+    }
+
+    &.fourth-bar {
+      height: 12px;
+    }
   }
 
   &.three-bars .bar.fourth-bar,
