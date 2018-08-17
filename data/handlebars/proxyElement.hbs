@@ -5,27 +5,27 @@
         --><span class="proxy-cell country">{{country}}</span>
     </div>
     <div class="proxy-row-right">
-        {{#ifCond pingTimeMs "lt" 300}}
-        <div class="proxy-cell ping signal-bars four-bars">
-        {{else}}
-            {{#ifCond pingTimeMs "lt" 1000}}
-            <div class="proxy-cell ping signal-bars three-bars">
-            {{else}}
-                {{#ifCond pingTimeMs "lt" 3000}}
-                <div class="proxy-cell ping signal-bars two-bars">
-                {{else}}
-                <div class="proxy-cell ping signal-bars one-bar">
-                {{/ifCond}}
-            {{/ifCond}}
-        {{/ifCond}}
+        {{#ifCond pingTimeMs "lt" 300}}<!--
+        --><div class="proxy-cell ping signal-bars four-bars"><!--
+        -->{{else}}<!--
+           -->{{#ifCond pingTimeMs "lt" 1000}}<!--
+            --><div class="proxy-cell ping signal-bars three-bars"><!--
+            -->{{else}}<!--
+                -->{{#ifCond pingTimeMs "lt" 3000}}<!--
+                --><div class="proxy-cell ping signal-bars two-bars"><!--
+                -->{{else}}<!--
+                --><div class="proxy-cell ping signal-bars one-bar"><!--
+                -->{{/ifCond}}<!--
+            -->{{/ifCond}}<!--
+        -->{{/ifCond}}
             <div class="first-bar bar"></div>
             <div class="second-bar bar"></div>
             <div class="third-bar bar"></div>
             <div class="fourth-bar bar"></div>
-        </div>
-        <span class="proxy-cell protocol">{{protocol}}</span>
-        <div class="proxy-cell apply">
-            <button class="apply-btn">{{t 'apply'}}</button>
-        </div>
+        </div><!--
+        --><span class="proxy-cell protocol">{{protocol}}</span><!--
+        --><div class="proxy-cell apply"><!--
+            --><button class="apply-btn">{{t 'apply'}}</button><!--
+        --></div>
     </div>
 </div>
