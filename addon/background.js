@@ -83,35 +83,30 @@ browser.runtime.onMessage.addListener(
              */
             case 'get-proxy-list':
                 if (proxyListSession.byExcludeFavorites().isEmpty() || request.force) {
-                    /**
-                     * Disconnect current proxy
-                     */
-                    Connector
-                        .disconnect()
-                        .then(
-                            () => {
-                                proxyProvider.getProxies()
-                                    .then(response => {
-                                        let result = response
-                                            .map(proxy => {
-                                                return (new Address())
-                                                    .setIPAddress(proxy.server)
-                                                    .setPort(proxy.port)
-                                                    .setCountry(proxy.country)
-                                                    .setProtocol(proxy.protocol)
-                                                    .setPingTimeMs(proxy.pingTimeMs)
-                                                    .setIsoCode(proxy.isoCode);
-                                            });
 
-                                        proxyListSession = proxyListSession
-                                            .disableAll()
-                                            .byFavorite()
-                                            .concat(result);
+                    let activeProxies = proxyListSession.filterEnabled();
 
-                                        sendResponse(proxyListSession.unique());
-                                    });
-                            }
-                        );
+                    proxyProvider
+                        .getProxies()
+                        .then(response => {
+                            let result = response
+                                .map(proxy => {
+                                    return (new Address())
+                                        .setIPAddress(proxy.server)
+                                        .setPort(proxy.port)
+                                        .setCountry(proxy.country)
+                                        .setProtocol(proxy.protocol)
+                                        .setPingTimeMs(proxy.pingTimeMs)
+                                        .setIsoCode(proxy.isoCode);
+                                });
+
+                            proxyListSession = proxyListSession
+                                .byFavorite()
+                                .concat(activeProxies)
+                                .concat(result);
+
+                            sendResponse(proxyListSession.unique());
+                        });
 
                     break;
                 }
@@ -128,9 +123,7 @@ browser.runtime.onMessage.addListener(
                         .disableAll()
                         .byIpAddress(request.message['ipAddress'])
                         .one()
-                        .enable(),
-                    blacklistSession,
-                    blacklistSettings
+                        .enable()
                 );
 
                 sendResponse(proxyListSession);

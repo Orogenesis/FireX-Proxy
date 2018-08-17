@@ -1,11 +1,9 @@
 class Connector {
     /**
      * @param {Address} address
-     * @param {Array<String>} blacklist
-     * @param {Object} blacklistSettings
      * @returns {void}
      */
-    static connect(address, blacklist, blacklistSettings) {
+    static connect(address) {
         let proxy = `${address.getPacProtocol()} ${address.ipAddress}:${address.port}`;
 
         if (isChrome()) {

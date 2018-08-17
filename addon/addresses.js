@@ -72,11 +72,9 @@ class Addresses extends Array {
      * @returns {Addresses}
      */
     unique() {
-        return this
-            .byFavorite()
-            .union(
-                this.byExcludeFavorites()
-            );
+        return this.filter((elem, pos, arr) => {
+            return arr.findIndex(value => value.getIPAddress() === elem.getIPAddress()) === pos;
+        })
     }
 
     /**

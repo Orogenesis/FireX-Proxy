@@ -40,6 +40,10 @@
         justify-content: center;
         line-height: 60px;
         padding: 0 10px;
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
         .proxy-row-left {
           min-width: 180px;
         }
@@ -54,10 +58,10 @@
             width: 28px;
           }
           &.protocol {
-            width: 55px;
+            width: 70px;
           }
           &.ping {
-            width: 65px;
+            width: 45px;
             &.green {
               color: #2E7D32;
             }
@@ -326,5 +330,28 @@
       font-weight: bolder;
       display: none;
     }
+  }
+}
+
+
+.signal-bars {
+  display: inline-block;
+
+  .bar.first-bar  { height: 3px; }
+  .bar.second-bar { height: 6px; }
+  .bar.third-bar  { height: 9px; }
+  .bar.fourth-bar { height: 12px; }
+
+  .bar {
+    width: 2px;
+    margin-left: -2px;
+    display: inline-block;
+    background-color: $materialBlack;
+    margin-bottom: -2px;
+  }
+
+  &.three-bars .bar.fourth-bar,
+  &.one-bar .bar:not(.first-bar),
+  &.two-bars .bar:not(.first-bar):not(.second-bar) {       background-color: $materialGray;
   }
 }
