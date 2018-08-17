@@ -5,7 +5,19 @@
         --><span class="proxy-cell country">{{country}}</span>
     </div>
     <div class="proxy-row-right">
-        <div class="proxy-cell ping signal-bars {{pingClass}}">
+        {{#ifCond pingTimeMs "lt" 300}}
+        <div class="proxy-cell ping signal-bars four-bars">
+        {{else}}
+            {{#ifCond pingTimeMs "lt" 1000}}
+            <div class="proxy-cell ping signal-bars three-bars">
+            {{else}}
+                {{#ifCond pingTimeMs "lt" 3000}}
+                <div class="proxy-cell ping signal-bars two-bars">
+                {{else}}
+                <div class="proxy-cell ping signal-bars one-bar">
+                {{/ifCond}}
+            {{/ifCond}}
+        {{/ifCond}}
             <div class="first-bar bar"></div>
             <div class="second-bar bar"></div>
             <div class="third-bar bar"></div>
