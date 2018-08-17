@@ -123,7 +123,9 @@ browser.runtime.onMessage.addListener(
                         .disableAll()
                         .byIpAddress(request.message['ipAddress'])
                         .one()
-                        .enable()
+                        .enable(),
+                    blacklistSession,
+                    blacklistSettings
                 );
 
                 sendResponse(proxyListSession);
