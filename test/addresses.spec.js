@@ -29,7 +29,7 @@ describe("addresses", () => {
                         .setPort(7070)
                 ]);
 
-            expect(addresses).to.deep.equal(expected);
+            expect(expected).to.deep.equal(addresses);
         });
     });
 
@@ -42,7 +42,11 @@ describe("addresses", () => {
                         .setPort(8080),
                     (new Address())
                         .setIPAddress('127.0.0.1')
-                        .setPort(9090)
+                        .setPort(9090),
+                    (new Address())
+                        .setIPAddress('127.0.0.1')
+                        .setPort(1010)
+                        .setActiveState(false)
                 ])
                 .union(
                     (new Addresses())
@@ -56,26 +60,13 @@ describe("addresses", () => {
                             (new Address())
                                 .setIPAddress('127.0.0.1')
                                 .setPort(1010)
+                                .setActiveState(true)
                         ])
                 );
 
-            let expected = (new Addresses())
-                .create([
-                    (new Address())
-                        .setIPAddress('127.0.0.1')
-                        .setPort(8080),
-                    (new Address())
-                        .setIPAddress('127.0.0.1')
-                        .setPort(9090),
-                    (new Address())
-                        .setIPAddress('127.0.0.1')
-                        .setPort(6060),
-                    (new Address())
-                        .setIPAddress('127.0.0.1')
-                        .setPort(1010)
-                ]);
+            let expected = [];
 
-            expect(addresses).to.deep.equal(expected);
+            expect(expected).to.deep.equal(addresses);
         });
     });
 });
