@@ -33,7 +33,7 @@ export class Address {
     }
 
     /**
-     * @param {String} port
+     * @param {number} port
      * @returns {Address}
      */
     setPort(port) {

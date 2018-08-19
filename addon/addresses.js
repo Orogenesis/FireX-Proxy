@@ -76,7 +76,7 @@ export class Addresses extends Array {
     unique() {
         return this.create(
             this.filter(
-                (elem, pos, arr) => arr.findIndex(value => value.getIPAddress() === elem.getIPAddress() && value.getPort() === elem.getPort()) === pos
+                (element, pos, arr) => arr.findIndex(value => value.getIPAddress() === element.getIPAddress() && value.getPort() === element.getPort()) === pos
             )
         );
     }
@@ -86,13 +86,7 @@ export class Addresses extends Array {
      * @returns {Addresses}
      */
     union(elements) {
-        return this.create(
-            this.concat(
-                elements.filter(
-                    element => this.findIndex(value => value.getIPAddress() === element.getIPAddress() && value.getPort() === elem.getPort()) === -1
-                )
-            )
-        );
+        return this.create(this.concat(elements).unique());
     }
 
     /**
