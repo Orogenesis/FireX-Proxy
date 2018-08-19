@@ -1,4 +1,6 @@
-class Connector {
+import { isChrome } from "./helpers.js";
+
+export class Connector {
     /**
      * @param {Address} address
      * @param {Array<String>} blacklist

@@ -1,4 +1,6 @@
-class Addresses extends Array {
+import { Address } from "./address.js";
+
+export class Addresses extends Array {
     /**
      * @param {Array.<Address>} args
      * @returns {Addresses}

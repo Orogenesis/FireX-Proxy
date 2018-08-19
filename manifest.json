@@ -35,14 +35,6 @@
     "default_popup": "popup/index.html"
   },
   "background": {
-    "scripts": [
-      "addon/browser-polyfill.js",
-      "addon/address.js",
-      "addon/addresses.js",
-      "addon/connector.js",
-      "addon/helpers.js",
-      "addon/proxyProvider.js",
-      "addon/background.js"
-    ]
+    "page": "background.html"
   }
 }
