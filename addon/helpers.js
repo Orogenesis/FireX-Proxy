@@ -8,7 +8,7 @@
  *
  * @returns {number}
  */
-function versionCompare(a, b) {
+export function versionCompare(a, b) {
     if (a === b) {
         return 0;
     }
@@ -37,6 +37,6 @@ function versionCompare(a, b) {
 /**
  * @returns {boolean}
  */
-function isChrome() {
+export function isChrome() {
     return navigator.userAgent.indexOf('Chrome') > -1;
 }

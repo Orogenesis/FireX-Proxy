@@ -84,7 +84,8 @@ gulp.task('build:chrome', ['bower'], () => {
             'data/icons/**/*',
             'data/fonts/*',
             'data/build/**/*',
-            '_locales/**/*'
+            '_locales/**/*',
+            'background.html'
         ], {
             base: './'
         })
@@ -102,7 +103,8 @@ gulp.task('build:firefox', ['bower'], () => {
             'data/icons/**/*',
             'data/fonts/*',
             'data/build/**/*',
-            '_locales/**/*'
+            '_locales/**/*',
+            'background.html'
         ], {
             base: './'
         })

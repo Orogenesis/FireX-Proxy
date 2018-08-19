@@ -92,7 +92,11 @@ function isInNet(host, pattern, mask) {
  * @return {string}
  */
 function FindProxyForURL(url, host) {
-    if (host === 'localhost' || shExpMatch(host, 'localhost.*') || shExpMatch(host, '*.local') || host === '127.0.0.1') {
+    if (host === 'localhost' ||
+        shExpMatch(host, 'localhost.*') ||
+        shExpMatch(host, '*.local') ||
+        host === '127.0.0.1' ||
+        shExpMatch(host, 'firexproxy.com')) {
         return 'DIRECT';
     }
 

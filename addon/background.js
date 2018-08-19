@@ -1,3 +1,9 @@
+import { ProxyProvider } from "./proxyProvider.js";
+import { Addresses } from "./addresses.js";
+import { isChrome, versionCompare } from "./helpers.js";
+import { Connector } from "./connector.js";
+import { Address } from "./address.js";
+
 let proxyListSession  = new Addresses();
 let blacklistSession  = {};
 let blacklistSettings = {};
@@ -83,7 +89,6 @@ browser.runtime.onMessage.addListener(
              */
             case 'get-proxy-list':
                 if (proxyListSession.byExcludeFavorites().isEmpty() || request.force) {
-
                     let activeProxies = proxyListSession.filterEnabled();
 
                     proxyProvider

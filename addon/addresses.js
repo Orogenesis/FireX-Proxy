@@ -1,4 +1,6 @@
-class Addresses extends Array {
+import { Address } from "./address.js";
+
+export class Addresses extends Array {
     /**
      * @param {Array.<Address>} args
      * @returns {Addresses}
@@ -74,7 +76,7 @@ class Addresses extends Array {
     unique() {
         return this.create(
             this.filter(
-                (elem, pos, arr) => arr.findIndex(value => value.getIPAddress() === elem.getIPAddress()) === pos
+                (element, pos, arr) => arr.findIndex(value => value.getIPAddress() === element.getIPAddress() && value.getPort() === element.getPort()) === pos
             )
         );
     }
@@ -84,13 +86,7 @@ class Addresses extends Array {
      * @returns {Addresses}
      */
     union(elements) {
-        return this.create(
-            this.concat(
-                elements.filter(
-                    element => this.findIndex(value => value.getIPAddress() === element.getIPAddress()) === -1
-                )
-            )
-        );
+        return this.create(this.concat(elements).unique());
     }
 
     /**

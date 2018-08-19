@@ -3,7 +3,7 @@ const pacDictionary = {
     'SOCKS5' : 'SOCKS'
 };
 
-class Address {
+export class Address {
     constructor() {
         this.ipAddress     = null;
         this.port          = null;
@@ -33,7 +33,7 @@ class Address {
     }
 
     /**
-     * @param {String} port
+     * @param {number} port
      * @returns {Address}
      */
     setPort(port) {

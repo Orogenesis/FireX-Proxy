@@ -7,8 +7,14 @@
   "main": "index.js",
   "author": "Exclumice",
   "license": "MIT",
+  "scripts": {
+    "test": "mocha --require babel-core/register"
+  },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "bower": "^1.7.9",
+    "chai": "^4.1.2",
     "gulp": "^3.9.1",
     "gulp-coffee": "^2.3.2",
     "gulp-concat": "^2.6.0",
@@ -19,6 +25,8 @@
     "gulp-zip": "^4.0.0",
     "handlebars": "^4.0.11",
     "main-bower-files": "^2.13.1",
+    "mocha": "^5.2.0",
+    "sinon": "^6.1.5",
     "webextension-polyfill": "^0.3.0"
   }
 }
