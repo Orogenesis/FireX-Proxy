@@ -64,7 +64,22 @@ describe("addresses", () => {
                         ])
                 );
 
-            let expected = [];
+            let expected = (new Addresses())
+                .create([
+                    (new Address())
+                        .setIPAddress('127.0.0.1')
+                        .setPort(8080),
+                    (new Address())
+                        .setIPAddress('127.0.0.1')
+                        .setPort(9090),
+                    (new Address())
+                        .setIPAddress('127.0.0.1')
+                        .setPort(1010)
+                        .setActiveState(false),
+                    (new Address())
+                        .setIPAddress('127.0.0.1')
+                        .setPort(6060)
+                ]);
 
             expect(expected).to.deep.equal(addresses);
         });
