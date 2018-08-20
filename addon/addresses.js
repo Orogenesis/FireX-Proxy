@@ -29,6 +29,18 @@ export class Addresses extends Array {
     }
 
     /**
+     * @param {number} port
+     * @returns {Addresses}
+     */
+    byPort(port) {
+        return this.create(
+            this.filter(
+                element => element.getPort() === port
+            )
+        );
+    }
+
+    /**
      * @returns {Addresses}
      */
     byFavorite() {
