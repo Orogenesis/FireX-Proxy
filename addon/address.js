@@ -16,7 +16,7 @@ export class Address {
     }
 
     /**
-     * @param {String} address
+     * @param {string} address
      * @returns {Address}
      */
     setIPAddress(address) {
@@ -26,7 +26,7 @@ export class Address {
     }
 
     /**
-     * @returns {String}
+     * @returns {string}
      */
     getIPAddress() {
         return this.ipAddress;
@@ -43,14 +43,14 @@ export class Address {
     }
 
     /**
-     * @returns {Number}
+     * @returns {number}
      */
     getPort() {
         return this.port;
     }
 
     /**
-     * @param {String} country
+     * @param {string} country
      * @returns {Address}
      */
     setCountry(country) {
@@ -60,7 +60,7 @@ export class Address {
     }
 
     /**
-     * @returns {String}
+     * @returns {string}
      */
     getCountry() {
         return this.country;
@@ -74,7 +74,7 @@ export class Address {
     }
 
     /**
-     * @param {String} protocol
+     * @param {string} protocol
      * @returns {Address}
      */
     setProtocol(protocol) {
@@ -84,7 +84,7 @@ export class Address {
     }
 
     /**
-     * @returns {String}
+     * @returns {string}
      */
     getProtocol() {
         return this.protocol;

@@ -127,6 +127,7 @@ browser.runtime.onMessage.addListener(
                     proxyListSession
                         .disableAll()
                         .byIpAddress(request.message['ipAddress'])
+                        .byPort(request.message['port'])
                         .one()
                         .enable(),
                     blacklistSession,
@@ -155,6 +156,7 @@ browser.runtime.onMessage.addListener(
             case 'toggle-favorite':
                 proxyListSession
                     .byIpAddress(request.message['ipAddress'])
+                    .byPort(request.message['port'])
                     .one()
                     .toggleFavorite();
 

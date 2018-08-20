@@ -19,8 +19,8 @@ $ ->
         else
           return options.inverse this
     t      : (k) -> new Handlebars.SafeString browser.i18n.getMessage k
-    lower  : (s) -> s.toLowerCase()
-    upper  : (s) -> s.toUpperCase()
+    lower  : (s) -> String(s).toLowerCase()
+    upper  : (s) -> String(s).toUpperCase()
 
   new Router()
 
