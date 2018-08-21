@@ -1,0 +1,23 @@
+{
+  "blacklist": {
+    "message": "黑名单（仅限）"
+  },
+  "favorites": {
+    "message": "星标收藏"
+  },
+  "proxymenu": {
+    "message": "代理列表"
+  },
+  "country": {
+    "message": "国家/地区"
+  },
+  "no_proxy": {
+    "message": "无可用代理。请尝试"
+  },
+  "reset_filters": {
+    "message": "重置筛选器"
+  },
+  "apply": {
+    "message": "应用"
+  }
+}
