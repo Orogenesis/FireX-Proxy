@@ -69,7 +69,6 @@ describe("helpers", () => {
             assert.isTrue(isMinorUpdate("1", "1.5.0"));
 
             assert.isFalse(isMinorUpdate("1.0.1", "1.0.2"));
-
         });
     });
 });
