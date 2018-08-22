@@ -39,9 +39,7 @@ export function versionCompare(a, b) {
  * @returns {boolean}
  */
 export function isMajorVersion(version) {
-    const cb = (a, b) => a + b;
-
-    return version.split('.').slice(1).map(Number).reduce(cb, 0) === 0;
+    return version.split('.').slice(1).filter(n => n > 0).length === 0;
 }
 
 /**
@@ -49,10 +47,9 @@ export function isMajorVersion(version) {
  * @returns {boolean}
  */
 export function isMinorVersion(version) {
-    const cb = (a, b) => a + b;
     const splits = version.split('.');
 
-    return (splits[1] || 0) > 0 && splits.slice(2).map(Number).reduce(cb, 0) === 0;
+    return (splits[1] || 0) > 0 && splits.slice(2).filter(n => n > 0).length === 0;
 }
 
 /**
