@@ -20,12 +20,15 @@ let pacMessageConfiguration = {
 browser.storage.local.get()
     .then(
         storage => {
-            proxyListSession = proxyListSession.concat(
-                ...(storage.favorites || [])
-                    .map(element => Object.assign(new Address(), element))
-            );
+            let favorites = (storage.favorites || [])
+                .map(element => Object.assign(new Address(), element));
 
-            blacklistSession  = storage.blacklist || {};
+            proxyListSession = Addresses
+                .create(favorites)
+                .unique()
+                .union(proxyListSession);
+
+            blacklistSession = storage.blacklist || {};
             blacklistSettings = storage.blacklistSettings || {};
 
             if (!isChrome()) {
@@ -35,7 +38,7 @@ browser.storage.local.get()
                 }, pacMessageConfiguration);
             }
         }
-);
+    );
 
 browser.storage.onChanged.addListener(
     newSettings => {
