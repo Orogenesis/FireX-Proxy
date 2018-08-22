@@ -1,4 +1,4 @@
-import {isMajorUpdate, isMajorVersion, isMinorUpdate, isMinorVersion, versionCompare} from "../addon/helpers";
+import { isMajorUpdate, isMajorVersion, isMinorUpdate, isMinorVersion, versionCompare } from "../addon/helpers";
 import { assert } from "chai"
 
 describe("helpers", () => {
