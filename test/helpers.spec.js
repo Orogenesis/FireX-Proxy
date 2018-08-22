@@ -47,7 +47,7 @@ describe("helpers", () => {
     });
 
     describe("isMajorUpdate", () => {
-        it('valid', () => {
+        it('should return true only when major update', () => {
             assert.isTrue(isMajorUpdate("1.0.0", "2.1.0"));
             assert.isTrue(isMajorUpdate("1.0.0", "2.0.0"));
             assert.isTrue(isMajorUpdate("1.0.0", "2.0.1"));
@@ -60,10 +60,10 @@ describe("helpers", () => {
 
     describe("isMinorUpdate", () => {
         it('should return false if update is major', () => {
-            assert.isFalse(isMinorUpdate("5.1.0","6.2.0"));
+            assert.isFalse(isMinorUpdate("5.1.0", "6.2.0"));
         });
 
-        it('valid', () => {
+        it('should return true only when minor update', () => {
             assert.isTrue(isMinorUpdate("1.1.0", "1.5.0"));
             assert.isTrue(isMinorUpdate("1.1.1", "1.2.2"));
             assert.isTrue(isMinorUpdate("1", "1.5.0"));
