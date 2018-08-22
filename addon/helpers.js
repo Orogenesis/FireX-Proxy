@@ -58,3 +58,24 @@ export function isMinorVersion(version) {
 export function isChrome() {
     return navigator.userAgent.indexOf('Chrome') > -1;
 }
+
+/**
+ * @param {string} oldVersion
+ * @param {string} newVersion
+ * @return {boolean}
+ */
+export function isMajorUpdate(oldVersion, newVersion) {
+    return parseInt(oldVersion.split('.')[0]) < parseInt(newVersion.split('.')[0]);
+}
+
+/**
+ * @param {string} oldVersion
+ * @param {string} newVersion
+ * @return {boolean}
+ */
+export function isMinorUpdate(oldVersion, newVersion) {
+    let oldSplits = oldVersion.split('.');
+    let newSplits = newVersion.split('.');
+
+    return oldSplits[0] === newSplits[0] && parseInt(oldSplits[1] || 0) < parseInt(newSplits[1] || 999);
+}
