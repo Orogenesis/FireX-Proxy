@@ -1,6 +1,6 @@
 import { ProxyProvider } from "./proxyProvider.js";
 import { Addresses } from "./addresses.js";
-import { isChrome, versionCompare } from "./helpers.js";
+import { isChrome, versionCompare, isMajorUpdate } from "./helpers.js";
 import { Connector } from "./connector.js";
 import { Address } from "./address.js";
 
@@ -20,12 +20,15 @@ let pacMessageConfiguration = {
 browser.storage.local.get()
     .then(
         storage => {
-            proxyListSession = proxyListSession.concat(
-                ...(storage.favorites || [])
-                    .map(element => Object.assign(new Address(), element))
-            );
+            let favorites = (storage.favorites || [])
+                .map(element => Object.assign(new Address(), element));
 
-            blacklistSession  = storage.blacklist || {};
+            proxyListSession = Addresses
+                .create(favorites)
+                .unique()
+                .union(proxyListSession);
+
+            blacklistSession = storage.blacklist || {};
             blacklistSettings = storage.blacklistSettings || {};
 
             if (!isChrome()) {
@@ -35,7 +38,7 @@ browser.storage.local.get()
                 }, pacMessageConfiguration);
             }
         }
-);
+    );
 
 browser.storage.onChanged.addListener(
     newSettings => {
@@ -70,7 +73,9 @@ browser.runtime.onInstalled.addListener(
 
         switch (reason) {
             case 'update':
-                if (versionCompare(previousVersion, browser.runtime.getManifest().version) === -1) {
+                const currentVersion = browser.runtime.getManifest().version;
+
+                if (versionCompare(previousVersion, currentVersion) === -1 && isMajorUpdate(previousVersion, currentVersion)) {
                     browser.tabs.create({
                         url: '../welcome/index.html'
                     });

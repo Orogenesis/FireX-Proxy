@@ -35,8 +35,47 @@ export function versionCompare(a, b) {
 }
 
 /**
+ * @param {string} version
+ * @returns {boolean}
+ */
+export function isMajorVersion(version) {
+    return version.split('.').slice(1).filter(n => n > 0).length === 0;
+}
+
+/**
+ * @param {string} version
+ * @returns {boolean}
+ */
+export function isMinorVersion(version) {
+    const splits = version.split('.');
+
+    return (splits[1] || 0) > 0 && splits.slice(2).filter(n => n > 0).length === 0;
+}
+
+/**
  * @returns {boolean}
  */
 export function isChrome() {
     return navigator.userAgent.indexOf('Chrome') > -1;
+}
+
+/**
+ * @param {string} oldVersion
+ * @param {string} newVersion
+ * @return {boolean}
+ */
+export function isMajorUpdate(oldVersion, newVersion) {
+    return parseInt(oldVersion.split('.')[0]) < parseInt(newVersion.split('.')[0]);
+}
+
+/**
+ * @param {string} oldVersion
+ * @param {string} newVersion
+ * @return {boolean}
+ */
+export function isMinorUpdate(oldVersion, newVersion) {
+    let oldSplits = oldVersion.split('.');
+    let newSplits = newVersion.split('.');
+
+    return oldSplits[0] === newSplits[0] && parseInt(oldSplits[1] || 0) < parseInt(newSplits[1] || 999);
 }

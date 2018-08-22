@@ -5,7 +5,7 @@ import { expect } from "chai"
 describe("addresses", () => {
     describe("unique", () => {
         it('should return unique proxies', () => {
-            let addresses = (new Addresses())
+            let addresses = Addresses
                 .create([
                     (new Address())
                         .setIPAddress('127.0.0.1')
@@ -19,7 +19,7 @@ describe("addresses", () => {
                 ])
                 .unique();
 
-            let expected = (new Addresses())
+            let expected = Addresses
                 .create([
                     (new Address())
                         .setIPAddress('127.0.0.1')
@@ -35,7 +35,7 @@ describe("addresses", () => {
 
     describe("union", () => {
         it('should return union proxies', () => {
-            let addresses = (new Addresses())
+            let addresses = Addresses
                 .create([
                     (new Address())
                         .setIPAddress('127.0.0.1')
@@ -49,7 +49,7 @@ describe("addresses", () => {
                         .setActiveState(false)
                 ])
                 .union(
-                    (new Addresses())
+                    Addresses
                         .create([
                             (new Address())
                                 .setIPAddress('127.0.0.1')
@@ -64,7 +64,7 @@ describe("addresses", () => {
                         ])
                 );
 
-            let expected = (new Addresses())
+            let expected = Addresses
                 .create([
                     (new Address())
                         .setIPAddress('127.0.0.1')

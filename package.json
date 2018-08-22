@@ -1,7 +1,7 @@
 {
   "title": "FireX Proxy",
   "name": "firex-proxy",
-  "version": "5.1.10",
+  "version": "5.1.11",
   "id": "divanproger@gmail.com",
   "description": "FireX Proxy",
   "main": "index.js",

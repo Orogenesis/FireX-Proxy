@@ -5,8 +5,12 @@ export class Addresses extends Array {
      * @param {Array.<Address>} args
      * @returns {Addresses}
      */
-    create(args) {
-        return new this.constructor(...args);
+    static create(args) {
+        let self = new this();
+
+        self.push.apply(self, args);
+
+        return self;
     }
 
     /**
@@ -21,7 +25,7 @@ export class Addresses extends Array {
      * @returns {Addresses}
      */
     byIpAddress(ipAddress) {
-        return this.create(
+        return Addresses.create(
             this.filter(
                 element => element.getIPAddress() === ipAddress
             )
@@ -33,7 +37,7 @@ export class Addresses extends Array {
      * @returns {Addresses}
      */
     byPort(port) {
-        return this.create(
+        return Addresses.create(
             this.filter(
                 element => element.getPort() === port
             )
@@ -44,7 +48,7 @@ export class Addresses extends Array {
      * @returns {Addresses}
      */
     byFavorite() {
-        return this.create(
+        return Addresses.create(
             this.filter(
                 element => element.isFavorite()
             )
@@ -55,7 +59,7 @@ export class Addresses extends Array {
      * @returns {Addresses}
      */
     byExcludeFavorites() {
-        return this.create(
+        return Addresses.create(
             this.filter(
                 element => !element.isFavorite()
             )
@@ -86,7 +90,7 @@ export class Addresses extends Array {
      * @returns {Addresses}
      */
     unique() {
-        return this.create(
+        return Addresses.create(
             this.filter(
                 (element, pos, arr) => arr.findIndex(value => value.getIPAddress() === element.getIPAddress() && value.getPort() === element.getPort()) === pos
             )
@@ -98,7 +102,7 @@ export class Addresses extends Array {
      * @returns {Addresses}
      */
     union(elements) {
-        return this.create(this.concat(elements).unique());
+        return Addresses.create(this.concat(elements).unique());
     }
 
     /**
@@ -116,7 +120,7 @@ export class Addresses extends Array {
      * @returns {Addresses}
      */
     filterEnabled() {
-        return this.create(
+        return Addresses.create(
             this.filter(
                 element => element.isActive()
             )
