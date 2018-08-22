@@ -35,6 +35,27 @@ export function versionCompare(a, b) {
 }
 
 /**
+ * @param {string} version
+ * @returns {boolean}
+ */
+export function isMajorVersion(version) {
+    const cb = (a, b) => a + b;
+
+    return version.split('.').slice(1).map(Number).reduce(cb, 0) === 0;
+}
+
+/**
+ * @param {string} version
+ * @returns {boolean}
+ */
+export function isMinorVersion(version) {
+    const cb = (a, b) => a + b;
+    const splits = version.split('.');
+
+    return (splits[1] || 0) > 0 && splits.slice(2).map(Number).reduce(cb, 0) === 0;
+}
+
+/**
  * @returns {boolean}
  */
 export function isChrome() {

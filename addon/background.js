@@ -1,6 +1,6 @@
 import { ProxyProvider } from "./proxyProvider.js";
 import { Addresses } from "./addresses.js";
-import { isChrome, versionCompare } from "./helpers.js";
+import { isChrome, versionCompare, isMajorVersion, isMinorVersion } from "./helpers.js";
 import { Connector } from "./connector.js";
 import { Address } from "./address.js";
 
@@ -73,7 +73,9 @@ browser.runtime.onInstalled.addListener(
 
         switch (reason) {
             case 'update':
-                if (versionCompare(previousVersion, browser.runtime.getManifest().version) === -1) {
+                const currentVersion = browser.runtime.getManifest().version;
+
+                if (versionCompare(previousVersion, currentVersion) === -1 && isMajorVersion(currentVersion)) {
                     browser.tabs.create({
                         url: '../welcome/index.html'
                     });
