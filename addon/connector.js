@@ -1,4 +1,4 @@
-import { isChrome } from "./helpers.js";
+import { isChrome } from './helpers.js';
 
 export class Connector {
     /**
@@ -21,7 +21,7 @@ export class Connector {
 
                     browser.proxy.settings.set({
                         value: {
-                            mode: "pac_script",
+                            mode: 'pac_script',
                             pacScript: {
                                 data: data
                             }
@@ -43,11 +43,11 @@ export class Connector {
          */
         browser.browserAction.setIcon({
             path: {
-                16: "data/icons/action/icon-16-active.png",
-                32: "data/icons/action/icon-32-active.png",
-                48: "data/icons/action/icon-48-active.png",
-                64: "data/icons/action/icon-64-active.png",
-                128: "data/icons/action/icon-128-active.png"
+                16: 'data/icons/action/icon-16-active.png',
+                32: 'data/icons/action/icon-32-active.png',
+                48: 'data/icons/action/icon-48-active.png',
+                64: 'data/icons/action/icon-64-active.png',
+                128: 'data/icons/action/icon-128-active.png'
             }
         });
     }
@@ -77,11 +77,11 @@ export class Connector {
 
                 browser.browserAction.setIcon({
                     path: {
-                        16: "data/icons/action/icon-16.png",
-                        32: "data/icons/action/icon-32.png",
-                        48: "data/icons/action/icon-48.png",
-                        64: "data/icons/action/icon-64.png",
-                        128: "data/icons/action/icon-128.png"
+                        16: 'data/icons/action/icon-16.png',
+                        32: 'data/icons/action/icon-32.png',
+                        48: 'data/icons/action/icon-48.png',
+                        64: 'data/icons/action/icon-64.png',
+                        128: 'data/icons/action/icon-128.png'
                     }
                 });
             }

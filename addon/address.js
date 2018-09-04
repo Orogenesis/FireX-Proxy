@@ -172,7 +172,7 @@ export class Address {
      * @returns {number}
      */
     getPingTimeMs() {
-        return this.pingTimeMs
+        return this.pingTimeMs;
     }
 
     /**
@@ -191,7 +191,7 @@ export class Address {
      */
     getPacProtocol() {
         if (pacDictionary[this.getProtocol()] === undefined) {
-            throw new Error('This protocol unsupported by PAC')
+            throw new Error('This protocol unsupported by PAC');
         }
 
         return pacDictionary[this.getProtocol()];
