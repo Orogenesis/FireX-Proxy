@@ -1,4 +1,4 @@
-import { Address } from "./address.js";
+import { Address } from './address.js';
 
 export class Addresses extends Array {
     /**

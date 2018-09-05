@@ -1,9 +1,9 @@
-import { Addresses } from "../addon/addresses";
-import { Address } from "../addon/address";
-import { expect } from "chai"
+import { Addresses } from '../addon/addresses';
+import { Address } from '../addon/address';
+import { expect } from 'chai';
 
-describe("addresses", () => {
-    describe("unique", () => {
+describe('addresses', () => {
+    describe('unique', () => {
         it('should return unique proxies', () => {
             let addresses = Addresses
                 .create([
@@ -33,7 +33,7 @@ describe("addresses", () => {
         });
     });
 
-    describe("union", () => {
+    describe('union', () => {
         it('should return union proxies', () => {
             let addresses = Addresses
                 .create([

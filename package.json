@@ -8,13 +8,15 @@
   "author": "Exclumice",
   "license": "MIT",
   "scripts": {
-    "test": "mocha --require babel-core/register"
+    "lint": "./node_modules/.bin/eslint addon/**/*.js test/**/*.js",
+    "test": "./node_modules/.bin/mocha --require babel-core/register"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "bower": "^1.7.9",
     "chai": "^4.1.2",
+    "eslint": "^5.5.0",
     "gulp": "^3.9.1",
     "gulp-coffee": "^2.3.2",
     "gulp-concat": "^2.6.0",
