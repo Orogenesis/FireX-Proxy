@@ -1,89 +1,111 @@
 import { isChrome } from './helpers.js';
+import { TemplateEngine } from "./templateEngine.js";
 
 export class Connector {
-    /**
-     * @param {Address} address
-     * @param {Array<String>} blacklist
-     * @param {Object} blacklistSettings
-     * @returns {void}
-     */
-    static connect(address, blacklist, blacklistSettings) {
-        let proxy = `${address.getPacProtocol()} ${address.ipAddress}:${address.port}`;
-
-        if (isChrome()) {
-            fetch(browser.runtime.getURL('addon/pac/chrome.dat'))
-                .then(response => response.text())
-                .then(response => {
-                    const data = response
-                        .replace(/%isBlacklistEnabled%/g, (blacklistSettings.isBlacklistEnabled || false).toString())
-                        .replace(/%proxy%/g, proxy)
-                        .replace(/%blacklist%/g, JSON.stringify(blacklist));
-
-                    browser.proxy.settings.set({
-                        value: {
-                            mode: 'pac_script',
-                            pacScript: {
-                                data: data
-                            }
-                        }
-                    });
-                });
-        } else {
-            let message = {
-                proxy: proxy
-            };
-
-            browser.runtime.sendMessage(message, {
-                toProxyScript: true
-            });
-        }
-
-        /**
-         * Change icon color to green
-         */
-        browser.browserAction.setIcon({
-            path: {
-                16: 'data/icons/action/icon-16-active.png',
-                32: 'data/icons/action/icon-32-active.png',
-                48: 'data/icons/action/icon-48-active.png',
-                64: 'data/icons/action/icon-64-active.png',
-                128: 'data/icons/action/icon-128-active.png'
-            }
-        });
+    constructor() {
+        this.observers = [];
+        this.connected = null;
     }
 
     /**
-     * @returns {Promise}
+     * @param {Function} observer
+     * @returns {void}
+     * @throws {Error}
      */
-    static disconnect() {
+    addObserver(observer) {
+        if (typeof observer !== 'function') {
+            throw new Error('Observer must be a function.');
+        }
+
+        this.observers.push(observer);
+    }
+
+    /**
+     * @returns {void}
+     */
+    broadcast() {
+        this.observers
+            .forEach(observer => {
+                observer(this);
+            });
+    }
+
+    /**
+     * @param {Address} address
+     * @param {Array<string>} blacklist
+     * @param {boolean} isBlacklistEnabled
+     * @returns {void}
+     */
+    connect(address, blacklist = [], isBlacklistEnabled = false) {
+        if (isChrome()) {
+            const engine = new TemplateEngine();
+
+            engine
+                .setPlaceholders({
+                    isBlacklistEnabled: isBlacklistEnabled,
+                    proxy: address.getPac(),
+                    blacklist: blacklist
+                })
+                .buildUrl('addon/pac/chrome.dat')
+                .then(data => {
+                    browser
+                        .proxy
+                        .settings
+                        .set({
+                            value: {
+                                mode: 'pac_script',
+                                pacScript: {
+                                    data: data
+                                }
+                            }
+                        });
+                });
+        } else {
+            let message = {
+                proxy: address.getPac()
+            };
+
+            browser
+                .runtime
+                .sendMessage(message, {
+                    toProxyScript: true
+                });
+        }
+
+        this.connected = address;
+        this.broadcast();
+    }
+
+    /**
+     * @returns {Promise<any>}
+     */
+    disconnect() {
         return new Promise(
             resolve => {
                 if (isChrome()) {
-                    browser.proxy.settings.set({
-                        value: {
-                            mode: 'system'
-                        },
-                        scope: 'regular'
-                    }, resolve);
+                    browser
+                        .proxy
+                        .settings
+                        .set({
+                            value: {
+                                mode: 'system'
+                            },
+                            scope: 'regular'
+                        }, resolve);
                 } else {
                     let message = {
                         proxy: 'DIRECT'
                     };
 
-                    browser.runtime.sendMessage(message, {
-                        toProxyScript: true
-                    }).then(resolve);
+                    browser
+                        .runtime
+                        .sendMessage(message, {
+                            toProxyScript: true
+                        }).then(resolve);
                 }
 
-                browser.browserAction.setIcon({
-                    path: {
-                        16: 'data/icons/action/icon-16.png',
-                        32: 'data/icons/action/icon-32.png',
-                        48: 'data/icons/action/icon-48.png',
-                        64: 'data/icons/action/icon-64.png',
-                        128: 'data/icons/action/icon-128.png'
-                    }
-                });
+                this.connected = null;
+                this.broadcast();
             }
         );
     }

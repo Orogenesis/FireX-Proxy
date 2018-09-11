@@ -2,6 +2,9 @@
   "blacklist": {
     "message": "Blacklist"
   },
+  "use_blacklist": {
+    "message": "Use blacklist"
+  },
   "favorites": {
     "message": "Favorites"
   },
@@ -17,7 +20,25 @@
   "reset_filters": {
     "message": "reset filters"
   },
-  "apply": {
+  "on": {
     "message": "Apply"
+  },
+  "off": {
+    "message": "Off"
+  },
+  "conflict": {
+    "message": "Disable conflicting extensions?"
+  },
+  "conflict_resolve": {
+    "message": "Resolve conflicts"
+  },
+  "protocol": {
+    "message": "Protocol"
+  },
+  "search": {
+    "message": "Search"
+  },
+  "blacklist_tip": {
+    "message": "Add a domain name or a domain mask to this list, then activate the blacklist by clicking on the switch at the top of this page. Proxy servers would be used only for entries from this list."
   }
 }

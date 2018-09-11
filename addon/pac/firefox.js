@@ -111,11 +111,7 @@ function FindProxyForURL(url, host) {
     }
 
     for (let pattern in blacklist) {
-        if (!blacklist.hasOwnProperty(pattern)) {
-            continue;
-        }
-
-        if (blacklist[pattern] && shExpMatch(host, pattern)) {
+        if (shExpMatch(host, pattern)) {
             return proxy;
         }
     }

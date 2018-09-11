@@ -1,3 +1,7 @@
+import $ from 'jquery';
+import Swiper from 'swiper';
+import 'swiper/dist/css/swiper.css';
+
 (function ($) {
     new Swiper('.swiper-container', {
         direction: 'horizontal',
@@ -57,4 +61,4 @@
     $(".overlay").window({
         closeButton: '.button-close'
     });
-})(jQuery);
+})($);

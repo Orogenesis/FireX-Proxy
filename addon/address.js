@@ -196,4 +196,11 @@ export class Address {
 
         return pacDictionary[this.getProtocol()];
     }
+
+    /**
+     * @returns {string}
+     */
+    getPac() {
+        return `${this.getPacProtocol()} ${this.ipAddress}:${this.port}`;
+    }
 }
