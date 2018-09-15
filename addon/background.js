@@ -3,6 +3,7 @@ import { Addresses } from './addresses.js';
 import { isChrome, isMajorUpdate } from './helpers.js';
 import { Connector } from './connector.js';
 import { Address } from './address.js';
+import { detectConflicts } from './conflict.js';
 
 (function setup() {
     let proxyListSession  = new Addresses();
@@ -82,35 +83,42 @@ import { Address } from './address.js';
         (request, sender, sendResponse) => {
             switch (request.name) {
             case 'get-proxy-list':
-                if (proxyListSession.byExcludeFavorites().isEmpty() || request.force) {
-                    let activeProxies = proxyListSession.filterEnabled();
+                detectConflicts()
+                    .then(conflicts => {
+                        if (!proxyListSession.byExcludeFavorites().isEmpty() && !request.force) {
+                            sendResponse({
+                                list: proxyListSession.unique(),
+                                conflicts: conflicts
+                            });
+                        } else {
+                            let activeProxies = proxyListSession.filterEnabled();
 
-                    proxyProvider
-                        .getProxies()
-                        .then(response => {
-                            let result = response
-                                .map(proxy => {
-                                    return (new Address())
-                                        .setIPAddress(proxy.server)
-                                        .setPort(proxy.port)
-                                        .setCountry(proxy.country)
-                                        .setProtocol(proxy.protocol)
-                                        .setPingTimeMs(proxy.pingTimeMs)
-                                        .setIsoCode(proxy.isoCode);
+                            proxyProvider
+                                .getProxies()
+                                .then(response => {
+                                    let result = response
+                                        .map(proxy => {
+                                            return (new Address())
+                                                .setIPAddress(proxy.server)
+                                                .setPort(proxy.port)
+                                                .setCountry(proxy.country)
+                                                .setProtocol(proxy.protocol)
+                                                .setPingTimeMs(proxy.pingTimeMs)
+                                                .setIsoCode(proxy.isoCode);
+                                        });
+
+                                    proxyListSession = proxyListSession
+                                        .byFavorite()
+                                        .concat(activeProxies)
+                                        .concat(result);
+
+                                    sendResponse({
+                                        list: proxyListSession.unique(),
+                                        conflicts: conflicts
+                                    });
                                 });
-
-                            proxyListSession = proxyListSession
-                                .byFavorite()
-                                .concat(activeProxies)
-                                .concat(result);
-
-                            sendResponse(proxyListSession.unique());
-                        });
-
-                    break;
-                }
-
-                sendResponse(proxyListSession.unique());
+                        }
+                    });
 
                 break;
             case 'connect':
