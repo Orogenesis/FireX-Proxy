@@ -1,132 +1,126 @@
-import { ProxyProvider } from "./proxyProvider.js";
-import { Addresses } from "./addresses.js";
-import { isChrome, versionCompare, isMajorUpdate } from "./helpers.js";
-import { Connector } from "./connector.js";
-import { Address } from "./address.js";
+import { ProxyProvider } from './proxyProvider.js';
+import { Addresses } from './addresses.js';
+import { isChrome, isMajorUpdate } from './helpers.js';
+import { Connector } from './connector.js';
+import { Address } from './address.js';
+import { detectConflicts } from './conflict.js';
 
-let proxyListSession  = new Addresses();
-let blacklistSession  = {};
-let blacklistSettings = {};
-let proxyProvider     = new ProxyProvider();
+(function setup() {
+    let proxyListSession  = new Addresses();
+    let blacklistSession  = {};
+    let blacklistSettings = {};
+    let proxyProvider     = new ProxyProvider();
 
-if (!isChrome() && browser.proxy.register) {
-    browser.proxy.register('addon/pac/firefox.js');
-}
+    if (!isChrome() && browser.proxy.register) {
+        browser.proxy.register('addon/pac/firefox.js');
+    }
 
-let pacMessageConfiguration = {
-    toProxyScript: true
-};
+    let pacMessageConfiguration = {
+        toProxyScript: true
+    };
 
-browser.storage.local.get()
-    .then(
-        storage => {
-            let favorites = (storage.favorites || [])
-                .map(element => Object.assign(new Address(), element));
+    browser.storage.local.get()
+        .then(
+            storage => {
+                let favorites = (storage.favorites || [])
+                    .map(element => Object.assign(new Address(), element));
 
-            proxyListSession = Addresses
-                .create(favorites)
-                .unique()
-                .union(proxyListSession);
+                proxyListSession = Addresses
+                    .create(favorites)
+                    .unique()
+                    .union(proxyListSession);
 
-            blacklistSession = storage.blacklist || {};
-            blacklistSettings = storage.blacklistSettings || {};
+                blacklistSession = storage.blacklist || {};
+                blacklistSettings = storage.blacklistSettings || {};
 
-            if (!isChrome()) {
-                browser.runtime.sendMessage({
-                    blacklist: blacklistSession,
-                    isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
-                }, pacMessageConfiguration);
+                if (!isChrome()) {
+                    browser.runtime.sendMessage({
+                        blacklist: blacklistSession,
+                        isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
+                    }, pacMessageConfiguration);
+                }
+            }
+        );
+
+    browser.storage.onChanged.addListener(
+        newSettings => {
+            if (newSettings.blacklistSettings || newSettings.blacklist) {
+                if (!isChrome()) {
+                    browser.runtime.sendMessage({
+                        blacklist: blacklistSession,
+                        isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
+                    }, pacMessageConfiguration);
+                } else {
+                    let proxies = proxyListSession.filterEnabled();
+
+                    if (!proxies.isEmpty()) {
+                        Connector.connect(
+                            proxies.one(),
+                            blacklistSession,
+                            blacklistSettings
+                        );
+                    }
+                }
             }
         }
     );
 
-browser.storage.onChanged.addListener(
-    newSettings => {
-        if (newSettings.blacklistSettings || newSettings.blacklist) {
-            if (!isChrome()) {
-                browser.runtime.sendMessage({
-                    blacklist: blacklistSession,
-                    isBlacklistEnabled: blacklistSettings.isBlacklistEnabled
-                }, pacMessageConfiguration);
-            } else {
-                let enabledArray = proxyListSession.filterEnabled();
-
-                if (!enabledArray.isEmpty()) {
-                    Connector.connect(
-                        enabledArray.one(),
-                        blacklistSession,
-                        blacklistSettings
-                    );
-                }
-            }
-        }
-    }
-);
-
-/**
- * Local storage data
- */
-
-browser.runtime.onInstalled.addListener(
-    details => {
+    browser.runtime.onInstalled.addListener(details => {
         const { reason, previousVersion } = details;
 
-        switch (reason) {
-            case 'update':
-                const currentVersion = browser.runtime.getManifest().version;
+        if (reason === 'update') {
+            const currentVersion = browser.runtime.getManifest().version;
 
-                if (versionCompare(previousVersion, currentVersion) === -1 && isMajorUpdate(previousVersion, currentVersion)) {
-                    browser.tabs.create({
-                        url: '../welcome/index.html'
-                    });
-                }
-
-                break;
+            if (isMajorUpdate(previousVersion, currentVersion)) {
+                browser.tabs.create({
+                    url: '../welcome/index.html'
+                });
+            }
         }
-    }
-);
+    });
 
-browser.runtime.onMessage.addListener(
-    (request, sender, sendResponse) => {
-        switch (request.name) {
-            /**
-             * Get proxy list
-             */
-            case 'get-proxy-list':
-                if (proxyListSession.byExcludeFavorites().isEmpty() || request.force) {
-                    let activeProxies = proxyListSession.filterEnabled();
+    browser.runtime.onMessage.addListener(
+        (request, sender, sendResponse) => {
+            switch (request.name) {
+            case 'show':
+                detectConflicts()
+                    .then(conflicts => {
+                        if (!proxyListSession.byExcludeFavorites().isEmpty() && !request.force) {
+                            sendResponse({
+                                list: proxyListSession.unique(),
+                                conflicts: conflicts
+                            });
+                        } else {
+                            let activeProxies = proxyListSession.filterEnabled();
 
-                    proxyProvider
-                        .getProxies()
-                        .then(response => {
-                            let result = response
-                                .map(proxy => {
-                                    return (new Address())
-                                        .setIPAddress(proxy.server)
-                                        .setPort(proxy.port)
-                                        .setCountry(proxy.country)
-                                        .setProtocol(proxy.protocol)
-                                        .setPingTimeMs(proxy.pingTimeMs)
-                                        .setIsoCode(proxy.isoCode);
+                            proxyProvider
+                                .getProxies()
+                                .then(response => {
+                                    let result = response
+                                        .map(proxy => {
+                                            return (new Address())
+                                                .setIPAddress(proxy.server)
+                                                .setPort(proxy.port)
+                                                .setCountry(proxy.country)
+                                                .setProtocol(proxy.protocol)
+                                                .setPingTimeMs(proxy.pingTimeMs)
+                                                .setIsoCode(proxy.isoCode);
+                                        });
+
+                                    proxyListSession = proxyListSession
+                                        .byFavorite()
+                                        .concat(activeProxies)
+                                        .concat(result);
+
+                                    sendResponse({
+                                        list: proxyListSession.unique(),
+                                        conflicts: conflicts
+                                    });
                                 });
-
-                            proxyListSession = proxyListSession
-                                .byFavorite()
-                                .concat(activeProxies)
-                                .concat(result);
-
-                            sendResponse(proxyListSession.unique());
-                        });
-
-                    break;
-                }
-
-                sendResponse(proxyListSession.unique());
+                        }
+                    });
 
                 break;
-            /**
-             * Proxy connect
-             */
             case 'connect':
                 Connector.connect(
                     proxyListSession
@@ -142,9 +136,6 @@ browser.runtime.onMessage.addListener(
                 sendResponse(proxyListSession);
 
                 break;
-            /**
-             * Proxy disconnect
-             */
             case 'disconnect':
                 Connector
                     .disconnect()
@@ -155,9 +146,6 @@ browser.runtime.onMessage.addListener(
                 sendResponse(proxyListSession);
 
                 break;
-            /**
-             * Toggle favorite state
-             */
             case 'toggle-favorite':
                 proxyListSession
                     .byIpAddress(request.message['ipAddress'])
@@ -165,9 +153,6 @@ browser.runtime.onMessage.addListener(
                     .one()
                     .toggleFavorite();
 
-                /**
-                 * Store favorites
-                 */
                 browser.storage.local.set({
                     favorites: [...proxyListSession.byFavorite()]
                 });
@@ -175,9 +160,6 @@ browser.runtime.onMessage.addListener(
                 sendResponse(proxyListSession);
 
                 break;
-            /**
-             * Remove an element from blacklist
-             */
             case 'remove-blacklist':
                 delete blacklistSession[request.message['address']];
 
@@ -186,9 +168,6 @@ browser.runtime.onMessage.addListener(
                 });
 
                 break;
-            /**
-             * Add an element to blacklist
-             */
             case 'add-blacklist':
                 blacklistSession[request.message['address']] = request.message['isEnabled'];
 
@@ -197,9 +176,6 @@ browser.runtime.onMessage.addListener(
                 });
 
                 break;
-            /**
-             * Read blacklist
-             */
             case 'get-blacklist':
                 sendResponse(blacklistSession);
 
@@ -216,8 +192,9 @@ browser.runtime.onMessage.addListener(
                 });
 
                 break;
-        }
+            }
 
-        return true;
-    }
-);
+            return true;
+        }
+    );
+})();

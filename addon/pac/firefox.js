@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: ["error", {"args": "none", "varsIgnorePattern": "^(FindProxyForURL)$"}] */
+
 let proxy              = 'DIRECT';
 let blacklist          = {};
 let isBlacklistEnabled = false;
@@ -8,15 +10,15 @@ let isBlacklistEnabled = false;
  * @returns {boolean}
  */
 function shExpMatch(str, shexp) {
-    if (typeof str !== "string" || typeof shexp !== "string") {
+    if (typeof str !== 'string' || typeof shexp !== 'string') {
         return false;
     }
 
-    if (shexp === "*") {
+    if (shexp === '*') {
         return true;
     }
 
-    if (str === "" && shexp === "") {
+    if (str === '' && shexp === '') {
         return true;
     }
 
@@ -29,7 +31,7 @@ function shExpMatch(str, shexp) {
     let i = 0;
 
     for (; i < pieces.length; i++) {
-        if (pieces[i] === "") {
+        if (pieces[i] === '') {
             continue;
         }
 
@@ -51,7 +53,7 @@ function shExpMatch(str, shexp) {
 
     i--;
 
-    return pieces[i] === "" || str === "";
+    return pieces[i] === '' || str === '';
 }
 
 /**
