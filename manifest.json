@@ -33,7 +33,7 @@
       "128": "data/icons/action/icon-128.png"
     },
     "default_title": "FireX Proxy",
-    "default_popup": "popup/index.html"
+    "default_popup": "vue/templates/browser-action.html"
   },
   "background": {
     "page": "background.html"

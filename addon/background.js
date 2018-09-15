@@ -82,7 +82,7 @@ import { detectConflicts } from './conflict.js';
     browser.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             switch (request.name) {
-            case 'get-proxy-list':
+            case 'show':
                 detectConflicts()
                     .then(conflicts => {
                         if (!proxyListSession.byExcludeFavorites().isEmpty() && !request.force) {
