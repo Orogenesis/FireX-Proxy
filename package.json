@@ -9,7 +9,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "./node_modules/.bin/eslint addon/**/*.js test/**/*.js",
-    "test": "./node_modules/.bin/mocha --require babel-core/register"
+    "test": "./node_modules/.bin/mocha --require babel-core/register",
+    "build": "./node_modules/.bin/webpack --config webpack.config.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -23,9 +24,11 @@
     "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.17",
     "webextension-polyfill": "^0.3.0",
-    "webpack": "^4.19.0"
+    "webpack": "^4.19.0",
+    "webpack-cli": "^3.1.0"
   },
   "dependencies": {
-    "vue": "^2.5.17"
+    "vue": "^2.5.17",
+    "vue-flag-icon-2": "^1.0.8"
   }
 }
