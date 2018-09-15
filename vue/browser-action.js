@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import FlagIcon from 'vue-flag-icon-2'
 import BrowserAction from './BrowserAction.vue';
+import FlagIcon from './components/FlagIcon.vue';
 
-Vue.use(FlagIcon);
+Vue.component('flag-icon', FlagIcon);
 
 new Vue({
     el: '#browser-action',
