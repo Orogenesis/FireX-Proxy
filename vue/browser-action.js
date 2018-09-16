@@ -15,6 +15,7 @@ import {
     MdButton,
     MdContent,
     MdTabs,
+    MdField,
     MdCheckbox,
     MdToolbar,
     MdIcon,
@@ -32,6 +33,7 @@ Vue.use(MdIcon);
 Vue.use(MdBadge);
 Vue.use(MdMenu);
 Vue.use(MdSwitch);
+Vue.use(MdField);
 
 Vue.component(FlagIcon.name, FlagIcon);
 Vue.component(Proxy.name, Proxy);
