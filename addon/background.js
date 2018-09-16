@@ -87,7 +87,7 @@ import { detectConflicts } from './conflict.js';
                     .then(conflicts => {
                         if (!proxyListSession.byExcludeFavorites().isEmpty() && !request.force) {
                             sendResponse({
-                                list: proxyListSession.unique(),
+                                proxies: proxyListSession.unique(),
                                 conflicts: conflicts
                             });
                         } else {
@@ -113,7 +113,7 @@ import { detectConflicts } from './conflict.js';
                                         .concat(result);
 
                                     sendResponse({
-                                        list: proxyListSession.unique(),
+                                        proxies: proxyListSession.unique(),
                                         conflicts: conflicts
                                     });
                                 });

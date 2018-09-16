@@ -18,8 +18,34 @@ module.exports = {
             {
                 test: /\.vue$/,
                 use: 'vue-loader'
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            data: '@import "variables";',
+                            includePaths: [
+                                resolve('vue','scss')
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.svg$/,
+                loader: 'svg-url-loader'
             }
         ]
+    },
+    resolve: {
+        alias: {
+            '@': resolve('vue'),
+            '$vendor': resolve('node_modules')
+        }
     },
     plugins: [
         new VueLoaderPlugin()
