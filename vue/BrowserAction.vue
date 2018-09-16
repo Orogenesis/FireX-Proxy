@@ -41,7 +41,7 @@
     @import "scss/main.scss";
 
     #wrapper {
-        height: 600px;
+        height: 100%;
         #primary-content {
             max-height: calc(100% - 56px);
             overflow: auto;
