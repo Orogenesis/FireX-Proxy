@@ -3,6 +3,7 @@ import { Addresses } from './addresses.js';
 import { isChrome, isMajorUpdate } from './helpers.js';
 import { Connector } from './connector.js';
 import { Address } from './address.js';
+import { detectConflicts } from './conflict.js';
 
 (function setup() {
     let proxyListSession  = new Addresses();
@@ -81,8 +82,17 @@ import { Address } from './address.js';
     browser.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             switch (request.name) {
-            case 'get-proxy-list':
-                if (proxyListSession.byExcludeFavorites().isEmpty() || request.force) {
+            case 'get-conflicts':
+                detectConflicts()
+                    .then(conflicts => {
+                        sendResponse(conflicts);
+                    });
+
+                break;
+            case 'get-proxies':
+                if (!proxyListSession.byExcludeFavorites().isEmpty() && !request.force) {
+                    sendResponse(proxyListSession.unique());
+                } else {
                     let activeProxies = proxyListSession.filterEnabled();
 
                     proxyProvider
@@ -106,11 +116,7 @@ import { Address } from './address.js';
 
                             sendResponse(proxyListSession.unique());
                         });
-
-                    break;
                 }
-
-                sendResponse(proxyListSession.unique());
 
                 break;
             case 'connect':
