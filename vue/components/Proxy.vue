@@ -1,5 +1,5 @@
 <template>
-    <div class="proxy-row" v-bind:class="{ active: proxy.active }">
+    <div class="proxy-row" v-bind:class="{ active: proxy.activeState }">
         <div class="proxy-row-left">
             <span class="proxy-cell checkbox star" v-bind:class="{ active: proxy.favoriteState }"></span>
             <flag-icon class="proxy-cell flag-icon-circle" v-bind="{ iso: proxy.isoCode.toLowerCase() }" />
@@ -25,14 +25,14 @@
         props: {
             proxy: Object
         },
-
         Components: {
             FlagIcon,
             StrengthIndicator
         },
-
         methods: {
             applyClicked() {
+                this.proxy.activeState = !this.proxy.activeState;
+
                 this.$emit('proxyStateChanged', this.$vnode.key);
             }
         }

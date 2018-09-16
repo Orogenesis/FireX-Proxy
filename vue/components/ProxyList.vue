@@ -40,6 +40,7 @@
         methods: {
             getData() {
                 this.loaded = false;
+
                 browser
                     .runtime
                     .sendMessage({
