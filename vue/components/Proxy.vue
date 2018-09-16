@@ -1,14 +1,14 @@
 <template>
-    <div class="proxy-row" v-bind:class="{ active: active }">
+    <div class="proxy-row" v-bind:class="{ active: proxy.active }">
         <div class="proxy-row-left">
-            <span class="proxy-cell checkbox star" v-bind:class="{ active: favoriteState }"></span>
+            <span class="proxy-cell checkbox star" v-bind:class="{ active: proxy.favoriteState }"></span>
             <flag-icon class="proxy-cell flag-icon-circle" v-bind="{ iso: proxy.isoCode.toLowerCase() }" />
             <span class="proxy-cell country">{{ proxy.country }}</span>
         </div>
         <div class="proxy-row-right">
             <strength-indicator v-bind="{ strength: proxy.pingTimeMs, strengths: [300, 1000, 3000] }"></strength-indicator>
             <span class="proxy-cell protocol">{{ proxy.protocol }}</span>
-            <div class="proxy-cell apply">
+            <div class="proxy-cell apply" v-on:click="applyClicked">
                 <button class="apply-btn">{{ 'apply' | translate }}</button>
             </div>
         </div>
@@ -18,14 +18,23 @@
 <script>
     import FlagIcon from '@/components/FlagIcon.vue';
     import StrengthIndicator from "./StrengthIndicator.vue";
+    import Vue from 'vue';
 
     export default {
         name: 'proxy',
-        props: ['proxy'],
+        props: {
+            proxy: Object
+        },
 
         Components: {
             FlagIcon,
             StrengthIndicator
+        },
+
+        methods: {
+            applyClicked() {
+                this.$emit('proxyStateChanged', this.$vnode.key);
+            }
         }
     }
 </script>
@@ -92,6 +101,12 @@
                         color: white;
                     }
                 }
+            }
+        }
+
+        .checkbox {
+            &.star {
+                background-image: url(~@/icons/star.svg);
             }
         }
     }

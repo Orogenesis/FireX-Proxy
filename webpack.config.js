@@ -29,7 +29,8 @@ module.exports = {
                         options: {
                             data: '@import "variables";',
                             includePaths: [
-                                resolve('vue','scss')
+                                resolve('vue','scss'),
+                                resolve('vue')
                             ]
                         }
                     }

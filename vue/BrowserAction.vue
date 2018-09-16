@@ -1,53 +1,65 @@
 <template>
-    <div>
-        <proxy v-for="proxy in proxies"
-               :key="proxy.ip+';'+proxy.port"
-               v-bind="{ proxy: proxy }">
+    <article id="wrapper">
+        <article id="primary-content">
+            <proxy-list></proxy-list>
+        </article>
+        <footer-component>
 
-        </proxy>
-    </div>
+        </footer-component>
+    </article>
 </template>
 
 <script>
-    import ProxyComponent from '@/components/Proxy.vue';
-    import * as browser from 'webextension-polyfill';
+    import ProxyList from "./components/ProxyList.vue";
+    import FooterComponent from "@/components/Footer.vue";
 
     export default {
         name: 'popup',
         components: {
-            ProxyComponent
+            ProxyList,
+            FooterComponent
         },
 
         data () {
             return {
-                proxies: [],
                 conflicts: []
             };
-        },
-
-        methods: {
-            getData() {
-                browser
-                    .runtime
-                    .sendMessage({
-                        name: 'show'
-                    }).then(message => {
-                        const { proxies, conflicts } = message;
-
-                        this.proxies = proxies;
-                        this.conflicts = conflicts;
-                    });
-            },
-        },
-
-        mounted() {
-            this.getData();
         }
     }
 </script>
 
 <style lang="scss">
     @import "_reset.scss";
-    $flag-icon-css-path: '~flag-icon-css/flags';
-    @import "~flag-icon-css/sass/flag-icon.scss";
+
+    .checkbox {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        cursor: pointer;
+        border: 1px solid #CCCCCC;
+        border-radius: 2px;
+        margin-right: 8px;
+        vertical-align: -4px;
+        background-image: url(~@/icons/checked.svg);
+        background-size: 10px 10px;
+        background-repeat: no-repeat;
+        background-color: #D9D9D9;
+        background-position: center center;
+        &.active {
+            background-color: #78C0BD;
+            border-color: $primaryColor;
+        }
+    }
+
+    #wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        #primary-content {
+            flex: 1;
+        }
+        footer-component {
+            display: flex;
+        }
+    }
 </style>
