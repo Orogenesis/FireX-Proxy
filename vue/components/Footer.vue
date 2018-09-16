@@ -4,14 +4,13 @@
 
 <script>
     import * as constants from '@/common/constants.js';
-    import event from '@/common/event.js';
+    import bus from '@/common/bus.js';
 
     export default {
         name: 'footer-components',
-
         methods: {
             emitUpdate() {
-                event.$emit(constants.PROXY_UPDATE_EVENT);
+                bus.$emit(constants.PROXY_UPDATE_EVENT);
             }
         }
     }

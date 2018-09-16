@@ -14,7 +14,6 @@
             strength: Number,
             strengths: Array
         },
-
         computed: {
             className() {
                 if (this.strength <= this.strengths[0]) {

@@ -82,43 +82,41 @@ import { detectConflicts } from './conflict.js';
     browser.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             switch (request.name) {
-            case 'show':
+            case 'get-conflicts':
                 detectConflicts()
                     .then(conflicts => {
-                        if (!proxyListSession.byExcludeFavorites().isEmpty() && !request.force) {
-                            sendResponse({
-                                proxies: proxyListSession.unique(),
-                                conflicts: conflicts
-                            });
-                        } else {
-                            let activeProxies = proxyListSession.filterEnabled();
-
-                            proxyProvider
-                                .getProxies()
-                                .then(response => {
-                                    let result = response
-                                        .map(proxy => {
-                                            return (new Address())
-                                                .setIPAddress(proxy.server)
-                                                .setPort(proxy.port)
-                                                .setCountry(proxy.country)
-                                                .setProtocol(proxy.protocol)
-                                                .setPingTimeMs(proxy.pingTimeMs)
-                                                .setIsoCode(proxy.isoCode);
-                                        });
-
-                                    proxyListSession = proxyListSession
-                                        .byFavorite()
-                                        .concat(activeProxies)
-                                        .concat(result);
-
-                                    sendResponse({
-                                        proxies: proxyListSession.unique(),
-                                        conflicts: conflicts
-                                    });
-                                });
-                        }
+                        sendResponse(conflicts);
                     });
+
+                break;
+            case 'get-proxies':
+                if (!proxyListSession.byExcludeFavorites().isEmpty() && !request.force) {
+                    sendResponse(proxyListSession.unique());
+                } else {
+                    let activeProxies = proxyListSession.filterEnabled();
+
+                    proxyProvider
+                        .getProxies()
+                        .then(response => {
+                            let result = response
+                                .map(proxy => {
+                                    return (new Address())
+                                        .setIPAddress(proxy.server)
+                                        .setPort(proxy.port)
+                                        .setCountry(proxy.country)
+                                        .setProtocol(proxy.protocol)
+                                        .setPingTimeMs(proxy.pingTimeMs)
+                                        .setIsoCode(proxy.isoCode);
+                                });
+
+                            proxyListSession = proxyListSession
+                                .byFavorite()
+                                .concat(activeProxies)
+                                .concat(result);
+
+                            sendResponse(proxyListSession.unique());
+                        });
+                }
 
                 break;
             case 'connect':

@@ -19,7 +19,6 @@
             ProxyList,
             FooterComponent
         },
-
         data () {
             return {
                 conflicts: []

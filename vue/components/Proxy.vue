@@ -18,7 +18,6 @@
 <script>
     import FlagIcon from '@/components/FlagIcon.vue';
     import StrengthIndicator from "./StrengthIndicator.vue";
-    import Vue from 'vue';
 
     export default {
         name: 'proxy',

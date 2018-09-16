@@ -20,7 +20,7 @@
     import ProxyComponent from '@/components/Proxy.vue';
     import * as browser from 'webextension-polyfill';
     import Spinner from "@/components/Spinner.vue";
-    import event from '@/common/event.js';
+    import bus from '@/common/bus.js';
     import * as constants from '@/common/constants.js';
 
     export default {
@@ -29,48 +29,40 @@
             Spinner,
             ProxyComponent
         },
-
         data() {
             return {
                 proxies: [],
                 loaded: false
             };
         },
-
         methods: {
-            getData() {
+            getData(isForce = false) {
                 this.loaded = false;
 
-                browser
-                    .runtime
-                    .sendMessage({
-                        name: 'show'
-                    }).then(message => {
-                    const { proxies } = message;
-
+                browser.runtime.sendMessage({
+                    name: 'get-proxies',
+                    force: isForce
+                }).then(proxies => {
                     this.proxies = proxies;
                     this.loaded = true;
                 });
             },
-
             onProxyUpdateHandler() {
-                this.getData();
+                this.getData(true);
             }
         },
-
         mounted() {
             this.getData();
-            event.$on(constants.PROXY_UPDATE_EVENT, this.onProxyUpdateHandler);
-        },
 
+            bus.$on(constants.PROXY_UPDATE_EVENT, this.onProxyUpdateHandler);
+        },
         beforeDestroy() {
-            event.$off(constants.PROXY_UPDATE_EVENT, this.onProxyUpdateHandler);
+            bus.$off(constants.PROXY_UPDATE_EVENT, this.onProxyUpdateHandler);
         }
     }
 </script>
 
 <style lang="scss">
-
     #proxy-content {
         .content-wrapper {
             position: relative;
@@ -105,5 +97,4 @@
             }
         }
     }
-
 </style>
