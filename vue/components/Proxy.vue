@@ -9,7 +9,8 @@
             <strength-indicator class="proxy-cell ping" v-bind="{ strength: proxy.pingTimeMs, strengths: [300, 1000, 3000] }"></strength-indicator>
             <span class="proxy-cell protocol">{{ proxy.protocol }}</span>
             <div class="proxy-cell apply" v-on:click="applyClicked">
-                <button class="apply-btn">{{ 'apply' | translate }}</button>
+                <button class="apply-btn" v-if="!proxy.activeState">{{ 'on' | translate }}</button>
+                <button class="apply-btn" v-else>{{ 'off' | translate }}</button>
             </div>
         </div>
     </div>
@@ -32,7 +33,7 @@
             applyClicked() {
                 this.proxy.activeState = !this.proxy.activeState;
 
-                this.$emit('proxyStateChanged', this.$vnode.key);
+                this.$emit('proxyStateChanged', this.$vnode.key, this.proxy.activeState);
             }
         }
     }

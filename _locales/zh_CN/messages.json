@@ -17,7 +17,10 @@
   "reset_filters": {
     "message": "重置筛选器"
   },
-  "apply": {
+  "on": {
+    "message": "应用"
+  },
+  "off": {
     "message": "应用"
   }
 }

@@ -17,7 +17,10 @@
   "reset_filters": {
     "message": "скинути фільтри"
   },
-  "apply": {
+  "on": {
     "message": "Вкл."
+  },
+  "off": {
+    "message": "Выкл."
   }
 }
