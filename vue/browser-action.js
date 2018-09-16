@@ -6,8 +6,11 @@ import Proxy from '@/components/Proxy.vue';
 import Spinner from '@/components/Spinner.vue';
 import ProxyList from '@/components/ProxyList.vue';
 import Refresher from "@/components/Refresher.vue";
+import VueMaterial from 'vue-material'
 
 import './filters/translate.js';
+
+Vue.use(VueMaterial);
 
 Vue.component('flag-icon', FlagIcon);
 Vue.component('proxy', Proxy);

@@ -53,16 +53,12 @@
             onProxyStateChanged(index, newState) {
                 let changedProxy = this.proxies[index];
 
-                this.proxies.forEach((proxy, idx) => {
-                    if (idx !== index) {
-                        proxy.activeState = false;
-                    }
-                });
+                this.proxies
+                    .filter((proxy, idx) => idx !== index)
+                    .forEach((proxy, idx) => proxy.activeState = false);
 
                 browser.runtime.sendMessage({
-                    name: !newState ?
-                        'disconnect' :
-                        'connect',
+                    name: newState ? 'connect' : 'disconnect',
                     message: changedProxy
                 })
             }
