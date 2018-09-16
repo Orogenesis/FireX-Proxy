@@ -1,7 +1,6 @@
 <template>
-    <div class="proxy-row" v-bind:class="{ active: proxy.activeState }">
+    <md-content class="proxy-row" v-bind:class="{ active: proxy.activeState }">
         <div class="proxy-row-left">
-            <span class="proxy-cell checkbox star" v-bind:class="{ active: proxy.favoriteState }"></span>
             <flag-icon class="proxy-cell flag-icon-circle" v-bind="{ iso: proxy.isoCode.toLowerCase() }" />
             <span class="proxy-cell country">{{ proxy.country }}</span>
         </div>
@@ -9,16 +8,16 @@
             <strength-indicator class="proxy-cell ping" v-bind="{ strength: proxy.pingTimeMs, strengths: [300, 1000, 3000] }"></strength-indicator>
             <span class="proxy-cell protocol">{{ proxy.protocol }}</span>
             <div class="proxy-cell apply" v-on:click="applyClicked">
-                <button class="apply-btn" v-if="!proxy.activeState">{{ 'on' | translate }}</button>
-                <button class="apply-btn" v-else>{{ 'off' | translate }}</button>
+                <md-button class="md-dense md-raised md-primary" v-if="!proxy.activeState">{{ 'on' | translate }}</md-button>
+                <md-button class="md-dense md-raised md-accent" v-else>{{ 'off' | translate }}</md-button>
             </div>
         </div>
-    </div>
+    </md-content>
 </template>
 
 <script>
     import FlagIcon from '@/components/FlagIcon.vue';
-    import StrengthIndicator from "./StrengthIndicator.vue";
+    import StrengthIndicator from "@/components/StrengthIndicator.vue";
 
     export default {
         name: 'proxy',
@@ -39,13 +38,15 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    @import "~vue-material/dist/theme/engine";
+
     .proxy-row {
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0 10px;
-        line-height: 60px;
+        height: 60px;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -58,47 +59,25 @@
         }
         .proxy-cell {
             display: inline-block;
-            color: $materialBlack;
             &.favorite,
             &.flag-icon {
                 width: 28px;
             }
             &.protocol {
-                width: 70px;
+                width: 50px;
             }
             &.ping {
-                width: 45px;
+                width: 40px;
             }
             &.apply {
-                width: 70px;
-                .apply-btn {
-                    font-weight: 500;
-                    text-align: center;
-                    text-transform: uppercase;
-                    padding: 7.5px 16px;
-                    border-radius: 2px;
-                    color: $primaryColor;
-                    background: $primaryColorLight;
-                    border: none;
+                width: 100px;
+                .md-button {
+                    vertical-align: 0 !important;
                 }
             }
         }
         &.active {
-            background-color: $primaryColorLight;
-            .proxy-cell {
-                &.apply {
-                    .apply-btn {
-                        background: #ff7970;
-                        color: white;
-                    }
-                }
-            }
-        }
-
-        .checkbox {
-            &.star {
-                background-image: url(~@/icons/star.svg);
-            }
+            background: md-get-palette-color(lightblue, 100);
         }
     }
 </style>

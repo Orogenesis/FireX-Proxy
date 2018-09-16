@@ -1,11 +1,16 @@
 <template>
     <div id="wrapper">
-        <header id="controls">
-            <h4>Proxy List</h4>
-            <div class="right-content">
-                <refresher></refresher>
+        <md-toolbar class="md-transparent">
+            <div class="md-toolbar-row">
+                <div class="md-toolbar-section-start">
+                    <h3 class="md-title">FireX Proxy</h3>
+                </div>
+                <div class="md-toolbar-section-end">
+                    <filter-list></filter-list>
+                    <refresher></refresher>
+                </div>
             </div>
-        </header>
+        </md-toolbar>
         <article id="primary-content">
             <proxy-list></proxy-list>
         </article>
@@ -13,12 +18,14 @@
 </template>
 
 <script>
-    import ProxyList from "./components/ProxyList.vue";
+    import ProxyList from "@/components/ProxyList.vue";
     import Refresher from "@/components/Refresher.vue";
+    import FilterList from "@/components/FilterList.vue";
 
     export default {
         name: 'popup',
         components: {
+            FilterList,
             ProxyList,
             Refresher
         },
@@ -31,45 +38,13 @@
 </script>
 
 <style lang="scss">
-    @import "_reset.scss";
-
-    .checkbox {
-        width: 16px;
-        height: 16px;
-        display: inline-block;
-        cursor: pointer;
-        border: 1px solid #CCCCCC;
-        border-radius: 2px;
-        margin-right: 8px;
-        vertical-align: -4px;
-        background-image: url(~@/icons/checked.svg);
-        background-size: 10px 10px;
-        background-repeat: no-repeat;
-        background-color: #D9D9D9;
-        background-position: center center;
-        &.active {
-            background-color: #78C0BD;
-            border-color: $primaryColor;
-        }
-    }
+    @import "scss/main.scss";
 
     #wrapper {
         height: 100%;
         #primary-content {
             display: flex;
             flex-direction: column;
-        }
-        #controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 10px;
-            h4 {
-                color: $materialBlack;
-            }
-            .right-content {
-                margin-left: auto;
-            }
         }
     }
 </style>

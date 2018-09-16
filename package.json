@@ -1,17 +1,13 @@
 {
-  "title": "FireX Proxy",
   "name": "firex-proxy",
   "version": "5.1.11",
-  "id": "divanproger@gmail.com",
-  "description": "FireX Proxy",
-  "main": "index.js",
-  "author": "Exclumice",
+  "author": "FireX Proxy",
   "license": "MIT",
   "scripts": {
     "lint": "./node_modules/.bin/eslint addon/**/*.js test/**/*.js",
     "test": "./node_modules/.bin/mocha --require babel-core/register",
     "build": "./node_modules/.bin/webpack --config webpack.config.js --mode production",
-    "dev": "./node_modules/.bin/webpack --config webpack.development.config.js"
+    "build-dev": "./node_modules/.bin/webpack --config webpack.development.config.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -31,6 +27,7 @@
     "svg-url-loader": "^2.3.2",
     "vue-loader": "^15.4.2",
     "vue-material": "^1.0.0-beta-10.2",
+    "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.5.17",
     "webextension-polyfill": "^0.3.1",
     "webpack": "^4.19.0",

@@ -1,8 +1,7 @@
 <template>
     <section id="proxy-content">
         <div class="content-wrapper">
-            <spinner v-if="!loaded" />
-            <div id="proxy-list-box" v-else-if="proxies.length > 0">
+            <div id="proxy-list-box" v-if="proxies.length > 0">
                 <proxy v-for="(proxy, index) in proxies"
                        :key="index"
                        v-bind="{ proxy: proxy }"
@@ -19,14 +18,12 @@
 <script>
     import ProxyComponent from '@/components/Proxy.vue';
     import * as browser from 'webextension-polyfill';
-    import Spinner from "@/components/Spinner.vue";
     import bus from '@/common/bus.js';
     import * as constants from '@/common/constants.js';
 
     export default {
         name: 'proxy-list',
         components: {
-            Spinner,
             ProxyComponent
         },
         data() {
@@ -102,7 +99,6 @@
                 text-align: center;
                 font-size: 14px;
                 .reset-button {
-                    color: $primaryColor;
                     text-decoration-style: solid;
                     cursor: pointer;
                 }

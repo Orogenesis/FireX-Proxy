@@ -1,5 +1,7 @@
 <template>
-    <i class="refresh" v-on:click="update"></i>
+    <md-button class="md-icon-button" v-on:click="update">
+        <md-icon>refresh</md-icon>
+    </md-button>
 </template>
 
 <script>
@@ -15,16 +17,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    i.refresh {
-        background-image: url(~@/icons/refresh.svg);
-        background-size: 16px 16px;
-        background-repeat: no-repeat;
-        background-position: center left;
-        height: 24px;
-        width: 24px;
-        display: inline-block;
-        cursor: pointer;
-    }
-</style>
