@@ -41,8 +41,10 @@
     @import "scss/main.scss";
 
     #wrapper {
-        height: 100%;
+        height: 600px;
         #primary-content {
+            max-height: calc(100% - 56px);
+            overflow: auto;
             display: flex;
             flex-direction: column;
         }
