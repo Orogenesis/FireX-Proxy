@@ -1,7 +1,7 @@
 <template>
     <md-content class="proxy-row" v-bind:class="{ active: proxy.activeState }">
         <div class="proxy-row-left">
-            <md-button class="md-icon-button md-transparent" v-bind:class="{ 'md-accent': proxy.favoriteState }">
+            <md-button class="md-icon-button md-transparent" v-bind:class="{ 'md-accent': proxy.favoriteState }" v-on:click="toggleFavorite">
                 <md-icon>thumb_up</md-icon>
             </md-button>
             <flag-icon class="proxy-cell flag-icon-circle" v-bind="{ iso: proxy.isoCode.toLowerCase() }" />
@@ -10,7 +10,7 @@
         <div class="proxy-row-right">
             <strength-indicator class="proxy-cell ping" v-bind="{ strength: proxy.pingTimeMs, strengths: [300, 1000, 3000] }"></strength-indicator>
             <span class="proxy-cell protocol">{{ proxy.protocol }}</span>
-            <div class="proxy-cell apply" v-on:click="applyClicked">
+            <div class="proxy-cell apply" v-on:click="apply">
                 <md-button class="md-dense md-raised md-primary" v-if="!proxy.activeState">{{ 'on' | translate }}</md-button>
                 <md-button class="md-dense md-raised md-accent" v-else>{{ 'off' | translate }}</md-button>
             </div>
@@ -21,6 +21,7 @@
 <script>
     import FlagIcon from '@/components/FlagIcon.vue';
     import StrengthIndicator from "@/components/StrengthIndicator.vue";
+    import * as browser from 'webextension-polyfill';
 
     export default {
         name: 'proxy',
@@ -32,10 +33,21 @@
             StrengthIndicator
         },
         methods: {
-            applyClicked() {
+            apply() {
                 this.proxy.activeState = !this.proxy.activeState;
 
                 this.$emit('proxyStateChanged', this.$vnode.key, this.proxy.activeState);
+            },
+            toggleFavorite() {
+                this.proxy.favoriteState = !this.proxy.favoriteState;
+
+                browser.runtime.sendMessage({
+                    name: 'toggle-favorite',
+                    message: {
+                        ipAddress: this.proxy.ipAddress,
+                        port: this.proxy.port
+                    }
+                });
             }
         }
     }
