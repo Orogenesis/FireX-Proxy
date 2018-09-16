@@ -2,7 +2,7 @@
     <section id="proxy-content">
         <div class="content-wrapper">
             <spinner v-if="!loaded" />
-            <div id="proxy-list-box" v-else-if="loaded && proxies.length > 0">
+            <div id="proxy-list-box" v-else-if="proxies.length > 0">
                 <proxy v-for="(proxy, index) in proxies"
                        :key="index"
                        v-bind="{ proxy: proxy }"
@@ -10,7 +10,7 @@
                 </proxy>
             </div>
             <div id="no-proxy-list" v-else>
-                {{'no_proxy' | translate}} <span class="reset-button">{{'reset_filters' | translate}}</span>
+                {{ 'no_proxy' | translate }} <span class="reset-button">{{ 'reset_filters' | translate }}</span>
             </div>
         </div>
     </section>

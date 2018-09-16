@@ -5,7 +5,7 @@ import StrengthIndicator from '@/components/StrengthIndicator.vue';
 import Proxy from '@/components/Proxy.vue';
 import Spinner from '@/components/Spinner.vue';
 import ProxyList from '@/components/ProxyList.vue';
-import FooterComponent from "@/components/Footer.vue";
+import Refresher from "@/components/Refresher.vue";
 
 import './filters/translate.js';
 
@@ -14,7 +14,7 @@ Vue.component('proxy', Proxy);
 Vue.component('strength-indicator', StrengthIndicator);
 Vue.component('spinner', Spinner);
 Vue.component('proxy-list', ProxyList);
-Vue.component('footer-component', FooterComponent);
+Vue.component('refresher', Refresher);
 
 
 new Vue({

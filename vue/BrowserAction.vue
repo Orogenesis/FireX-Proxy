@@ -1,23 +1,26 @@
 <template>
-    <article id="wrapper">
+    <div id="wrapper">
+        <header id="controls">
+            <h4>Proxy List</h4>
+            <div class="right-content">
+                <refresher></refresher>
+            </div>
+        </header>
         <article id="primary-content">
             <proxy-list></proxy-list>
         </article>
-        <footer-component>
-
-        </footer-component>
-    </article>
+    </div>
 </template>
 
 <script>
     import ProxyList from "./components/ProxyList.vue";
-    import FooterComponent from "@/components/Footer.vue";
+    import Refresher from "@/components/Refresher.vue";
 
     export default {
         name: 'popup',
         components: {
             ProxyList,
-            FooterComponent
+            Refresher
         },
         data () {
             return {
@@ -52,13 +55,21 @@
 
     #wrapper {
         height: 100%;
-        display: flex;
-        flex-direction: column;
         #primary-content {
-            flex: 1;
-        }
-        footer-component {
             display: flex;
+            flex-direction: column;
+        }
+        #controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+            h4 {
+                color: $materialBlack;
+            }
+            .right-content {
+                margin-left: auto;
+            }
         }
     }
 </style>

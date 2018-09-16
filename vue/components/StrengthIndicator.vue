@@ -1,5 +1,5 @@
 <template>
-    <div class="proxy-cell ping signal-bars" :class="className">
+    <div class="signal-bars" :class="className">
         <div class="first-bar bar"></div>
         <div class="second-bar bar"></div>
         <div class="third-bar bar"></div>
