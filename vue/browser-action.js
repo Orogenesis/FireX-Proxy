@@ -33,12 +33,12 @@ Vue.use(MdBadge);
 Vue.use(MdMenu);
 Vue.use(MdSwitch);
 
-Vue.component('flag-icon', FlagIcon);
-Vue.component('proxy', Proxy);
-Vue.component('strength-indicator', StrengthIndicator);
-Vue.component('proxy-list', ProxyList);
-Vue.component('refresher', Refresher);
-Vue.component('filter-list', FilterList);
+Vue.component(FlagIcon.name, FlagIcon);
+Vue.component(Proxy.name, Proxy);
+Vue.component(StrengthIndicator.name, StrengthIndicator);
+Vue.component(ProxyList.name, ProxyList);
+Vue.component(Refresher.name, Refresher);
+Vue.component(FilterList.name, FilterList);
 
 
 new Vue({

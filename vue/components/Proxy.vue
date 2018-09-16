@@ -24,7 +24,7 @@
     import * as browser from 'webextension-polyfill';
 
     export default {
-        name: 'proxy',
+        name: 'Proxy',
         props: {
             proxy: Object
         },

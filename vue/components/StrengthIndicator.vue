@@ -9,7 +9,7 @@
 
 <script>
     export default {
-        name: 'strength-indicator',
+        name: 'StrengthIndicator',
         props: {
             strength: Number,
             strengths: Array

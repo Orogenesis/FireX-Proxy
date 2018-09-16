@@ -15,7 +15,7 @@
 
 <script>
     export default {
-        name: 'filter-list',
+        name: 'FilterList',
         data() {
             return {
                 showFavorites: false

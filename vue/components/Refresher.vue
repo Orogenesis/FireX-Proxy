@@ -9,7 +9,7 @@
     import bus from '@/common/bus.js';
 
     export default {
-        name: 'refresher',
+        name: 'Refresher',
         methods: {
             update() {
                 bus.$emit(constants.PROXY_UPDATE_EVENT);

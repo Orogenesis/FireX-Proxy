@@ -22,7 +22,7 @@
     import * as constants from '@/common/constants.js';
 
     export default {
-        name: 'proxy-list',
+        name: 'ProxyList',
         components: {
             ProxyComponent
         },
