@@ -1,6 +1,9 @@
 <template>
     <md-content class="proxy-row" v-bind:class="{ active: proxy.activeState }">
         <div class="proxy-row-left">
+            <md-button class="md-icon-button md-transparent" v-bind:class="{ 'md-accent': proxy.favoriteState }">
+                <md-icon>thumb_up</md-icon>
+            </md-button>
             <flag-icon class="proxy-cell flag-icon-circle" v-bind="{ iso: proxy.isoCode.toLowerCase() }" />
             <span class="proxy-cell country">{{ proxy.country }}</span>
         </div>
@@ -59,6 +62,9 @@
         }
         .proxy-cell {
             display: inline-block;
+            .md-checkbox {
+                margin: 0 !important;
+            }
             &.favorite,
             &.flag-icon {
                 width: 28px;
@@ -71,10 +77,10 @@
             }
             &.apply {
                 width: 100px;
-                .md-button {
-                    vertical-align: 0 !important;
-                }
             }
+        }
+        .md-button {
+            vertical-align: 0 !important;
         }
         &.active {
             background: md-get-palette-color(lightblue, 100);
