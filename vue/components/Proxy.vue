@@ -92,7 +92,7 @@
             }
         }
         .md-button {
-            vertical-align: 0 !important;
+            vertical-align: middle !important;
         }
         &.active {
             background: md-get-palette-color(lightblue, 100);
