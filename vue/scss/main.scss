@@ -1,5 +1,9 @@
 @import "variables";
 
+html {
+  overflow: hidden;
+}
+
 body {
   width: $actionWidth;
   height: $actionHeight;
