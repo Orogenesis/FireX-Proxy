@@ -13,7 +13,7 @@
                        @proxyStateChanged="apply" />
             </v-layout>
         </v-container>
-        <span v-else>
+        <span class="body-2" v-else>
             {{ 'no_proxy' | translate }} <span class="reset-button primary--text" v-on:click="resetFilters">{{ 'reset_filters' | translate }}.</span>
         </span>
     </v-layout>

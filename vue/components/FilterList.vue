@@ -3,14 +3,15 @@
             :close-on-content-click="false"
             :light="true"
             top
-            left>
+            left
+            max-width="80%"
+            min-width="80%">
         <v-btn slot="activator" icon :dark="true">
             <v-badge right color="primary darken-3">
                 <span slot="badge" v-if="countFilters > 0">{{countFilters}}</span>
                 <v-icon>filter_list</v-icon>
             </v-badge>
         </v-btn>
-
         <v-card>
             <v-container>
                 <v-switch
