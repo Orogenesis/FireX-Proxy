@@ -12,6 +12,14 @@ import { detectConflicts } from './conflict.js';
 
     let blacklistSession   = [];
     let isBlacklistEnabled = false;
+    let appState           = {
+        filters: {
+            countryFilter: [],
+            protocolFilter: [],
+            protocols: [],
+            favorites: true
+        }
+    };
 
     if (!isChrome() && browser.proxy.register) {
         browser.proxy.register('addon/pac/firefox.js');
@@ -205,6 +213,16 @@ import { detectConflicts } from './conflict.js';
                     browser.storage.local.set({
                         favorites: [...proxyListSession.byFavorite()]
                     });
+
+                    break;
+                }
+                case 'update-state': {
+                    appState = Object.assign(appState, message);
+
+                    break;
+                }
+                case 'poll-state': {
+                    sendResponse(appState);
 
                     break;
                 }

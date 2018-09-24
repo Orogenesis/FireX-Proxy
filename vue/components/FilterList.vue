@@ -46,6 +46,7 @@
 <script>
     import bus from '@/common/bus.js';
     import * as constants from '@/common/constants.js';
+    import * as browser from 'webextension-polyfill';
 
     export default {
         name: 'FilterList',
@@ -85,6 +86,8 @@
                 this.protocols      = newProtocols;
             },
             updateFilters() {
+                this.save();
+
                 bus.$emit(constants.FILTERS_UPDATED, {
                     countries: this.countryFilter,
                     protocols: this.protocolFilter,
@@ -95,9 +98,37 @@
                 this.countryFilter = [];
                 this.protocolFilter = this.protocols;
                 this.favorites = true;
+            },
+            poll() {
+                browser.runtime.sendMessage({
+                    name: 'poll-state',
+                }).then(state => {
+                    const { filters } = state;
+                    const { countryFilter, protocolFilter, favorites, protocols } = filters;
+
+                    this.countryFilter = countryFilter;
+                    this.protocolFilter = protocolFilter;
+                    this.protocols = protocols;
+                    this.favorites = favorites;
+                });
+            },
+            save() {
+                browser.runtime.sendMessage({
+                    name: 'update-state',
+                    message: {
+                        filters: {
+                            countryFilter: this.countryFilter,
+                            protocolFilter: this.protocolFilter,
+                            protocols: this.protocols,
+                            favorites: this.favorites
+                        }
+                    }
+                })
             }
         },
         mounted() {
+            this.poll();
+
             bus.$on(constants.PROXY_UPDATE_FINISHED, this.onProxiesUpdated);
             bus.$on(constants.PROXY_UPDATE_FINISHED, this.updateFilters);
             bus.$on(constants.FILTERS_RESET, this.onFiltersReset);

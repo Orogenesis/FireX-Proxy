@@ -62,7 +62,7 @@
             },
             apply(index, newState) {
                 const current = this.proxies.findIndex(
-                    proxy => proxy.server === this.filtered[index].server && proxy.port === this.filtered[index].port
+                    proxy => proxy.ipAddress === this.filtered[index].ipAddress && proxy.port === this.filtered[index].port
                 );
 
                 this.proxies.forEach(
