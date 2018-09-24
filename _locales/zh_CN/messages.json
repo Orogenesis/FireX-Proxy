@@ -2,6 +2,9 @@
   "blacklist": {
     "message": "黑名单（仅限）"
   },
+  "use_blacklist": {
+    "message": "使用 黑名单"
+  },
   "favorites": {
     "message": "星标收藏"
   },
@@ -17,7 +20,25 @@
   "reset_filters": {
     "message": "重置筛选器"
   },
-  "apply": {
+  "on": {
     "message": "应用"
+  },
+  "off": {
+    "message": "禁用"
+  },
+  "conflict": {
+    "message": "禁用有衝突的擴展？"
+  },
+  "conflict_resolve": {
+    "message": "解決衝突"
+  },
+  "protocol": {
+    "message": "协议"
+  },
+  "search": {
+    "message": "搜索"
+  },
+  "blacklist_tip": {
+    "message": "Add a domain name or a domain mask to this list, then activate the blacklist by clicking on the switch at the top of this page. Proxy servers would be used only for entries from this list."
   }
 }

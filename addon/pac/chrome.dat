@@ -11,19 +11,15 @@ function FindProxyForURL(url, host) {
         return 'DIRECT';
     }
 
-    if (!%isBlacklistEnabled%) {
-        return '%proxy%';
+    if (!{{isBlacklistEnabled}}) {
+        return '{{proxy}}';
     }
 
-    let blacklist = %blacklist%;
+    let blacklist = {{blacklist}};
 
     for (let pattern in blacklist) {
-        if (!blacklist.hasOwnProperty(pattern)) {
-            continue;
-        }
-
-        if (blacklist[pattern] && shExpMatch(host, pattern)) {
-            return '%proxy%';
+        if (shExpMatch(host, blacklist[pattern])) {
+            return '{{proxy}}';
         }
     }
 
