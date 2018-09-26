@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: ["error", {"args": "none", "varsIgnorePattern": "^(FindProxyForURL)$"}] */
 
 let proxy              = 'DIRECT';
-let blacklist          = {};
+let blacklist          = [];
 let isBlacklistEnabled = false;
 
 /**
@@ -111,7 +111,7 @@ function FindProxyForURL(url, host) {
     }
 
     for (let pattern in blacklist) {
-        if (shExpMatch(host, pattern)) {
+        if (shExpMatch(host, blacklist[pattern])) {
             return proxy;
         }
     }

@@ -57,17 +57,30 @@
                 countryFilter: [],
                 protocols: [],
                 protocolFilter: [],
-                favorites: true
+                favorites: true,
+                polled: false
             }
         },
         watch: {
             countryFilter() {
+                if (!this.polled) {
+                    return;
+                }
+
                 this.updateFilters();
             },
             protocolFilter() {
+                if (!this.polled) {
+                    return;
+                }
+
                 this.updateFilters();
             },
             favorites() {
+                if (!this.polled) {
+                    return;
+                }
+
                 this.updateFilters();
             }
         },
@@ -111,6 +124,7 @@
                     this.protocolFilter = protocolFilter;
                     this.protocols = protocols;
                     this.favorites = favorites;
+                    this.polled = true;
                 });
             },
             save() {

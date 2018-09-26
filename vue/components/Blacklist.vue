@@ -62,17 +62,26 @@
             return {
                 isBlacklistEnabled: false,
                 patterns: [],
-                newPattern: "",
+                newPattern: String(),
                 newPatternTips: [],
-                search: ""
+                search: String(),
+                polled: false
             }
         },
         watch: {
             isBlacklistEnabled() {
+                if (!this.polled) {
+                    return;
+                }
+
                 this.save();
             },
             patterns: {
                 handler() {
+                    if (!this.polled) {
+                        return;
+                    }
+
                     this.save();
                 },
                 deep: true
@@ -101,6 +110,7 @@
                 browser.storage.local.get().then(storage => {
                     this.isBlacklistEnabled = storage.isBlacklistEnabled || false;
                     this.patterns = storage.patterns || [];
+                    this.polled = true;
                 });
             },
             save() {
@@ -116,7 +126,7 @@
                     this.patterns.splice(duplicate, 1);
                 }
 
-                this.newPattern = "";
+                this.newPattern = String();
                 this.newPatternTips = [];
 
                 this.patterns.push(newPattern);
