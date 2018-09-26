@@ -11,7 +11,12 @@
                     </v-switch>
                 </v-flex>
                 <v-flex xs6>
-                    <v-text-field :label="this.$options.filters.translate('search')" v-model="search" :error="patterns.length > 0 && filteredPatterns.length === 0"></v-text-field>
+                    <v-text-field
+                            :label="this.$options.filters.translate('search')"
+                            v-model="search"
+                            :error="patterns.length > 0 && filteredPatterns.length === 0"
+                            :disabled="patterns.length === 0">
+                    </v-text-field>
                 </v-flex>
             </v-layout>
             <v-list id="blacklist-container">
