@@ -15,12 +15,12 @@
                 :dark="true"
                 color="primary">
             <v-btn flat color="white">
-                <span>Home</span>
+                <span>{{ 'home' | translate }}</span>
                 <v-icon>home</v-icon>
             </v-btn>
 
             <v-btn flat color="white">
-                <span>Websites</span>
+                <span>{{ 'websites' | translate }}</span>
                 <v-icon>web</v-icon>
             </v-btn>
         </v-bottom-nav>

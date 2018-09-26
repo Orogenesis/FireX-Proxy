@@ -1,15 +1,9 @@
 {
-  "blacklist": {
-    "message": "Blacklist"
-  },
   "use_blacklist": {
     "message": "Use blacklist"
   },
   "favorites": {
     "message": "Favorites"
-  },
-  "proxymenu": {
-    "message": "Proxy List"
   },
   "country": {
     "message": "Country"
@@ -40,5 +34,11 @@
   },
   "blacklist_tip": {
     "message": "Add a domain name or a domain mask to this list, then activate the blacklist by clicking on the switch at the top of this page. Proxy servers would be used only for entries from this list."
+  },
+  "home": {
+    "message": "Home"
+  },
+  "websites": {
+    "message": "Websites"
   }
 }
