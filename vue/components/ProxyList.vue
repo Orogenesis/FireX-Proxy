@@ -1,5 +1,5 @@
 <template>
-    <v-layout class="font-weight-medium caption" fill-height justify-center v-bind:class="{'align-center': filtered.length === 0 || !loaded}">
+    <v-layout class="font-weight-bold caption" fill-height justify-center v-bind:class="{'align-center': filtered.length === 0 || !loaded}">
         <v-progress-circular
                 indeterminate
                 v-if="!loaded"

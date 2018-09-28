@@ -32,18 +32,15 @@
                     {{ 'blacklist_tip' | translate }}
                 </v-container>
             </v-list>
-            <v-layout column>
-                <v-autocomplete
-                        :items="newPatternTips"
-                        :search-input.sync="newPattern"
-                        v-model="newPattern"
-                        @input="typing"
-                        flat
-                        hide-no-data
-                        label="example.com"
-                        solo>
-                </v-autocomplete>
-            </v-layout>
+            <v-text-field
+                    label="facebook.com"
+                    v-model.trim="newPattern"
+                    clearable
+                    box
+                    append-icon="send"
+                    @click:append="submit"
+                    @keyup.enter="submit">
+            </v-text-field>
         </v-layout>
     </v-container>
 </template>
@@ -51,7 +48,6 @@
 <script>
     import * as browser from 'webextension-polyfill';
     import BlacklistPattern from '@/components/BlacklistPattern.vue';
-    import Vue from 'vue';
 
     export default {
         name: 'Blacklist',
@@ -63,7 +59,6 @@
                 isBlacklistEnabled: false,
                 patterns: [],
                 newPattern: String(),
-                newPatternTips: [],
                 search: String(),
                 polled: false
             }
@@ -85,19 +80,6 @@
                     this.save();
                 },
                 deep: true
-            },
-            newPattern(newValue) {
-                if (newValue) {
-                    this.newPatternTips = [
-                        newValue
-                    ];
-
-                    if (!newValue.startsWith('*.')) {
-                        this.newPatternTips.push(`*.${newValue}`)
-                    }
-                } else {
-                    this.newPatternTips = [];
-                }
             }
         },
         computed: {
@@ -119,17 +101,19 @@
                     patterns: this.patterns
                 });
             },
-            typing(newPattern) {
-                const duplicate = this.patterns.indexOf(newPattern);
+            submit() {
+                if (!this.newPattern.length) {
+                    return;
+                }
+
+                const duplicate = this.patterns.indexOf(this.newPattern);
 
                 if (duplicate > -1) {
                     this.patterns.splice(duplicate, 1);
                 }
 
+                this.patterns.push(this.newPattern);
                 this.newPattern = String();
-                this.newPatternTips = [];
-
-                this.patterns.push(newPattern);
             },
             remove(index) {
                 this.patterns.splice(index, 1);

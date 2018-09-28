@@ -33,7 +33,7 @@
     "message": "搜索"
   },
   "blacklist_tip": {
-    "message": "Add a domain name or a domain mask to this list, then activate the blacklist by clicking on the switch at the top of this page. Proxy servers would be used only for entries from this list."
+    "message": "Add a domain name to this list, then activate the blacklist by clicking on the switch at the top of this page. Proxy servers would be used only for entries from this list. Alternatively, you can use domain mask when you're adding a new entry. For example, example* will match all websites which starts with «example» (example.com, example.org)."
   },
   "home": {
     "message": "代理列表"

@@ -19,7 +19,7 @@
                 {{ proxy.protocol }}
             </v-flex>
             <v-flex xs3>
-                <v-btn small v-if="!proxy.activeState" color="primary lighten-1" :dark="true" v-on:click="apply">{{ 'on' | translate }}</v-btn>
+                <v-btn small v-if="!proxy.activeState" color="primary lighten-1" dark v-on:click="apply">{{ 'on' | translate }}</v-btn>
                 <v-btn small v-else color="error" v-on:click="apply">{{ 'off' | translate }}</v-btn>
             </v-flex>
         </v-layout>
