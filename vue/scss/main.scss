@@ -8,3 +8,10 @@ body {
   width: $actionWidth;
   height: $actionHeight;
 }
+
+
+@media (width: 348px) {
+  body {
+    width: 348px;
+  }
+}
