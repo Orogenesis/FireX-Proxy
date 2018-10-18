@@ -25,6 +25,8 @@ import { detectConflicts } from './conflict.js';
         browser.proxy.register('addon/pac/firefox.js');
     }
 
+    connector.disconnect();
+
     connector
         .addObserver(
             newConnector => {
