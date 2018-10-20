@@ -25,8 +25,6 @@ import { detectConflicts } from './conflict.js';
         browser.proxy.register('addon/pac/firefox.js');
     }
 
-    connector.disconnect();
-
     connector
         .addObserver(
             newConnector => {
@@ -56,6 +54,9 @@ import { detectConflicts } from './conflict.js';
                     });
             }
         );
+
+    // Disable all proxies on browser start
+    connector.disconnect();
 
     let pacMessageConfiguration = {
         toProxyScript: true
