@@ -55,6 +55,9 @@ import { detectConflicts } from './conflict.js';
             }
         );
 
+    // Disable all proxies on browser start
+    connector.disconnect();
+
     let pacMessageConfiguration = {
         toProxyScript: true
     };
