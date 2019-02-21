@@ -24,7 +24,7 @@
     "message": "Відключити конфліктуючі розширення?"
   },
   "conflict_resolve": {
-    "message": "Дозволити конфлікти"
+    "message": "Вирiшити конфлікти"
   },
   "protocol": {
     "message": "Протокол"
@@ -40,5 +40,53 @@
   },
   "websites": {
     "message": "Сайти"
+  },
+  "add_new_server": {
+    "message": "Додати новий проксі"
+  },
+  "details": {
+    "message": "Деталі"
+  },
+  "hostname": {
+    "message": "Адреса"
+  },
+  "port": {
+    "message": "Порт"
+  },
+  "credentials": {
+    "message": "Облікові дані (необов'язково)"
+  },
+  "username": {
+    "message": "Логін"
+  },
+  "password": {
+    "message": "Пароль"
+  },
+  "create": {
+    "message": "Додати"
+  },
+  "reset": {
+    "message": "Скидання"
+  },
+  "required_validation": {
+    "message": "Обов'язково"
+  },
+  "port_validation": {
+    "message": "Від 0 до 65535"
+  },
+  "prompt_header": {
+    "message": "Додаткові дозволи"
+  },
+  "prompt_footer": {
+    "message": "FireX Proxy відкрив це вікно через обмеження безпеки, встановлених в Firefox. Додаткові дозволи необхідні для використання своїх проксі-серверів на всіх веб-сайтах."
+  },
+  "allow_permissions_button": {
+    "message": "Дозволити"
+  },
+  "cancel_permissions_button": {
+    "message": "Скасувати"
+  },
+  "authentication_support_warning": {
+    "message": "Ваш браузер не підтримує аутентифікацію для SOCKS проксі. Приносимо свої вибачення за доставлені незручності."
   }
 }

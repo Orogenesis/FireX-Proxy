@@ -40,5 +40,53 @@
   },
   "websites": {
     "message": "Сайты"
+  },
+  "add_new_server": {
+    "message": "Добавить новый прокси"
+  },
+  "details": {
+    "message": "Детали"
+  },
+  "hostname": {
+    "message": "Адрес"
+  },
+  "port": {
+    "message": "Порт"
+  },
+  "credentials": {
+    "message": "Учетные данные (необязательно)"
+  },
+  "username": {
+    "message": "Логин"
+  },
+  "password": {
+    "message": "Пароль"
+  },
+  "create": {
+    "message": "Добавить"
+  },
+  "reset": {
+    "message": "Сброс"
+  },
+  "required_validation": {
+    "message": "Обязательно"
+  },
+  "port_validation": {
+    "message": "От 0 до 65535"
+  },
+  "prompt_header": {
+    "message": "Дополнительные разрешения"
+  },
+  "prompt_footer": {
+    "message": "FireX Proxy открыл это окно из-за ограничений безопасности, установленных в Firefox. Дополнительные разрешения необходимы для использования своих прокси-серверов на всех веб-сайтах."
+  },
+  "allow_permissions_button": {
+    "message": "Разрешить"
+  },
+  "cancel_permissions_button": {
+    "message": "Отменить"
+  },
+  "authentication_support_warning": {
+    "message": "Ваш браузер не поддерживает аутентификацию для SOCKS прокси. Приносим свои извинения за доставленные неудобства."
   }
 }

@@ -6,14 +6,21 @@
                     <v-icon small>thumb_up</v-icon>
                 </v-btn>
             </v-flex>
-            <v-flex xs1>
-                <flag-icon class="flag-icon-circle" v-bind="{ iso: proxy.isoCode }" />
+            <v-flex xs6 v-if="proxy.isoCode && proxy.country !== 'Unknown'">
+                <v-layout row>
+                    <v-flex xs2>
+                        <flag-icon-component class="flag-icon-circle" v-bind="{ iso: proxy.isoCode }"></flag-icon-component>
+                    </v-flex>
+                    <v-flex class="text-truncate" xs10>
+                        {{ proxy.country }}
+                    </v-flex>
+                </v-layout>
             </v-flex>
-            <v-flex class="text-truncate" xs5>
-                {{ proxy.country }}
+            <v-flex xs6 v-else>
+                {{ proxy.ipAddress+':'+proxy.port }}
             </v-flex>
             <v-flex xs1>
-                <strength-indicator v-bind="{ strength: proxy.pingTimeMs, strengths: [300, 1000, 3000] }"></strength-indicator>
+                <strength-indicator-component v-bind="{ strength: proxy.pingTimeMs, strengths: [300, 1000, 3000] }"></strength-indicator-component>
             </v-flex>
             <v-flex xs2>
                 {{ proxy.protocol }}
@@ -27,23 +34,22 @@
 </template>
 
 <script>
-    import FlagIcon from '@/components/FlagIcon.vue';
-    import StrengthIndicator from "@/components/StrengthIndicator.vue";
-    import * as browser from 'webextension-polyfill';
+    import FlagIconComponent from '@/components/FlagIconComponent.vue'
+    import StrengthIndicatorComponent from "@/components/StrengthIndicatorComponent.vue"
+    import * as browser from 'webextension-polyfill'
 
     export default {
-        name: 'Proxy',
+        components: {
+            StrengthIndicatorComponent,
+            FlagIconComponent
+        },
+        name: 'ProxyComponent',
         props: {
             proxy: Object
-        },
-        Components: {
-            FlagIcon,
-            StrengthIndicator
         },
         methods: {
             apply() {
                 this.proxy.activeState = !this.proxy.activeState;
-
                 this.$emit('proxyStateChanged', this.$vnode.key, this.proxy.activeState);
             },
             toggleFavorite() {
