@@ -1,29 +1,34 @@
 <template>
     <v-app>
-        <v-toolbar color="primary" :dark="true">
+        <v-toolbar color="primary" dark>
             <v-toolbar-title>FireX Proxy</v-toolbar-title>
             <v-spacer></v-spacer>
-            <filter-list v-if="active === 0"></filter-list>
-            <refresher v-if="active === 0"></refresher>
+            <add-proxy-component v-if="active === 'home'"></add-proxy-component>
+            <filter-list-component v-if="active === 'home'"></filter-list-component>
+            <refresher-component v-if="active === 'home'"></refresher-component>
+            <v-tabs v-model="active"
+                    slot="extension"
+                    grow
+                    color="transparent"
+                    slider-color="primary lighten-2">
+                <v-tab key="1" href="#home">
+                    {{ "home" | translate }}
+                </v-tab>
+                <v-tab key="2" href="#websites">
+                    {{ "websites" | translate }}
+                </v-tab>
+            </v-tabs>
         </v-toolbar>
         <v-content>
-            <proxy-list v-if="active === 0"></proxy-list>
-            <blacklist v-else-if="active === 1"></blacklist>
+            <v-tabs-items v-model="active">
+                <v-tab-item key="1" id="home">
+                    <proxy-list-component></proxy-list-component>
+                </v-tab-item>
+                <v-tab-item key="2" id="websites">
+                    <blacklist-component></blacklist-component>
+                </v-tab-item>
+            </v-tabs-items>
         </v-content>
-        <v-bottom-nav
-                :active.sync="active"
-                :dark="true"
-                color="primary">
-            <v-btn flat color="white">
-                <span>{{ 'home' | translate }}</span>
-                <v-icon>home</v-icon>
-            </v-btn>
-
-            <v-btn flat color="white">
-                <span>{{ 'websites' | translate }}</span>
-                <v-icon>web</v-icon>
-            </v-btn>
-        </v-bottom-nav>
         <v-dialog v-model="dialog" persistent>
             <v-card>
                 <v-card-title class="headline">{{ 'conflict' | translate }}</v-card-title>
@@ -47,22 +52,26 @@
 </template>
 
 <script>
-    import ProxyList from "@/components/ProxyList.vue";
-    import Refresher from "@/components/Refresher.vue";
-    import FilterList from "@/components/FilterList.vue";
-    import * as browser from 'webextension-polyfill';
+    import * as browser from 'webextension-polyfill'
+    import ProxyListComponent from '@/components/ProxyListComponent.vue'
+    import RefresherComponent from '@/components/RefresherComponent.vue'
+    import FilterListComponent from '@/components/FilterListComponent.vue'
+    import BlacklistComponent from '@/components/BlacklistComponent.vue'
+    import AddProxyComponent from '@/components/AddProxyComponent.vue'
 
     export default {
         name: 'popup',
         components: {
-            FilterList,
-            ProxyList,
-            Refresher
+            AddProxyComponent,
+            BlacklistComponent,
+            FilterListComponent,
+            ProxyListComponent,
+            RefresherComponent
         },
         data() {
             return {
                 conflicts: [],
-                active: 0,
+                active: 'home',
                 dialog: false
             };
         },
@@ -84,7 +93,7 @@
                 });
             },
             resolveConflicts() {
-                this.dialog    = false;
+                this.dialog = false;
                 this.conflicts = [];
 
                 browser.runtime.sendMessage({
@@ -105,17 +114,18 @@
         height: 100%;
         .v-content {
             max-height: calc(100% - 56px - 57px);
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        .v-bottom-nav {
-            transform: unset;
         }
         .conflicts {
             img {
                 height: 16px;
                 width: 16px;
             }
+        }
+
+        .v-tabs__items, .v-tabs__content {
+            height: 100%;
+            overflow: auto;
+            overflow-x: hidden;
         }
     }
 </style>

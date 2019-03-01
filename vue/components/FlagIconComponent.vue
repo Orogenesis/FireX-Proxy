@@ -3,7 +3,7 @@
 </template>
 <script>
     export default {
-        name: 'FlagIcon',
+        name: 'FlagIconComponent',
         props: {
             iso: {
                 type: String,
