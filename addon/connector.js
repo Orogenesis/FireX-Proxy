@@ -61,9 +61,7 @@ export class Connector {
                         });
                 });
         } else {
-            let message = {
-                proxy: address.getPac()
-            };
+            const message = { proxy: [address.getPacObject()] };
 
             browser
                 .runtime
@@ -93,9 +91,7 @@ export class Connector {
                             scope: 'regular'
                         }, resolve);
                 } else {
-                    let message = {
-                        proxy: 'DIRECT'
-                    };
+                    const message = { proxy: 'DIRECT' };
 
                     browser
                         .runtime

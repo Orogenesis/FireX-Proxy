@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "FireX Proxy",
-  "version": "5.2.3",
+  "version": "5.2.4",
   "description": "FireX Proxy",
   "default_locale": "en",
   "icons": {
@@ -15,6 +15,11 @@
     "proxy",
     "storage",
     "*://firexproxy.com/*"
+  ],
+  "optional_permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
   ],
   "applications": {
     "gecko": {

@@ -40,5 +40,53 @@
   },
   "websites": {
     "message": "Websites"
+  },
+  "add_new_server": {
+    "message": "Add new proxy"
+  },
+  "details": {
+    "message": "Details"
+  },
+  "hostname": {
+    "message": "Hostname"
+  },
+  "port": {
+    "message": "Port"
+  },
+  "credentials": {
+    "message": "Credentials (optional)"
+  },
+  "username": {
+    "message": "Username"
+  },
+  "password": {
+    "message": "Password"
+  },
+  "create": {
+    "message": "Add"
+  },
+  "reset": {
+    "message": "Clear"
+  },
+  "required_validation": {
+    "message": "Required"
+  },
+  "port_validation": {
+    "message": "Port must be 0-65535"
+  },
+  "prompt_header": {
+    "message": "Additional permissions"
+  },
+  "prompt_footer": {
+    "message": "FireX Proxy opened this window due to security restrictions in Firefox. Additional permissions are needed to use your own proxies for all websites."
+  },
+  "allow_permissions_button": {
+    "message": "Allow"
+  },
+  "cancel_permissions_button": {
+    "message": "Cancel"
+  },
+  "authentication_support_warning": {
+    "message": "Your browser does not support SOCKS proxy authentication. Please accept our apologies for any inconvenience."
   }
 }

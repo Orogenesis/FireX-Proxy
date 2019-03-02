@@ -1,6 +1,6 @@
 import { ProxyProvider } from './proxyProvider.js';
 import { Addresses } from './addresses.js';
-import { isChrome, isMajorUpdate, isMinorUpdate } from './helpers.js';
+import { isChrome, isFirefox, isMajorUpdate, isMinorUpdate } from './helpers.js';
 import { Connector } from './connector.js';
 import { Address } from './address.js';
 import { detectConflicts } from './conflict.js';
@@ -10,9 +10,11 @@ import { detectConflicts } from './conflict.js';
     let proxyProvider     = new ProxyProvider();
     let connector         = new Connector();
 
-    let blacklistSession   = [];
-    let isBlacklistEnabled = false;
-    let appState           = {
+    let blacklistSession     = [];
+    let pendingRequests      = [];
+    let isBlacklistEnabled   = false;
+    let authenticationEvents = false;
+    let appState             = {
         filters: {
             countryFilter: [],
             protocolFilter: [],
@@ -58,9 +60,7 @@ import { detectConflicts } from './conflict.js';
     // Disable all proxies on browser start
     connector.disconnect();
 
-    let pacMessageConfiguration = {
-        toProxyScript: true
-    };
+    const pacMessageConfiguration = { toProxyScript: true };
 
     browser.storage.local.get()
         .then(
@@ -121,6 +121,108 @@ import { detectConflicts } from './conflict.js';
         }
     });
 
+    function setupAuthentication() {
+        if (authenticationEvents) {
+            return;
+        }
+
+        const permissions = {
+            origins: ['<all_urls>'],
+            permissions: ['webRequest', 'webRequestBlocking']
+        };
+
+        const onAuthHandlerAsync = ({ isProxy, requestId }, asyncCallback) => {
+            if (!isProxy) {
+                return asyncCallback();
+            }
+
+            if (pendingRequests.indexOf(requestId) > -1) {
+                return asyncCallback({
+                    cancel: true
+                });
+            }
+
+            pendingRequests.push(requestId);
+
+            try {
+                const proxy = proxyListSession.filterEnabled().one();
+
+                if (proxy.getUsername() && proxy.getPassword()) {
+                    asyncCallback({
+                        authCredentials: {
+                            username: proxy.getUsername(),
+                            password: proxy.getPassword()
+                        }
+                    });
+                }
+            } catch (e) {
+                asyncCallback({
+                    cancel: true
+                });
+            }
+        };
+
+        const onAuthHandler = ({ isProxy, requestId }) => {
+            if (!isProxy) {
+                return {};
+            }
+
+            if (pendingRequests.indexOf(requestId) > -1) {
+                return { cancel: true };
+            }
+
+            pendingRequests.push(requestId);
+
+            try {
+                const proxy = proxyListSession.filterEnabled().one();
+
+                if (proxy.getUsername() && proxy.getPassword()) {
+                    return new Promise(resolve => resolve({
+                        authCredentials: {
+                            username: proxy.getUsername(),
+                            password: proxy.getPassword()
+                        }
+                    }));
+                }
+            } catch (e) {
+                return { cancel: true };
+            }
+        };
+
+        const onRequestFinished = ({ requestId }) => {
+            const index = pendingRequests.indexOf(requestId);
+
+            if (index > -1) {
+                pendingRequests.splice(index, 1);
+            }
+        };
+
+        browser.permissions.contains(permissions).then(yes => {
+            if (!yes) {
+                return;
+            }
+
+            if (isFirefox()) {
+                browser.webRequest.onAuthRequired.addListener(onAuthHandler, { urls: ["<all_urls>"] }, ["blocking"]);
+            } else {
+                browser.webRequest.onAuthRequired.addListener(onAuthHandlerAsync, { urls: ["<all_urls>"] }, ["asyncBlocking"]);
+            }
+
+            browser.webRequest.onCompleted.addListener(onRequestFinished, { urls: ["<all_urls>"] });
+            browser.webRequest.onErrorOccurred.addListener(onRequestFinished, { urls: ["<all_urls>"] });
+
+            authenticationEvents = true;
+        })
+    }
+
+    setupAuthentication();
+
+    // Chrome on macOS closes the extension popup when permissions are accepted by user
+    // so message does not accepted by onMessage event
+    if (browser.permissions.onAdded) {
+        browser.permissions.onAdded.addListener(setupAuthentication);
+    }
+
     browser.runtime.onMessage.addListener(
         (request, sender, sendResponse) => {
             const { name, message } = request;
@@ -139,11 +241,7 @@ import { detectConflicts } from './conflict.js';
                     break;
                 }
                 case 'get-conflicts': {
-                    detectConflicts()
-                        .then(conflicts => {
-                            sendResponse(conflicts);
-                        });
-
+                    detectConflicts().then(conflicts => sendResponse(conflicts));
                     break;
                 }
                 case 'get-proxies': {
@@ -196,12 +294,7 @@ import { detectConflicts } from './conflict.js';
                     break;
                 }
                 case 'disconnect': {
-                    connector.disconnect().then(
-                        () => {
-                            proxyListSession.disableAll();
-                        }
-                    );
-
+                    connector.disconnect().then(() => proxyListSession.disableAll());
                     break;
                 }
                 case 'toggle-favorite': {
@@ -221,12 +314,34 @@ import { detectConflicts } from './conflict.js';
                 }
                 case 'update-state': {
                     appState = Object.assign(appState, message);
-
                     break;
                 }
                 case 'poll-state': {
                     sendResponse(appState);
+                    break;
+                }
+                case 'add-proxy': {
+                    const { protocol, ipAddress, username, password, port } = message;
+                    const newAddress = new Address()
+                        .setProtocol(protocol)
+                        .setIPAddress(ipAddress)
+                        .setPort(port)
+                        .setFavorite(true)
+                        .setUsername(username)
+                        .setPassword(password);
 
+                    proxyListSession.unshift(newAddress);
+
+                    browser.storage.local.set({
+                        favorites: [...proxyListSession.byFavorite()]
+                    });
+
+                    sendResponse(newAddress);
+                    break;
+                }
+                case 'register-authentication': {
+                    // browser.permissions.onAdded is not supported by Firefox
+                    setupAuthentication();
                     break;
                 }
             }

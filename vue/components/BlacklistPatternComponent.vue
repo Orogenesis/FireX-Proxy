@@ -14,7 +14,7 @@
 
 <script>
     export default {
-        name: "BlacklistPattern",
+        name: "BlacklistPatternComponent",
         props: {
             blacklistPattern: String,
             isBlacklistEnabled: Boolean

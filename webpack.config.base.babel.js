@@ -50,8 +50,14 @@ export const base = {
             },
             {
                 test: /\.svg$/,
-                loader: 'svg-url-loader'
-            }
+                loader: 'svg-url-loader',
+                options: {
+                    fallback: 'file-loader',
+                    limit: 2 * 1024,
+                    noquotes: true,
+                    outputPath: 'images'
+                }
+            },
         ]
     },
     resolve: {
@@ -82,6 +88,9 @@ export const base = {
             {
                 from: 'welcome/**.*',
                 ignore: ['*.js', '*.html']
+            },
+            {
+                from: 'prompt'
             }
         ]),
         new HtmlWebpackPlugin({

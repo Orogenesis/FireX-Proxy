@@ -40,5 +40,53 @@
   },
   "websites": {
     "message": "网站"
+  },
+  "add_new_server": {
+    "message": "添加新代理"
+  },
+  "details": {
+    "message": "細節"
+  },
+  "hostname": {
+    "message": "主機名"
+  },
+  "port": {
+    "message": "港口"
+  },
+  "credentials": {
+    "message": "憑證（可選）"
+  },
+  "username": {
+    "message": "用戶名"
+  },
+  "password": {
+    "message": "密碼"
+  },
+  "create": {
+    "message": "加"
+  },
+  "reset": {
+    "message": "明確"
+  },
+  "required_validation": {
+    "message": "需要"
+  },
+  "port_validation": {
+    "message": "端口必須為0-65535"
+  },
+  "prompt_header": {
+    "message": "其他權限"
+  },
+  "prompt_footer": {
+    "message": "FireX Proxy opened this window due to security restrictions in Firefox. Additional permissions are needed to use your own proxies for all websites."
+  },
+  "allow_permissions_button": {
+    "message": "允許"
+  },
+  "cancel_permissions_button": {
+    "message": "取消"
+  },
+  "authentication_support_warning": {
+    "message": "Your browser does not support SOCKS proxy authentication. Please accept our apologies for any inconvenience."
   }
 }

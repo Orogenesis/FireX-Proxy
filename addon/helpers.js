@@ -60,6 +60,13 @@ export function isChrome() {
 }
 
 /**
+ * @returns {boolean}
+ */
+export function isFirefox() {
+    return navigator.userAgent.indexOf('Firefox') > -1;
+}
+
+/**
  * @param {string} oldVersion
  * @param {string} newVersion
  * @return {boolean}
