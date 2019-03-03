@@ -1,7 +1,7 @@
-import merge from 'webpack-merge';
-import { resolve, base } from './webpack.config.base.babel';
-import ZipPlugin from 'zip-webpack-plugin';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import merge from 'webpack-merge'
+import { resolve, base } from './webpack.config.base.babel'
+import ZipPlugin from 'zip-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 export default merge(base, {
     plugins: [
