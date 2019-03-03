@@ -1,0 +1,92 @@
+{
+  "use_blacklist": {
+    "message": "Schwarze Liste nutzen"
+  },
+  "favorites": {
+    "message": "Favoriten"
+  },
+  "country": {
+    "message": "Land"
+  },
+  "no_proxy": {
+    "message": "Keine Proxies verfügbar. Versuchen Sie"
+  },
+  "reset_filters": {
+    "message": "die Filter zurückzusetzen"
+  },
+  "on": {
+    "message": "Ein"
+  },
+  "off": {
+    "message": "Aus"
+  },
+  "conflict": {
+    "message": "Widersprüchliche Erweiterungen deaktivieren?"
+  },
+  "conflict_resolve": {
+    "message": "Konflikte lösen"
+  },
+  "protocol": {
+    "message": "Protokol"
+  },
+  "search": {
+    "message": "Suchen"
+  },
+   "blacklist_tip": {
+    "message": "Fügen Sie einen Domänennamen zu dieser Liste hinzu, dann aktivieren Sie die schwarze Liste mit Klick auf den Schalter oben auf dieser Seite. Proxy-Server werden nur für Einträge aus dieser Liste verwendet. Alternativ können Sie Domänenmaske verwenden, wenn Sie einen neuen Eintrag hinzufügen. Zum Beispiel, example* wird mit allen Webseiten übereinstimmen, die mit «example» beginnen (example.com, example.org)."
+  },
+  "home": {
+    "message": "Startseite"
+  },
+  "websites": {
+    "message": "Webseiten"
+  },
+  "add_new_server": {
+    "message": "Neues Proxy hinzufügen"
+  },
+  "details": {
+    "message": "Details"
+  },
+  "hostname": {
+    "message": "Hostname"
+  },
+  "port": {
+    "message": "Port"
+  },
+  "credentials": {
+    "message": "Anmeldedaten (fakultativ)"
+  },
+  "username": {
+    "message": "Benutzername"
+  },
+  "password": {
+    "message": "Passwort"
+  },
+  "create": {
+    "message": "Hinzufügen"
+  },
+  "reset": {
+    "message": "Löschen"
+  },
+  "required_validation": {
+    "message": "Erforderlich"
+  },
+  "port_validation": {
+    "message": "Port muss zwischen 0-65535 sein"
+  },
+  "prompt_header": {
+    "message": "Zusätzliche Berechtigungen"
+  },
+  "prompt_footer": {
+    "message": "FireX Proxy hat dieses Fenster wegen Sicherheitsbegrenzungen von Firefox geöffnet. Zusätzliche Berechtigungen werden benötigt um Ihre eigene Proxies für alle Webseiten zu nutzen"
+  },
+  "allow_permissions_button": {
+    "message": "Zulassen"
+  },
+  "cancel_permissions_button": {
+    "message": "Widerrufen"
+  },
+  "authentication_support_warning": {
+    "message": "Ihre Browser unterstützt SOCKS-Proxy Authentifizierung nicht. Wir entschuldigen uns für die Unannehmlichkeiten"
+  }
+}
