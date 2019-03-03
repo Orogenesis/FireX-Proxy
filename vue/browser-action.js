@@ -15,6 +15,10 @@ Vue.use(Vuetify, {
 
 Vue.component('proxy-list-component', () => import('@/components/ProxyListComponent.vue'));
 Vue.component('blacklist-component', () => import('@/components/BlacklistComponent.vue'));
+Vue.component('add-proxy-component', () => import('@/components/AddProxyComponent.vue'));
+Vue.component('filter-list-component', () => import('@/components/FilterListComponent.vue'));
+Vue.component('refresher-component', () => import('@/components/RefresherComponent.vue'));
+Vue.component('flag-icon-component', () => import('@/components/FlagIconComponent.vue'));
 
 new Vue({
     el: '#browser-action',

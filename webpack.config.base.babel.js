@@ -20,7 +20,31 @@ export const base = {
         rules: [
             {
                 test: /\.vue$/,
-                use: 'vue-loader'
+                loader: 'vue-loader',
+                options: {
+                    loaders: {
+                        scss: ExtractTextPlugin.extract({
+                            use: [
+                                'css-loader',
+                                {
+                                    loader: 'sass-loader',
+                                    options: {
+                                        data: '@import "variables";',
+                                        includePaths: [
+                                            resolve('vue', 'scss'),
+                                            resolve('vue')
+                                        ]
+                                    }
+                                }
+                            ],
+                            fallback: 'vue-style-loader'
+                        }),
+                        css: ExtractTextPlugin.extract({
+                            use: 'css-loader',
+                            fallback: 'vue-style-loader'
+                        })
+                    }
+                }
             },
             {
                 test: /\.(eot|ttf|woff|woff2)$/,
@@ -54,10 +78,8 @@ export const base = {
             },
             {
                 test: /\.svg$/,
-                loader: 'svg-url-loader',
+                loader: 'file-loader',
                 options: {
-                    fallback: 'file-loader',
-                    limit: 2 * 1024,
                     noquotes: true,
                     outputPath: 'images'
                 }

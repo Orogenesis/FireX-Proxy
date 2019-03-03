@@ -3,9 +3,9 @@
         <v-toolbar color="primary" dark>
             <v-toolbar-title>FireX Proxy</v-toolbar-title>
             <v-spacer></v-spacer>
-            <add-proxy-component v-show="active === 'home'"></add-proxy-component>
-            <filter-list-component v-show="active === 'home'"></filter-list-component>
-            <refresher-component v-show="active === 'home'"></refresher-component>
+            <add-proxy-component v-if="active === 'home'"></add-proxy-component>
+            <filter-list-component v-if="active === 'home'"></filter-list-component>
+            <refresher-component v-if="active === 'home'"></refresher-component>
             <v-tabs v-model="active"
                     slot="extension"
                     grow
@@ -53,17 +53,9 @@
 
 <script>
     import * as browser from 'webextension-polyfill'
-    import RefresherComponent from '@/components/RefresherComponent.vue'
-    import FilterListComponent from '@/components/FilterListComponent.vue'
-    import AddProxyComponent from '@/components/AddProxyComponent.vue'
 
     export default {
         name: 'popup',
-        components: {
-            AddProxyComponent,
-            FilterListComponent,
-            RefresherComponent
-        },
         data() {
             return {
                 conflicts: [],

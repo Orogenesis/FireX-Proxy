@@ -34,14 +34,12 @@
 </template>
 
 <script>
-    import FlagIconComponent from '@/components/FlagIconComponent.vue'
     import StrengthIndicatorComponent from "@/components/StrengthIndicatorComponent.vue"
     import * as browser from 'webextension-polyfill'
 
     export default {
         components: {
-            StrengthIndicatorComponent,
-            FlagIconComponent
+            StrengthIndicatorComponent
         },
         name: 'ProxyComponent',
         props: {

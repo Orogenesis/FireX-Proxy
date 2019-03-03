@@ -35,18 +35,22 @@
                             </v-text-field>
                         </v-flex>
                     </v-layout>
-                    <div v-if="credentialsAvailable">
-                        <h3>{{ 'credentials' | translate }}</h3>
-                        <v-text-field append-icon="perm_identity"
-                                      v-model.trim="username"
-                                      :label="this.$options.filters.translate('username')">
-                        </v-text-field>
-                        <v-text-field append-icon="security"
-                                      v-model.trim="password"
-                                      type="password"
-                                      :label="this.$options.filters.translate('password')">
-                        </v-text-field>
-                    </div>
+                   <h3>{{ 'credentials' | translate }}</h3>
+                    <v-layout v-if="credentialsAvailable">
+                        <v-flex xs6>
+                            <v-text-field append-icon="perm_identity"
+                                          v-model.trim="username"
+                                          :label="this.$options.filters.translate('username')">
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex xs6>
+                            <v-text-field append-icon="security"
+                                          v-model.trim="password"
+                                          type="password"
+                                          :label="this.$options.filters.translate('password')">
+                            </v-text-field>
+                        </v-flex>
+                    </v-layout>
                     <v-alert v-else :value="true" type="info">
                         {{ 'authentication_support_warning' | translate }}
                     </v-alert>

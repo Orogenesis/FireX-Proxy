@@ -7,7 +7,7 @@
         </v-progress-circular>
         <v-container grid-list-xs v-else-if="filtered.length > 0">
             <v-layout justify-center column>
-                <virtual-list :size="50" :remain="11" :bench="20" class="virtual-list">
+                <virtual-list :size="50" :remain="15" :bench="20" class="virtual-list">
                     <proxy-component v-for="(proxy, index) in filtered"
                            :key="index"
                            v-bind="{ proxy: proxy }" @proxyStateChanged="apply">
