@@ -32,7 +32,7 @@
   "search": {
     "message": "Suchen"
   },
-   "blacklist_tip": {
+  "blacklist_tip": {
     "message": "Fügen Sie einen Domänennamen zu dieser Liste hinzu, dann aktivieren Sie die schwarze Liste mit Klick auf den Schalter oben auf dieser Seite. Proxy-Server werden nur für Einträge aus dieser Liste verwendet. Alternativ können Sie Domänenmaske verwenden, wenn Sie einen neuen Eintrag hinzufügen. Zum Beispiel, example* wird mit allen Webseiten übereinstimmen, die mit «example» beginnen (example.com, example.org)."
   },
   "home": {
