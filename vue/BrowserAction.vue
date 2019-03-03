@@ -3,9 +3,9 @@
         <v-toolbar color="primary" dark>
             <v-toolbar-title>FireX Proxy</v-toolbar-title>
             <v-spacer></v-spacer>
-            <add-proxy-component v-if="active === 'home'"></add-proxy-component>
-            <filter-list-component v-if="active === 'home'"></filter-list-component>
-            <refresher-component v-if="active === 'home'"></refresher-component>
+            <add-proxy-component v-show="active === 'home'"></add-proxy-component>
+            <filter-list-component v-show="active === 'home'"></filter-list-component>
+            <refresher-component v-show="active === 'home'"></refresher-component>
             <v-tabs v-model="active"
                     slot="extension"
                     grow
@@ -21,11 +21,11 @@
         </v-toolbar>
         <v-content>
             <v-tabs-items v-model="active">
-                <v-tab-item key="1" id="home">
-                    <proxy-list-component></proxy-list-component>
+                <v-tab-item lazy key="1" id="home">
+                    <proxy-list-component v-show="active === 'home'"></proxy-list-component>
                 </v-tab-item>
-                <v-tab-item key="2" id="websites">
-                    <blacklist-component></blacklist-component>
+                <v-tab-item lazy key="2" id="websites">
+                    <blacklist-component v-show="active === 'websites'"></blacklist-component>
                 </v-tab-item>
             </v-tabs-items>
         </v-content>
@@ -53,19 +53,15 @@
 
 <script>
     import * as browser from 'webextension-polyfill'
-    import ProxyListComponent from '@/components/ProxyListComponent.vue'
     import RefresherComponent from '@/components/RefresherComponent.vue'
     import FilterListComponent from '@/components/FilterListComponent.vue'
-    import BlacklistComponent from '@/components/BlacklistComponent.vue'
     import AddProxyComponent from '@/components/AddProxyComponent.vue'
 
     export default {
         name: 'popup',
         components: {
             AddProxyComponent,
-            BlacklistComponent,
             FilterListComponent,
-            ProxyListComponent,
             RefresherComponent
         },
         data() {
