@@ -13,6 +13,9 @@ Vue.use(Vuetify, {
     }
 });
 
+Vue.component('proxy-list-component', () => import('@/components/ProxyListComponent.vue'));
+Vue.component('blacklist-component', () => import('@/components/BlacklistComponent.vue'));
+
 new Vue({
     el: '#browser-action',
     store,

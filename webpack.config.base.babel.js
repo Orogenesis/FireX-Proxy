@@ -1,8 +1,10 @@
-import { VueLoaderPlugin } from 'vue-loader';
-import CleanWebpackPlugin from 'clean-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-import path from 'path';
+import { VueLoaderPlugin } from 'vue-loader'
+import CleanWebpackPlugin from 'clean-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
+import path from 'path'
+import ImageminPlugin from 'imagemin-webpack-plugin'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 export const resolve = (...paths) => path.join(__dirname, ...paths);
 export const base = {
@@ -25,28 +27,30 @@ export const base = {
                 loader: 'file-loader?name=public/fonts/[name].[ext]'
             },
             {
-                test: /\.css/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader'
-                ],
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    use: 'css-loader',
+                    fallback: 'vue-style-loader'
+                })
             },
             {
                 test: /\.scss$/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader',
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            data: '@import "variables";',
-                            includePaths: [
-                                resolve('vue','scss'),
-                                resolve('vue')
-                            ]
+                use: ExtractTextPlugin.extract({
+                    use: [
+                        'css-loader',
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                data: '@import "variables";',
+                                includePaths: [
+                                    resolve('vue', 'scss'),
+                                    resolve('vue')
+                                ]
+                            }
                         }
-                    }
-                ]
+                    ],
+                    fallback: 'vue-style-loader'
+                }),
             },
             {
                 test: /\.svg$/,
@@ -69,6 +73,10 @@ export const base = {
     plugins: [
         new CleanWebpackPlugin(["build"]),
         new VueLoaderPlugin(),
+        new ExtractTextPlugin({
+            allChunks: true,
+            filename: '[name].[chunkhash].css'
+        }),
         new CopyWebpackPlugin([
             {
                 from: "data",
@@ -102,7 +110,8 @@ export const base = {
             template: resolve('welcome', 'index.html'),
             filename: 'welcome/index.html',
             chunks: ['welcome']
-        })
+        }),
+        new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i })
     ],
     mode: 'production',
 };

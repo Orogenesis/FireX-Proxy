@@ -1,5 +1,5 @@
 <template>
-    <v-layout class="font-weight-bold caption" fill-height justify-center v-bind:class="{'align-center': filtered.length === 0 || !loaded}">
+    <v-layout class="font-weight-bold caption" fill-height justify-center v-bind:class="{ 'align-center': filtered.length === 0 || !loaded }">
         <v-progress-circular
                 indeterminate
                 v-if="!loaded"
@@ -7,10 +7,12 @@
         </v-progress-circular>
         <v-container grid-list-xs v-else-if="filtered.length > 0">
             <v-layout justify-center column>
-                <proxy-component v-for="(proxy, index) in filtered"
-                       :key="index"
-                       v-bind="{ proxy: proxy }" @proxyStateChanged="apply">
-                </proxy-component>
+                <virtual-list :size="50" :remain="11" :bench="20" class="virtual-list">
+                    <proxy-component v-for="(proxy, index) in filtered"
+                           :key="index"
+                           v-bind="{ proxy: proxy }" @proxyStateChanged="apply">
+                    </proxy-component>
+                </virtual-list>
             </v-layout>
         </v-container>
         <span class="body-2" v-else>
@@ -25,11 +27,13 @@
     import bus from '@/common/bus.js'
     import * as constants from '@/common/constants.js'
     import { mapState } from 'vuex'
+    import virtualList from 'vue-virtual-scroll-list'
 
     export default {
         name: 'ProxyListComponent',
         components: {
-            ProxyComponent
+            ProxyComponent,
+            virtualList
         },
         methods: {
             apply(index, newState) {
@@ -91,5 +95,13 @@
     .container {
         padding: 0;
         margin: 0;
+        .layout {
+            height: 100%;
+            .virtual-list {
+                height: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+        }
     }
 </style>
