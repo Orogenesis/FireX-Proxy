@@ -1,0 +1,92 @@
+{
+  "use_blacklist": {
+    "message": "使用黑名單"
+  },
+  "favorites": {
+    "message": "最愛"
+  },
+  "country": {
+    "message": "國家"
+  },
+  "no_proxy": {
+    "message": "沒有可用的代理伺服器。請嘗試"
+  },
+  "reset_filters": {
+    "message": "重設過濾器"
+  },
+  "on": {
+    "message": "套用"
+  },
+  "off": {
+    "message": "關閉"
+  },
+  "conflict": {
+    "message": "停用衝突的擴充套件嗎？"
+  },
+  "conflict_resolve": {
+    "message": "解決衝突"
+  },
+  "protocol": {
+    "message": "協定"
+  },
+  "search": {
+    "message": "搜尋"
+  },
+  "blacklist_tip": {
+    "message": "將網域名稱加到這個清單，然後點擊這個頁面頂端的開關來啟用黑名單。代理服務器只會用於此清單中的條目。或者，您可以在加入新條目時使用網域遮罩。例如 example* 會匹配以 «example» (example.com, example.org) 開頭的所有網站。"
+  },
+  "home": {
+    "message": "首頁"
+  },
+  "websites": {
+    "message": "網站"
+  },
+  "add_new_server": {
+    "message": "加入新的代理伺服器"
+  },
+  "details": {
+    "message": "詳細資料"
+  },
+  "hostname": {
+    "message": "主機名稱"
+  },
+  "port": {
+    "message": "連接埠"
+  },
+  "credentials": {
+    "message": "憑證（選填）"
+  },
+  "username": {
+    "message": "使用者名稱"
+  },
+  "password": {
+    "message": "密碼"
+  },
+  "create": {
+    "message": "加入"
+  },
+  "reset": {
+    "message": "清除"
+  },
+  "required_validation": {
+    "message": "必要"
+  },
+  "port_validation": {
+    "message": "連接埠必須為 0-65535"
+  },
+  "prompt_header": {
+    "message": "其他權限"
+  },
+  "prompt_footer": {
+    "message": "因為 Firefox 的安全限制，FireX Proxy 開啟這個視窗。需要其他權限來讓所有網站使用您自己的代理伺服器。"
+  },
+  "allow_permissions_button": {
+    "message": "允許"
+  },
+  "cancel_permissions_button": {
+    "message": "取消"
+  },
+  "authentication_support_warning": {
+    "message": "您的瀏覽器不支援 SOCKS 代理伺服器驗證。如有不便，敬請見諒。"
+  }
+}
