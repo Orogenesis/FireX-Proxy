@@ -6,10 +6,10 @@ const pacDictionary = {
 };
 
 const pacObjectDictionary = {
-    'HTTP'   : 'HTTP',
-    'HTTPS'  : 'HTTPS',
-    'SOCKS5' : 'SOCKS',
-    'SOCKS4' : 'SOCKS4'
+    'HTTP'   : 'http',
+    'HTTPS'  : 'https',
+    'SOCKS5' : 'socks',
+    'SOCKS4' : 'socks4'
 };
 
 export class Address {

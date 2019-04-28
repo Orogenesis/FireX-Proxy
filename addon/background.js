@@ -4,11 +4,13 @@ import { isChrome, isFirefox, isMajorUpdate, isMinorUpdate } from './helpers.js'
 import { Connector } from './connector.js';
 import { Address } from './address.js';
 import { detectConflicts } from './conflict.js';
+import { User } from "./user.js";
 
 (function setup() {
     let proxyListSession  = new Addresses();
     let proxyProvider     = new ProxyProvider();
     let connector         = new Connector();
+    let user              = new User();
 
     let blacklistSession     = [];
     let pendingRequests      = [];
@@ -72,6 +74,8 @@ import { detectConflicts } from './conflict.js';
                     .create(favorites)
                     .unique()
                     .union(proxyListSession);
+
+                user.init(storage.credentials);
 
                 blacklistSession = storage.patterns || [];
                 isBlacklistEnabled = storage.isBlacklistEnabled || false;
@@ -256,15 +260,14 @@ import { detectConflicts } from './conflict.js';
                             .getProxies()
                             .then(response => {
                                 let result = response
-                                    .map(proxy => {
-                                        return (new Address())
+                                    .map(proxy => (new Address())
                                             .setIPAddress(proxy.server)
                                             .setPort(proxy.port)
                                             .setCountry(proxy.country)
                                             .setProtocol(proxy.protocol)
                                             .setPingTimeMs(proxy.pingTimeMs)
-                                            .setIsoCode(proxy.isoCode);
-                                    });
+                                            .setIsoCode(proxy.isoCode)
+                                    );
 
                                 proxyListSession = proxyListSession
                                     .filterEnabled()
@@ -342,6 +345,41 @@ import { detectConflicts } from './conflict.js';
                 case 'register-authentication': {
                     // browser.permissions.onAdded is not supported by Firefox
                     setupAuthentication();
+                    break;
+                }
+                case 'get-user': {
+                    user
+                        .query()
+                        .then(user.refresh())
+                        .then(() => {
+                        sendResponse(user.credentials);
+                    });
+                    break;
+                }
+                case 'relevant-proxy': {
+                    user
+                        .refresh()
+                        .then(() => {
+                            return proxyProvider.getRelevantProxies(user.accessToken);
+                        })
+                        .then((response) => {
+                            let result = response
+                                .map(proxy =>
+                                     (new Address())
+                                        .setIPAddress(proxy.server)
+                                        .setPort(proxy.port)
+                                        .setCountry(proxy.country)
+                                        .setProtocol(proxy.protocol)
+                                        .setPingTimeMs(proxy.pingTimeMs)
+                                        .setIsoCode(proxy.isoCode)
+                                );
+
+                            proxyListSession = proxyListSession
+                                .filterEnabled()
+                                .concat(result);
+
+                            sendResponse(proxyListSession.unique());
+                        });
                     break;
                 }
             }

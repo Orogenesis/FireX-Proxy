@@ -82,9 +82,26 @@ export class ProxyProvider {
      * @returns {Promise<ProxyModel>}
      */
     getProxies() {
+        return this.processFetch();
+    }
+
+    getRelevantProxies(token) {
+        let options = {
+            method: 'get',
+            headers: new Headers({
+                "Authentication": `Bearer ${token}`
+            })
+        };
+
+        return this.processFetch('relevant', options);
+    }
+
+    processFetch(endpoint = 'proxy', options) {
+        options = options || {}
+
         return new Promise(
             (resolve, reject) => {
-                fetch(`${this.baseUrl}/proxy`)
+                fetch(`${this.baseUrl}/${endpoint}`, options)
                     .then(response => response.json())
                     .then(response => {
                         resolve(

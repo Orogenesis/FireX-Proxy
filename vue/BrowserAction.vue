@@ -3,6 +3,7 @@
         <v-toolbar color="primary" dark>
             <v-toolbar-title>FireX Proxy</v-toolbar-title>
             <v-spacer></v-spacer>
+            <user-component></user-component>
             <add-proxy-component v-show="active === 'home'"></add-proxy-component>
             <filter-list-component v-show="active === 'home'"></filter-list-component>
             <refresher-component v-show="active === 'home'"></refresher-component>
@@ -56,13 +57,15 @@
     import RefresherComponent from '@/components/RefresherComponent.vue'
     import FilterListComponent from '@/components/FilterListComponent.vue'
     import AddProxyComponent from '@/components/AddProxyComponent.vue'
+    import UserComponent from './components/UserComponent.vue'
 
     export default {
         name: 'popup',
         components: {
             AddProxyComponent,
             FilterListComponent,
-            RefresherComponent
+            RefresherComponent,
+            UserComponent
         },
         data() {
             return {
@@ -95,10 +98,14 @@
                 browser.runtime.sendMessage({
                     name: 'resolve-conflicts'
                 });
+            },
+            updateUser() {
+                this.$store.dispatch('user/update');
             }
         },
         mounted() {
             this.receiveConflicts();
+            this.updateUser();
         }
     }
 </script>
