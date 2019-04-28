@@ -4,11 +4,13 @@ import { isChrome, isFirefox, isMajorUpdate, isMinorUpdate } from './helpers.js'
 import { Connector } from './connector.js';
 import { Address } from './address.js';
 import { detectConflicts } from './conflict.js';
+import { User } from "./user.js";
 
 (function setup() {
     let proxyListSession  = new Addresses();
     let proxyProvider     = new ProxyProvider();
     let connector         = new Connector();
+    let user              = new User();
 
     let blacklistSession     = [];
     let pendingRequests      = [];
@@ -72,6 +74,8 @@ import { detectConflicts } from './conflict.js';
                     .create(favorites)
                     .unique()
                     .union(proxyListSession);
+
+                user.init(storage.credentials);
 
                 blacklistSession = storage.patterns || [];
                 isBlacklistEnabled = storage.isBlacklistEnabled || false;
@@ -343,6 +347,15 @@ import { detectConflicts } from './conflict.js';
                     // browser.permissions.onAdded is not supported by Firefox
                     setupAuthentication();
                     break;
+                }
+                case 'get-user': {
+                    user.query().then(() => {
+                        if (user.isExpired) {
+                            user.read(null);
+                        }
+
+                        sendResponse(user.credentials);
+                    });
                 }
             }
 
