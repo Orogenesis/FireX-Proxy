@@ -1,92 +1,124 @@
-function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(atob(base64));
-}
-
 export class User {
-    constructor(baseUrl = "https://api.firexproxy.com") {
-        this.baseUrl = baseUrl;
-        this.credentials = null;
+    constructor() {
+        this.credentials = {};
+        this.profile = {};
     }
 
-    init(credentials) {
+    /**
+     * @returns {Promise}
+     */
+    async parseCookies() {
+        await this.refresh();
+
+        if (!this.isEmpty()) {
+            return this.metadata();
+        }
+
+        const data = { url: 'https://www.firexproxy.com', name: 'credentials' };
+        const { value } = await browser.cookies.get(data) || {};
+
+        if (!value) {
+            return {};
+        }
+
+        this.updateCredentials(JSON.parse(decodeURIComponent(value)));
+
+        return this.metadata();
+    }
+
+    /**
+     * @param {Object} credentials
+     * @returns {void}
+     */
+    updateCredentials(credentials = {}) {
         this.credentials = credentials;
+        browser.storage.local.set({ credentials });
     }
 
-    read(credentials) {
-        this.credentials = credentials ? JSON.parse(decodeURIComponent(credentials)) : credentials;
+    /**
+     * @returns {void}
+     */
+    async refresh() {
+        const { refreshToken } = this.credentials;
 
-        browser.storage.local.set({
-            credentials: this.credentials
-        });
-    }
-
-    query() {
-        if (this.credentials) {
-            return Promise.resolve(this.credentials);
+        if (!this.isExpired || this.isEmpty()) {
+            return;
         }
 
-        return browser.cookies
-            .get({
-                url: "https://www.firexproxy.com",
-                name: "credentials"
-            })
-            .then(cookie => {
-                if (cookie && cookie.value) {
-                    this.read(cookie.value);
-                    if (this.isExpired) {
-                        this.credentials = null;
-                    }
-                }
-
-                return this.credentials;
-            });
-    }
-
-    refresh() {
-        if (!this.isExpired) {
-            return Promise.resolve();
-        }
-
-        let options = {
-            method: 'post',
+        const options = {
+            method: 'POST',
             credentials: 'include',
-            headers: new Headers({
-                "Authentication": `Bearer ${this.credentials.refreshToken}`
-            })
+            headers: new Headers({ Authorization: `Bearer ${refreshToken}` })
         };
 
-        return fetch(`${this.baseUrl}/auth/refresh`, options)
-            .then(newCredentials => this.credentials = newCredentials)
-            .catch(() => this.credentials = null)
+        try {
+            const response = await fetch('https://api.firexproxy.com/auth/refresh', options);
+            const data = await response.json();
+            const { access_token: accessToken, refresh_token: refreshToken } = data;
+            const credentials = { accessToken, refreshToken };
+            const cookies = { url: 'https://www.firexproxy.com', name: 'credentials', value: encodeURIComponent(JSON.stringify(credentials)) };
+
+            browser.cookies.set(cookies);
+            this.updateCredentials(credentials);
+        } catch (e) {
+            this.updateCredentials();
+        }
     }
 
+    /**
+     * @returns {Promise}
+     */
+    async getProfile() {
+        if (this.isExpired) {
+            return {};
+        }
+
+        const { accessToken } = this.credentials;
+        const options = {
+            method: 'GET',
+            credentials: 'include',
+            headers: new Headers({ Authorization: `Bearer ${accessToken}` })
+        };
+
+        try {
+            const response = await fetch(`https://api.firexproxy.com/auth/profile`, options);
+            const { premium_expires_at: premiumExpiresAt } = await response.json();
+
+            this.profile = { premiumExpiresAt };
+        } catch (e) {
+            this.profile = {};
+        }
+
+        return this.profile;
+    }
+
+    /**
+     * @returns {boolean}
+     */
     get isExpired() {
-        if (!this.credentials) {
-            return true;
-        }
+        const { exp } = this.metadata();
 
-        const { exp } = parseJwt(this.credentials.accessToken);
-
-        return Math.floor((new Date().getTime()) / 1e3) >= exp;
+        return Math.floor((new Date().getTime()) / 1e3) >= (exp || 0);
     }
 
-    get name() {
-        if (!this.credentials) {
-            return null;
-        }
-
-        const { aud } = parseJwt(this.credentials.accessToken);
-
-        return aud;
+    /**
+     * @returns {boolean}
+     */
+    isEmpty() {
+        return Object.keys(this.credentials).length === 0;
     }
 
-    get accessToken() {
-        if (!this.credentials) {
-            return null;
+    /**
+     * @returns {Object}
+     */
+    metadata() {
+        if (this.isEmpty()) {
+            return {};
         }
 
-        return this.credentials.accessToken;
+        const { accessToken } = this.credentials;
+        const [, payload] = accessToken.split('.');
+
+        return JSON.parse(atob(payload));
     }
 }

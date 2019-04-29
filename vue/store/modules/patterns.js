@@ -1,4 +1,4 @@
-import * as browser from 'webextension-polyfill';
+import * as browser from 'webextension-polyfill'
 
 const state = {
     isBlacklistEnabled: false,

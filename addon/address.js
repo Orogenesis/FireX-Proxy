@@ -6,10 +6,10 @@ const pacDictionary = {
 };
 
 const pacObjectDictionary = {
-    'HTTP'   : 'http',
-    'HTTPS'  : 'https',
-    'SOCKS5' : 'socks',
-    'SOCKS4' : 'socks4'
+    'HTTP'   : 'HTTP',
+    'HTTPS'  : 'HTTPS',
+    'SOCKS5' : 'SOCKS',
+    'SOCKS4' : 'SOCKS4'
 };
 
 export class Address {
@@ -32,7 +32,6 @@ export class Address {
      */
     setIPAddress(address) {
         this.ipAddress = address;
-
         return this;
     }
 
@@ -49,7 +48,6 @@ export class Address {
      */
     setPort(port) {
         this.port = port;
-
         return this;
     }
 
@@ -66,7 +64,6 @@ export class Address {
      */
     setCountry(country) {
         this.country = country;
-
         return this;
     }
 
@@ -90,7 +87,6 @@ export class Address {
      */
     setProtocol(protocol) {
         this.protocol = protocol;
-
         return this;
     }
 
@@ -114,7 +110,6 @@ export class Address {
      */
     setActiveState(value) {
         this.activeState = value;
-
         return this;
     }
 
@@ -123,7 +118,6 @@ export class Address {
      */
     enable() {
         this.setActiveState(true);
-
         return this;
     }
 
@@ -132,7 +126,6 @@ export class Address {
      */
     disable() {
         this.setActiveState(false);
-
         return this;
     }
 
@@ -149,7 +142,6 @@ export class Address {
      */
     setIsoCode(isoCode) {
         this.isoCode = isoCode;
-
         return this;
     }
 
@@ -165,7 +157,6 @@ export class Address {
      */
     toggleFavorite() {
         this.setFavorite(Boolean(this.favoriteState ^ 1));
-
         return this;
     }
 
@@ -175,7 +166,6 @@ export class Address {
      */
     setFavorite(state) {
         this.favoriteState = state;
-
         return this;
     }
 
@@ -192,7 +182,6 @@ export class Address {
      */
     setPingTimeMs(pingTimeMs) {
         this.pingTimeMs = pingTimeMs;
-
         return this;
     }
 
@@ -235,7 +224,6 @@ export class Address {
      */
     setUsername(username) {
         this.username = username;
-
         return this;
     }
 
@@ -245,7 +233,6 @@ export class Address {
      */
     setPassword(password) {
         this.password = password;
-
         return this;
     }
 

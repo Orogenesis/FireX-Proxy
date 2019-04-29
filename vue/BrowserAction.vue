@@ -3,7 +3,6 @@
         <v-toolbar color="primary" dark>
             <v-toolbar-title>FireX Proxy</v-toolbar-title>
             <v-spacer></v-spacer>
-            <user-component></user-component>
             <add-proxy-component v-show="active === 'home'"></add-proxy-component>
             <filter-list-component v-show="active === 'home'"></filter-list-component>
             <refresher-component v-show="active === 'home'"></refresher-component>
@@ -15,7 +14,10 @@
                 <v-tab key="1" href="#home">
                     {{ "home" | translate }}
                 </v-tab>
-                <v-tab key="2" href="#websites">
+                <v-tab key="2" href="#premium">
+                    {{ "premium" | translate }}
+                </v-tab>
+                <v-tab key="3" href="#websites">
                     {{ "websites" | translate }}
                 </v-tab>
             </v-tabs>
@@ -23,10 +25,13 @@
         <v-content>
             <v-tabs-items v-model="active">
                 <v-tab-item lazy key="1" id="home">
-                    <proxy-list-component v-show="active === 'home'"></proxy-list-component>
+                    <proxy-list-component v-if="active === 'home'"></proxy-list-component>
                 </v-tab-item>
-                <v-tab-item lazy key="2" id="websites">
-                    <blacklist-component v-show="active === 'websites'"></blacklist-component>
+                <v-tab-item lazy key="2" id="premium">
+                    <premium-component v-if="active === 'premium'"></premium-component>
+                </v-tab-item>
+                <v-tab-item lazy key="3" id="websites">
+                    <blacklist-component v-if="active === 'websites'"></blacklist-component>
                 </v-tab-item>
             </v-tabs-items>
         </v-content>
@@ -57,15 +62,13 @@
     import RefresherComponent from '@/components/RefresherComponent.vue'
     import FilterListComponent from '@/components/FilterListComponent.vue'
     import AddProxyComponent from '@/components/AddProxyComponent.vue'
-    import UserComponent from './components/UserComponent.vue'
 
     export default {
         name: 'popup',
         components: {
             AddProxyComponent,
             FilterListComponent,
-            RefresherComponent,
-            UserComponent
+            RefresherComponent
         },
         data() {
             return {
@@ -85,11 +88,7 @@
         },
         methods: {
             receiveConflicts() {
-                browser.runtime.sendMessage({
-                    name: 'get-conflicts'
-                }).then(conflicts => {
-                    this.conflicts = conflicts;
-                });
+                browser.runtime.sendMessage({ name: 'get-conflicts' }).then(conflicts => this.conflicts = conflicts);
             },
             resolveConflicts() {
                 this.dialog = false;

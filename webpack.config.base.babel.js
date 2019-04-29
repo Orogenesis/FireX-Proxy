@@ -53,7 +53,7 @@ export const base = {
                 }),
             },
             {
-                test: /\.svg$/,
+                test: /\.(png|jpe?g|gif|svg)$/,
                 loader: 'svg-url-loader',
                 options: {
                     fallback: 'file-loader',
@@ -61,7 +61,7 @@ export const base = {
                     noquotes: true,
                     outputPath: 'images'
                 }
-            },
+            }
         ]
     },
     resolve: {

@@ -88,5 +88,38 @@
   },
   "authentication_support_warning": {
     "message": "Ваш браузер не поддерживает аутентификацию для SOCKS прокси. Приносим свои извинения за доставленные неудобства."
+  },
+  "authentication": {
+    "message": "Регистрация / Вход"
+  },
+  "close": {
+    "message": "Закрыть"
+  },
+  "premium": {
+    "message": "Премиум"
+  },
+  "days_left": {
+    "message": "Дней осталось"
+  },
+  "get_premium": {
+    "message": "Купить доступ"
+  },
+  "change_user": {
+    "message": "Аккаунт"
+  },
+  "sign_in": {
+    "message": "Вход"
+  },
+  "refresh_tooltip": {
+    "message": "Другой прокси"
+  },
+  "pros_alive": {
+    "message": "Сотни живых прокси"
+  },
+  "pros_fast_servers": {
+    "message": "Самые быстрые сервера"
+  },
+  "pros_bandwidth": {
+    "message": "Безлимитный трафик"
   }
 }

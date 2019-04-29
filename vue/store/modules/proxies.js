@@ -1,4 +1,4 @@
-import * as browser from 'webextension-polyfill';
+import * as browser from 'webextension-polyfill'
 
 const defaultForm = {
     protocol: "HTTP",
@@ -43,12 +43,7 @@ const actions = {
             });
     },
     addProxy({ commit }, proxy) {
-        const message = {
-            name: 'add-proxy',
-            message: proxy
-        };
-
-        return browser.runtime.sendMessage(message).then(proxy => commit('addProxy', proxy));
+        return browser.runtime.sendMessage({ name: 'add-proxy', message: proxy }).then(proxy => commit('addProxy', proxy));
     },
     modifyForm({ commit, dispatch }, payload) {
         commit('modifyForm', payload);
@@ -86,6 +81,9 @@ const mutations = {
     },
     updateForm(state, form) {
         state.createForm = Object.assign({}, form);
+    },
+    disableAll(state) {
+        state.items = state.items.map(s => ({ ...s, activeState: false }));
     }
 };
 
