@@ -24,8 +24,7 @@
                     <blacklist-pattern-component
                             v-for="(blacklistPattern, index) in filteredPatterns"
                             :key="index"
-                            v-bind="{ blacklistPattern, isBlacklistEnabled }"
-                            @patternDeleted="remove">
+                            v-bind="{ blacklistPattern, isBlacklistEnabled }">
                     </blacklist-pattern-component>
                 </v-slide-y-transition>
                 <v-container class="font-weight-medium body-1" v-else>
@@ -74,16 +73,13 @@
                 },
                 set(newState) {
                     this.$store.commit('patterns/setBlacklistEnabled', newState);
-                    this.save();
+                    this.$store.dispatch('patterns/save');
                 }
             }
         },
         methods: {
             poll() {
                 this.$store.dispatch('patterns/poll').then(() => this.polled = true)
-            },
-            save() {
-                this.$store.dispatch('patterns/save')
             },
             submit() {
                 if (!this.newPattern.length) {
@@ -97,13 +93,8 @@
                 }
 
                 this.$store.commit('patterns/addPattern', this.newPattern);
-                this.save();
-                this.newPattern = String();
-            },
-            remove(index) {
-                this.$store.commit('patterns/removePattern', index);
-                this.$store.commit('patterns/setBlacklistEnabled', this.patterns.length !== 0);
-                this.save();
+                this.$store.dispatch('patterns/save');
+                this.newPattern = '';
             }
         },
         mounted() {

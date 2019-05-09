@@ -102,15 +102,11 @@ import { User } from "./user.js"
     });
 
     browser.runtime.onInstalled.addListener(details => {
-        const { reason, previousVersion } = details;
+        const { reason } = details;
 
         if (reason === 'update') {
-            const currentVersion = browser.runtime.getManifest().version;
-
-            if (isMajorUpdate(previousVersion, currentVersion) || isMinorUpdate(previousVersion, currentVersion)) {
-                browser.tabs.create({
-                    url: '../welcome/index.html'
-                });
+            if (browser.i18n.getUILanguage() === 'ru') {
+                browser.tabs.create({ url: '../welcome.html' });
             }
         }
     });

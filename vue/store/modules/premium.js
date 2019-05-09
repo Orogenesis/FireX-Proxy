@@ -23,7 +23,10 @@ const actions = {
     },
     async updateServers({ commit }) {
         const response = await browser.runtime.sendMessage({ name: 'relevant' });
-        await commit('updateServers', response);
+
+        if (response.length > 0) {
+            commit('updateServers', response);
+        }
     },
     connect({ commit }, server) {
         browser.runtime.sendMessage({ name: 'connect-premium', message: server });

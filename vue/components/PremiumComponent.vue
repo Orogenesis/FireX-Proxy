@@ -1,5 +1,5 @@
 <template>
-    <v-card height="100%">
+    <v-card height="100%" elevation="0">
         <v-card dark flat>
             <v-img :src="require('@/assets/material.png')" gradient="to top, rgba(190, 136, 233, .88), rgba(253, 138, 166, .88)">
                 <v-container fill-height>
@@ -53,7 +53,7 @@
             <v-card class="px-3">
                 <v-layout align-center>
                     <v-flex xs7>
-                        <v-list>
+                        <v-list class="advantages">
                             <v-list-tile>
                                 <v-list-tile-action>
                                     <v-icon color="pink">done_all</v-icon>
@@ -181,10 +181,12 @@
 </script>
 
 <style lang="scss" scoped>
-    /deep/ .v-list__tile {
-        padding: 0;
-        .v-list__tile__action {
-            min-width: 34px;
+    .advantages {
+        /deep/ .v-list__tile {
+            padding: 0;
+            .v-list__tile__action {
+                min-width: 34px;
+            }
         }
     }
 

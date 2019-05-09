@@ -5,7 +5,9 @@
             <v-spacer></v-spacer>
             <add-proxy-component v-show="active === 'home'"></add-proxy-component>
             <filter-list-component v-show="active === 'home'"></filter-list-component>
-            <refresher-component v-show="active === 'home'"></refresher-component>
+            <v-btn icon @click="update" v-show="active === 'home'">
+                <v-icon>refresh</v-icon>
+            </v-btn>
             <v-tabs v-model="active"
                     slot="extension"
                     grow
@@ -24,13 +26,13 @@
         </v-toolbar>
         <v-content>
             <v-tabs-items v-model="active">
-                <v-tab-item lazy key="1" id="home">
+                <v-tab-item :transition="false" :reverse-transition="false" lazy key="1" value="home">
                     <proxy-list-component v-if="active === 'home'"></proxy-list-component>
                 </v-tab-item>
-                <v-tab-item lazy key="2" id="premium">
+                <v-tab-item :transition="false" :reverse-transition="false" lazy key="2" value="premium">
                     <premium-component v-if="active === 'premium'"></premium-component>
                 </v-tab-item>
-                <v-tab-item lazy key="3" id="websites">
+                <v-tab-item :transition="false" :reverse-transition="false" lazy key="3" value="websites">
                     <blacklist-component v-if="active === 'websites'"></blacklist-component>
                 </v-tab-item>
             </v-tabs-items>
@@ -59,7 +61,6 @@
 
 <script>
     import * as browser from 'webextension-polyfill'
-    import RefresherComponent from '@/components/RefresherComponent.vue'
     import FilterListComponent from '@/components/FilterListComponent.vue'
     import AddProxyComponent from '@/components/AddProxyComponent.vue'
 
@@ -67,8 +68,7 @@
         name: 'popup',
         components: {
             AddProxyComponent,
-            FilterListComponent,
-            RefresherComponent
+            FilterListComponent
         },
         data() {
             return {
@@ -87,6 +87,9 @@
             }
         },
         methods: {
+            update() {
+                this.$store.dispatch('proxies/poll', true);
+            },
             receiveConflicts() {
                 browser.runtime.sendMessage({ name: 'get-conflicts' }).then(conflicts => this.conflicts = conflicts);
             },
@@ -123,8 +126,7 @@
                 width: 16px;
             }
         }
-
-        .v-tabs__items, .v-tabs__content {
+        .v-window, .v-window__container, .v-window-item {
             height: 100%;
             overflow: auto;
             overflow-x: hidden;
