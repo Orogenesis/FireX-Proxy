@@ -1,4 +1,4 @@
-import * as browser from 'webextension-polyfill';
+import * as browser from 'webextension-polyfill'
 
 const state = {
     isBlacklistEnabled: false,
@@ -11,6 +11,15 @@ const actions = {
             isBlacklistEnabled: state.isBlacklistEnabled,
             patterns: state.patterns
         });
+    },
+    remove({ commit, dispatch, state }, index) {
+        commit('removePattern', index);
+
+        if (state.patterns.length === 0) {
+            commit('setBlacklistEnabled', false);
+        }
+
+        dispatch('save');
     },
     poll({ commit }) {
         return browser.storage.local.get().then(storage => {

@@ -70,8 +70,6 @@
 
 <script>
     import * as browser from 'webextension-polyfill'
-    import bus from '@/common/bus.js'
-    import * as constants from '@/common/constants.js'
 
     const permissions = { permissions: ['webRequest', 'webRequestBlocking'], origins: ['<all_urls>'] };
 
@@ -99,7 +97,7 @@
                     return this.$store.state.proxies.createForm.protocol;
                 },
                 set(newValue) {
-                    this.$store.dispatch('modifyForm', {field: 'protocol', value: newValue});
+                    this.$store.dispatch('proxies/modifyForm', { field: 'protocol', value: newValue });
                 }
             },
             ipAddress: {
@@ -107,7 +105,7 @@
                     return this.$store.state.proxies.createForm.ipAddress;
                 },
                 set(newValue) {
-                    this.$store.dispatch('modifyForm', {field: 'ipAddress', value: newValue});
+                    this.$store.dispatch('proxies/modifyForm', { field: 'ipAddress', value: newValue });
                 }
             },
             port: {
@@ -115,7 +113,7 @@
                     return this.$store.state.proxies.createForm.port;
                 },
                 set(newValue) {
-                    this.$store.dispatch('modifyForm', {field: 'port', value: newValue});
+                    this.$store.dispatch('proxies/modifyForm', { field: 'port', value: newValue });
                 }
             },
             username: {
@@ -123,7 +121,7 @@
                     return this.$store.state.proxies.createForm.username;
                 },
                 set(newValue) {
-                    this.$store.dispatch('modifyForm', {field: 'username', value: newValue});
+                    this.$store.dispatch('proxies/modifyForm', { field: 'username', value: newValue });
                 }
             },
             password: {
@@ -131,13 +129,13 @@
                     return this.$store.state.proxies.createForm.password;
                 },
                 set(newValue) {
-                    this.$store.dispatch('modifyForm', {field: 'password', value: newValue});
+                    this.$store.dispatch('proxies/modifyForm', { field: 'password', value: newValue });
                 }
             }
         },
         methods: {
             reset() {
-                this.$store.dispatch('resetForm');
+                this.$store.dispatch('proxies/resetForm');
                 this.$refs.form.resetValidation();
             },
             add() {
@@ -164,8 +162,7 @@
 
                 this.reset();
                 this.menuState = false;
-                await this.$store.dispatch('addProxy', newProxy);
-                bus.$emit(constants.PROXY_UPDATE_FINISHED);
+                this.$store.dispatch('proxies/addProxy', newProxy);
             },
             requestPermissions() {
                 if (navigator.userAgent.indexOf('Chrome') > -1) {
@@ -195,7 +192,7 @@
             }
         },
         mounted() {
-            this.$store.dispatch('updateForm');
+            this.$store.dispatch('proxies/updateForm');
         }
     }
 </script>

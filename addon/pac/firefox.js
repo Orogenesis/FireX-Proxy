@@ -98,6 +98,7 @@ function FindProxyForURL(url, host) {
         shExpMatch(host, 'localhost.*') ||
         shExpMatch(host, '*.local') ||
         host === '127.0.0.1' ||
+        shExpMatch(host, '*.firexproxy.com') ||
         shExpMatch(host, 'firexproxy.com')) {
         return 'DIRECT';
     }

@@ -88,5 +88,38 @@
   },
   "authentication_support_warning": {
     "message": "Your browser does not support SOCKS proxy authentication. Please accept our apologies for any inconvenience."
+  },
+  "authentication": {
+    "message": "Sign up / Log in"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "premium": {
+    "message": "Premium"
+  },
+  "days_left": {
+    "message": "Days left"
+  },
+  "get_premium": {
+    "message": "Get Premium"
+  },
+  "change_user": {
+    "message": "Switch User"
+  },
+  "sign_in": {
+    "message": "Sign in"
+  },
+  "refresh_tooltip": {
+    "message": "Next proxy"
+  },
+  "pros_alive": {
+    "message": "Hundreds of alive proxy"
+  },
+  "pros_fast_servers": {
+    "message": "Crazy fast proxy servers"
+  },
+  "pros_bandwidth": {
+    "message": "Unlimited bandwidth"
   }
 }

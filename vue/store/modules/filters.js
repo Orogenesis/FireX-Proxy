@@ -1,4 +1,4 @@
-import * as browser from 'webextension-polyfill';
+import * as browser from 'webextension-polyfill'
 
 const state = {
     countries: [],
@@ -23,9 +23,7 @@ const actions = {
         commit('updateChoices', update);
     },
     update({ commit }) {
-        return browser.runtime
-            .sendMessage({ name: 'poll-state' })
-            .then(({ filters }) => commit('update', filters));
+        return browser.runtime.sendMessage({ name: 'poll-state' }).then(({ filters }) => commit('update', filters));
     },
     save({ state }) {
         browser.runtime.sendMessage({

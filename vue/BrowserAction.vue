@@ -5,7 +5,9 @@
             <v-spacer></v-spacer>
             <add-proxy-component v-show="active === 'home'"></add-proxy-component>
             <filter-list-component v-show="active === 'home'"></filter-list-component>
-            <refresher-component v-show="active === 'home'"></refresher-component>
+            <v-btn icon @click="update" v-show="active === 'home'">
+                <v-icon>refresh</v-icon>
+            </v-btn>
             <v-tabs v-model="active"
                     slot="extension"
                     grow
@@ -14,18 +16,24 @@
                 <v-tab key="1" href="#home">
                     {{ "home" | translate }}
                 </v-tab>
-                <v-tab key="2" href="#websites">
+                <v-tab key="2" href="#premium">
+                    {{ "premium" | translate }}
+                </v-tab>
+                <v-tab key="3" href="#websites">
                     {{ "websites" | translate }}
                 </v-tab>
             </v-tabs>
         </v-toolbar>
         <v-content>
             <v-tabs-items v-model="active">
-                <v-tab-item lazy key="1" id="home">
-                    <proxy-list-component v-show="active === 'home'"></proxy-list-component>
+                <v-tab-item :transition="false" :reverse-transition="false" lazy key="1" value="home">
+                    <proxy-list-component v-if="active === 'home'"></proxy-list-component>
                 </v-tab-item>
-                <v-tab-item lazy key="2" id="websites">
-                    <blacklist-component v-show="active === 'websites'"></blacklist-component>
+                <v-tab-item :transition="false" :reverse-transition="false" lazy key="2" value="premium">
+                    <premium-component v-if="active === 'premium'"></premium-component>
+                </v-tab-item>
+                <v-tab-item :transition="false" :reverse-transition="false" lazy key="3" value="websites">
+                    <blacklist-component v-if="active === 'websites'"></blacklist-component>
                 </v-tab-item>
             </v-tabs-items>
         </v-content>
@@ -53,7 +61,6 @@
 
 <script>
     import * as browser from 'webextension-polyfill'
-    import RefresherComponent from '@/components/RefresherComponent.vue'
     import FilterListComponent from '@/components/FilterListComponent.vue'
     import AddProxyComponent from '@/components/AddProxyComponent.vue'
 
@@ -61,8 +68,7 @@
         name: 'popup',
         components: {
             AddProxyComponent,
-            FilterListComponent,
-            RefresherComponent
+            FilterListComponent
         },
         data() {
             return {
@@ -81,12 +87,11 @@
             }
         },
         methods: {
+            update() {
+                this.$store.dispatch('proxies/poll', true);
+            },
             receiveConflicts() {
-                browser.runtime.sendMessage({
-                    name: 'get-conflicts'
-                }).then(conflicts => {
-                    this.conflicts = conflicts;
-                });
+                browser.runtime.sendMessage({ name: 'get-conflicts' }).then(conflicts => this.conflicts = conflicts);
             },
             resolveConflicts() {
                 this.dialog = false;
@@ -95,10 +100,14 @@
                 browser.runtime.sendMessage({
                     name: 'resolve-conflicts'
                 });
+            },
+            updateUser() {
+                this.$store.dispatch('user/update');
             }
         },
         mounted() {
             this.receiveConflicts();
+            this.updateUser();
         }
     }
 </script>
@@ -117,8 +126,7 @@
                 width: 16px;
             }
         }
-
-        .v-tabs__items, .v-tabs__content {
+        .v-window, .v-window__container, .v-window-item {
             height: 100%;
             overflow: auto;
             overflow-x: hidden;

@@ -88,5 +88,38 @@
   },
   "authentication_support_warning": {
     "message": "Ваш браузер не підтримує аутентифікацію для SOCKS проксі. Приносимо свої вибачення за доставлені незручності."
+  },
+  "authentication": {
+    "message": "Зареєструватися / Увійти"
+  },
+  "close": {
+    "message": "Закрити"
+  },
+  "premium": {
+    "message": "Преміум"
+  },
+  "days_left": {
+    "message": "Днів залишилося"
+  },
+  "get_premium": {
+    "message": "Купити"
+  },
+  "change_user": {
+    "message": "Аккаунт"
+  },
+  "sign_in": {
+    "message": "Увійти"
+  },
+  "refresh_tooltip": {
+    "message": "Наступний проксі"
+  },
+  "pros_alive": {
+    "message": "Сотні живих проксі"
+  },
+  "pros_fast_servers": {
+    "message": "Швидкі проксі-сервери"
+  },
+  "pros_bandwidth": {
+    "message": "Безлімітний трафік"
   }
 }

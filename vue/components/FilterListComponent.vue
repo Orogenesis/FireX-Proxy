@@ -8,7 +8,7 @@
             min-width="80%">
         <v-btn slot="activator" icon :dark="true">
             <v-badge right color="primary darken-3">
-                <span slot="badge" v-if="countFilters > 0">{{countFilters}}</span>
+                <span slot="badge" v-if="countFilters > 0">{{ countFilters }}</span>
                 <v-icon>filter_list</v-icon>
             </v-badge>
         </v-btn>
@@ -45,8 +45,6 @@
 </template>
 
 <script>
-    import bus from '@/common/bus.js'
-    import * as constants from '@/common/constants.js'
     import { mapState } from 'vuex'
 
     export default {
@@ -93,33 +91,16 @@
             })
         },
         methods: {
-            onProxiesUpdated() {
-                this.$store.dispatch('filters/updateChoices', this.$store.state.proxies.items);
-                this.updateFilters();
-            },
             updateFilters() {
                 if (!this.polled) {
                     return;
                 }
 
-                this.save();
-            },
-            poll() {
-                this.$store.dispatch('filters/update').then(() => this.polled = true);
-            },
-            save() {
                 this.$store.dispatch('filters/save');
             }
         },
         mounted() {
-            this.poll();
-
-            bus.$on(constants.PROXY_UPDATE_FINISHED, this.onProxiesUpdated);
-            bus.$on(constants.PROXY_UPDATE_FINISHED, this.updateFilters);
-        },
-        beforeDestroy() {
-            bus.$off(constants.PROXY_UPDATE_FINISHED, this.onProxiesUpdated);
-            bus.$off(constants.PROXY_UPDATE_FINISHED, this.updateFilters);
+            this.$store.dispatch('filters/update').then(() => this.polled = true);
         }
     }
 </script>

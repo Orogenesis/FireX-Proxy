@@ -1,4 +1,4 @@
-import * as browser from 'webextension-polyfill';
+import * as browser from 'webextension-polyfill'
 
 const defaultForm = {
     protocol: "HTTP",
@@ -21,49 +21,45 @@ const actions = {
     setProxies({ commit }, proxies) {
         commit('setProxies', proxies);
     },
-    poll({ commit }, isForce = false) {
+    async poll({ commit }, isForce = false) {
         commit('setLoaded', false);
 
-        const message = {
-            name: 'get-proxies',
-            message: {
-                force: isForce
-            }
-        };
+        const message = { name: 'get-proxies', message: { force: isForce } };
+        const proxies = await browser.runtime.sendMessage(message);
+        const newProxies = proxies.map(proxy => ({ ...proxy, country: proxy.country || 'Unknown' }));
 
-        return browser.runtime
-            .sendMessage(message)
-            .then(proxies => {
-                const newProxies = proxies.map(proxy => Object.assign({}, proxy, { country: proxy.country || 'Unknown' }));
+        this.dispatch('filters/updateChoices', newProxies);
 
-                commit('setProxies', newProxies);
-                commit('setLoaded', true);
+        commit('setProxies', newProxies);
+        commit('setLoaded', true);
 
-                return proxies;
-            });
+        return proxies;
+    },
+    async connect({ commit, state }, proxy) {
+        commit('disableAll');
+        commit('activate', proxy);
+        browser.runtime.sendMessage({ name: 'connect', message: proxy });
+    },
+    disconnect({ commit }) {
+        commit('disableAll');
+        browser.runtime.sendMessage({ name: 'disconnect' });
+    },
+    toggleFavorite({ commit }, proxy) {
+        commit('toggleFavorite', proxy);
+        browser.runtime.sendMessage({ name: 'toggle-favorite', message: proxy });
     },
     addProxy({ commit }, proxy) {
-        const message = {
-            name: 'add-proxy',
-            message: proxy
-        };
-
-        return browser.runtime.sendMessage(message).then(proxy => commit('addProxy', proxy));
+        browser.runtime.sendMessage({ name: 'add-proxy', message: proxy }).then(proxy => commit('addProxy', proxy));
     },
     modifyForm({ commit, dispatch }, payload) {
         commit('modifyForm', payload);
         dispatch('saveForm');
     },
     saveForm({ state }) {
-        browser.runtime.sendMessage({
-            name: 'update-state',
-            message: { createForm: state.createForm }
-        })
+        browser.runtime.sendMessage({ name: 'update-state', message: { createForm: state.createForm } })
     },
     updateForm({ commit }) {
-        return browser.runtime
-            .sendMessage({ name: 'poll-state' })
-            .then(({ createForm }) => commit('updateForm', createForm || defaultForm));
+        browser.runtime.sendMessage({ name: 'poll-state' }).then(({ createForm }) => commit('updateForm', createForm || defaultForm));
     },
     resetForm({ commit, dispatch }) {
         commit('updateForm', defaultForm);
@@ -86,10 +82,24 @@ const mutations = {
     },
     updateForm(state, form) {
         state.createForm = Object.assign({}, form);
+    },
+    disableAll(state) {
+        state.items = state.items.map(s => ({ ...s, activeState: false }));
+    },
+    activate(state, proxy) {
+        const finder = ({ ipAddress, port }) => proxy.ipAddress === ipAddress && proxy.port === port;
+
+        state.items.splice(state.items.findIndex(finder), 1, { ...proxy, activeState: true });
+    },
+    toggleFavorite(state, proxy) {
+        const finder = ({ ipAddress, port }) => proxy.ipAddress === ipAddress && proxy.port === port;
+
+        state.items.splice(state.items.findIndex(finder), 1, { ...proxy, favoriteState: proxy.favoriteState === false });
     }
 };
 
 export default {
+    namespaced: true,
     state,
     actions,
     mutations

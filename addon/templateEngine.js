@@ -1,4 +1,4 @@
-import parser from './pac/pac-parser.js';
+import parser from './pac/pac-parser.js'
 
 export const NODE_TEXT = 'text';
 export const NODE_EXPRESSION = 'expression';
@@ -21,24 +21,15 @@ export class TemplateEngine {
      */
     setPlaceholders(placeholders = {}) {
         this.placeholders = placeholders;
-
         return this;
     }
 
     /**
      * @param {string} templateUrl
-     * @returns {Promise<any>}
+     * @returns {Promise}
      */
     buildUrl(templateUrl) {
-        return new Promise(
-            (resolve, reject) => {
-                fetch(browser.runtime.getURL(templateUrl))
-                    .then(response => response.text())
-                    .then(response => {
-                        resolve(this.build(response));
-                    }).catch(reject)
-            }
-        )
+        return fetch(browser.runtime.getURL(templateUrl)).then(response => response.text()).then(response => this.build(response));
     }
 
     /**
@@ -56,7 +47,6 @@ export class TemplateEngine {
                     switch (type) {
                         case NODE_TEXT: {
                             output += value;
-
                             break;
                         }
                         case NODE_EXPRESSION: {
@@ -82,11 +72,10 @@ export class TemplateEngine {
     resolvePlaceholder(placeholder) {
         const value = this.placeholders[placeholder];
 
-        switch (typeof value) {
-            case 'object':
-                return JSON.stringify(value);
-            default:
-                return value.toString();
+        if (typeof value === 'object') {
+            return JSON.stringify(value);
         }
+
+        return value.toString();
     }
 }

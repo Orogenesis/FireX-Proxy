@@ -53,7 +53,7 @@ export const base = {
                 }),
             },
             {
-                test: /\.svg$/,
+                test: /\.(png|jpe?g|gif|svg)$/,
                 loader: 'svg-url-loader',
                 options: {
                     fallback: 'file-loader',
@@ -61,13 +61,14 @@ export const base = {
                     noquotes: true,
                     outputPath: 'images'
                 }
-            },
+            }
         ]
     },
     resolve: {
         alias: {
             '@': resolve('vue'),
-            '$vendor': resolve('node_modules')
+            '$vendor': resolve('node_modules'),
+            '@welcome': resolve('welcome')
         }
     },
     plugins: [
@@ -94,10 +95,6 @@ export const base = {
                 from: "background.html"
             },
             {
-                from: 'welcome/**.*',
-                ignore: ['*.js', '*.html']
-            },
-            {
                 from: 'prompt'
             }
         ]),
@@ -108,10 +105,10 @@ export const base = {
         }),
         new HtmlWebpackPlugin({
             template: resolve('welcome', 'index.html'),
-            filename: 'welcome/index.html',
+            filename: 'welcome.html',
             chunks: ['welcome']
         }),
         new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i })
     ],
-    mode: 'production',
+    mode: 'production'
 };

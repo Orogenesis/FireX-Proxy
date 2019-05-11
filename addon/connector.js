@@ -1,5 +1,5 @@
-import { isChrome } from './helpers.js';
-import { TemplateEngine } from "./templateEngine.js";
+import { isChrome } from './helpers.js'
+import { TemplateEngine } from "./templateEngine.js"
 
 export class Connector {
     constructor() {
@@ -24,10 +24,7 @@ export class Connector {
      * @returns {void}
      */
     broadcast() {
-        this.observers
-            .forEach(observer => {
-                observer(this);
-            });
+        this.observers.forEach(observer => observer(this));
     }
 
     /**
@@ -38,9 +35,7 @@ export class Connector {
      */
     connect(address, blacklist = [], isBlacklistEnabled = false) {
         if (isChrome()) {
-            const engine = new TemplateEngine();
-
-            engine
+            new TemplateEngine()
                 .setPlaceholders({
                     isBlacklistEnabled: isBlacklistEnabled,
                     proxy: address.getPac(),
@@ -78,31 +73,17 @@ export class Connector {
      * @returns {Promise<any>}
      */
     disconnect() {
-        return new Promise(
-            resolve => {
-                if (isChrome()) {
-                    browser
-                        .proxy
-                        .settings
-                        .set({
-                            value: {
-                                mode: 'system'
-                            },
-                            scope: 'regular'
-                        }, resolve);
-                } else {
-                    const message = { proxy: 'DIRECT' };
-
-                    browser
-                        .runtime
-                        .sendMessage(message, {
-                            toProxyScript: true
-                        }).then(resolve);
-                }
-
-                this.connected = null;
-                this.broadcast();
+        return new Promise(resolve => {
+            if (isChrome()) {
+                const message = { value: { mode: 'system' }, scope: 'regular' };
+                browser.proxy.settings.set(message, resolve);
+            } else {
+                const message = { proxy: 'DIRECT' };
+                browser.runtime.sendMessage(message, { toProxyScript: true }).then(resolve);
             }
-        );
+
+            this.connected = null;
+            this.broadcast();
+        });
     }
 }
