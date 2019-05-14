@@ -22,8 +22,9 @@ const getters = {
         }
 
         const delta = new Date(premiumExpiresAt).getTime() - new Date().getTime();
+        const days = Math.ceil(delta / (1e3 * 60 * 60 * 24));
 
-        return Math.ceil(delta / (1e3 * 60 * 60 * 24));
+        return Math.max(days, 0);
     }
 };
 
