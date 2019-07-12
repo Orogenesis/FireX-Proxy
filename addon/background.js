@@ -92,7 +92,8 @@ import { User } from "./user.js"
                     isBlacklistEnabled: isBlacklistEnabled
                 }, pacMessageConfiguration);
             } else {
-                const proxies = proxyListSession.filterEnabled();
+                const proxies = premiumListSession.filterEnabled()
+                    .union(proxyListSession.filterEnabled());
 
                 if (!proxies.isEmpty()) {
                     connector.connect(proxies.one(), blacklistSession, isBlacklistEnabled);
