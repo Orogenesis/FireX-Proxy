@@ -33,7 +33,7 @@
     "message": "搜尋"
   },
   "blacklist_tip": {
-    "message": "將網域名稱加到這個清單，然後點擊這個頁面頂端的開關來啟用黑名單。代理服務器只會用於此清單中的條目。或者，您可以在加入新條目時使用網域遮罩。例如 example* 會匹配以 «example» (example.com, example.org) 開頭的所有網站。"
+    "message": "將網域名稱加到這個清單，然後點擊這個頁面頂端的開關來啟用黑名單。代理伺服器只會用於此清單中的條目。或者，您可以在加入新條目時使用網域遮罩。例如 example* 會匹配以 «example» (example.com, example.org) 開頭的所有網站。"
   },
   "home": {
     "message": "首頁"
@@ -90,36 +90,36 @@
     "message": "您的瀏覽器不支援 SOCKS 代理伺服器驗證。如有不便，敬請見諒。"
   },
   "authentication": {
-    "message": "Sign up / Log in"
+    "message": "註冊 / 登入"
   },
   "close": {
-    "message": "Close"
+    "message": "關閉"
   },
   "premium": {
-    "message": "Premium"
+    "message": "進階版"
   },
   "days_left": {
-    "message": "Days left"
+    "message": "天剩餘"
   },
   "get_premium": {
-    "message": "Get Premium"
+    "message": "獲得進階版"
   },
   "change_user": {
-    "message": "Switch User"
+    "message": "切換使用者"
   },
   "sign_in": {
-    "message": "Sign in"
+    "message": "登入"
   },
   "refresh_tooltip": {
-    "message": "Next proxy"
+    "message": "下一個代理伺服器"
   },
   "pros_alive": {
-    "message": "Hundreds of alive proxy"
+    "message": "幾百個運作中的代理伺服器"
   },
   "pros_fast_servers": {
-    "message": "Crazy fast proxy servers"
+    "message": "非常快的代理伺服器"
   },
   "pros_bandwidth": {
-    "message": "Unlimited bandwidth"
+    "message": "無限頻寬"
   }
 }
