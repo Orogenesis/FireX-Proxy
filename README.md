@@ -19,7 +19,7 @@ Improve or suggest a translation [here](https://github.com/Orogenesis/FireX-Prox
 1. Run `npm run build-chrome`
 2. Navigate to chrome://extensions and enable "Developer Mode".
 3. Choose "Load unpacked"
-4. Select the dist directory
+4. Select the `dist` directory
 
 *Note that you will sometimes need to manually reload the unpacked extension, depending which files you're working on.*
 
@@ -27,4 +27,4 @@ Improve or suggest a translation [here](https://github.com/Orogenesis/FireX-Prox
 1. Run `npm run build-firefox`
 2. Navigate to about:debugging
 3. Choose `Load Temporary Add-on`
-4. Select the `firex-proxy-firefox.xpi` file
+4. Select the `dist/firex-proxy-firefox.xpi` file
