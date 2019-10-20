@@ -24,7 +24,7 @@ Improve or suggest a translation [here](https://github.com/Orogenesis/FireX-Prox
 *Note that you will sometimes need to manually reload the unpacked extension, depending which files you're working on.*
 
 #### Firefox:
-1. 1. Run `npm run build-firefox`
+1. Run `npm run build-firefox`
 2. Navigate to about:debugging
 3. Choose `Load Temporary Add-on`
 4. Select the `firex-proxy-firefox.xpi` file
