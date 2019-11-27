@@ -1,5 +1,67 @@
 import { isChrome } from './helpers.js'
-import { TemplateEngine } from "./templateEngine.js"
+import { TemplateEngine } from './templateEngine.js'
+import { isInNet, shExpMatch } from './helpers'
+
+function shouldProxyRequest(requestInfo, blacklist, isBlacklistEnabled) {
+    function isProtocolSupported(protocol) {
+        return protocol === 'http:' ||
+            protocol === 'https:' ||
+            protocol === 'ftp:' ||
+            protocol === 'wss:' ||
+            protocol === 'ws:';
+    }
+
+    function isLocal(hostname) {
+        if (hostname === 'localhost' ||
+            shExpMatch(hostname, 'localhost.*') ||
+            shExpMatch(hostname, '*.local') ||
+            hostname === '127.0.0.1') {
+            return true;
+        }
+
+        if (shExpMatch(hostname, '*.firexproxy.com') ||
+            shExpMatch(hostname, 'firexproxy.com')) {
+            return true;
+        }
+
+        if (isInNet(hostname, '10.0.0.0', '255.0.0.0') || isInNet(hostname, '192.168.0.0', '255.255.0.0')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function isBlacklisted(hostname) {
+        for (let pattern in blacklist) {
+            if (!blacklist.hasOwnProperty(pattern)) {
+                continue;
+            }
+
+            if (shExpMatch(hostname, blacklist[pattern])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    const { url } = requestInfo;
+    const { hostname, protocol } = new URL(url);
+
+    if (!isProtocolSupported(protocol)) {
+        return false;
+    }
+
+    if (isLocal(hostname)) {
+        return false;
+    }
+
+    if (!isBlacklistEnabled) {
+        return true;
+    }
+
+    return isBlacklisted(hostname);
+}
 
 export class Connector {
     constructor() {
@@ -25,6 +87,24 @@ export class Connector {
      */
     broadcast() {
         this.observers.forEach(observer => observer(this));
+    }
+
+    handleProxyRequest(blacklist = [], isBlacklistEnabled = false) {
+        const connectedProxy = this.getConnected();
+
+        return function (requestInfo) {
+            if (!shouldProxyRequest(requestInfo, blacklist, isBlacklistEnabled)) {
+                return {
+                    type: 'DIRECT'
+                };
+            }
+
+            return [{
+                type: connectedProxy.getPacType(),
+                host: connectedProxy.getIPAddress(),
+                port: connectedProxy.getPort()
+            }];
+        };
     }
 
     /**
@@ -56,13 +136,9 @@ export class Connector {
                         });
                 });
         } else {
-            const message = { proxy: [address.getPacObject()] };
-
-            browser
-                .runtime
-                .sendMessage(message, {
-                    toProxyScript: true
-                });
+            browser.proxy.onRequest.addListener(this.handleProxyRequest(isBlacklistEnabled, blacklist), {
+                urls: ['<all_urls>']
+            });
         }
 
         this.connected = address;
@@ -78,12 +154,18 @@ export class Connector {
                 const message = { value: { mode: 'system' }, scope: 'regular' };
                 browser.proxy.settings.set(message, resolve);
             } else {
-                const message = { proxy: 'DIRECT' };
-                browser.runtime.sendMessage(message, { toProxyScript: true }).then(resolve);
+                browser.proxy.onRequest.removeListener(this.handleProxyRequest());
             }
 
             this.connected = null;
             this.broadcast();
         });
+    }
+
+    /**
+     * @returns {Address}
+     */
+    getConnected() {
+        return this.connected;
     }
 }

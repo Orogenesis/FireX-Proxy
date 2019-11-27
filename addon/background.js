@@ -1,23 +1,23 @@
 import { ProxyProvider } from './proxyProvider.js'
 import { Addresses } from './addresses.js'
-import { isChrome, isFirefox, isMajorUpdate, isMinorUpdate } from './helpers.js'
+import { isChrome, isFirefox } from './helpers.js'
 import { Connector } from './connector.js'
 import { Address } from './address.js'
 import { detectConflicts } from './conflict.js'
 import { User } from "./user.js"
 
 (function setup() {
-    let proxyListSession    = new Addresses();
-    let premiumListSession  = new Addresses();
-    let user                = new User();
-    let proxyProvider       = new ProxyProvider(user);
-    let connector           = new Connector();
+    let proxyListSession = new Addresses();
+    let premiumListSession = new Addresses();
+    let user = new User();
+    let proxyProvider = new ProxyProvider(user);
+    let connector = new Connector();
 
-    let blacklistSession     = [];
-    let pendingRequests      = [];
-    let isBlacklistEnabled   = false;
+    let blacklistSession = [];
+    let pendingRequests = [];
+    let isBlacklistEnabled = false;
     let authenticationEvents = false;
-    let appState             = {
+    let appState = {
         filters: {
             countryFilter: [],
             protocolFilter: [],
@@ -25,10 +25,6 @@ import { User } from "./user.js"
             favorites: true
         }
     };
-
-    if (!isChrome() && browser.proxy.register) {
-        browser.proxy.register('addon/pac/firefox.js');
-    }
 
     connector
         .addObserver(
@@ -70,8 +66,8 @@ import { User } from "./user.js"
             const favorites = (storage.favorites || [])
                 .map(element => Object.assign(new Address(), element));
 
-            proxyListSession   = Addresses.create(favorites).unique().union(proxyListSession);
-            blacklistSession   = storage.patterns || [];
+            proxyListSession = Addresses.create(favorites).unique().union(proxyListSession);
+            blacklistSession = storage.patterns || [];
             isBlacklistEnabled = storage.isBlacklistEnabled || false;
 
             if (!isChrome()) {

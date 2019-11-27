@@ -205,17 +205,10 @@ export class Address {
     }
 
     /**
-     * @returns {Object}
+     * @returns {string}
      */
-    getPacObject() {
-        return {
-            type: pacObjectDictionary[this.getProtocol()],
-            host: this.ipAddress,
-            port: this.port,
-            username: this.username || '',
-            password: this.password || '',
-            proxyDNS: this.getProtocol() === 'SOCKS5'
-        }
+    getPacType() {
+        return pacObjectDictionary[this.getProtocol()];
     }
 
     /**
