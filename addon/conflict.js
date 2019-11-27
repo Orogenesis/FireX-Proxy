@@ -1,4 +1,4 @@
-import { isChrome } from "./helpers.js"
+import { isChrome } from './helpers.js'
 
 export class Extension {
     constructor(id, shortName, icon) {
