@@ -104,7 +104,10 @@ export class Connector {
         return [{
             type: this.getConnected().getPacType(),
             host: this.getConnected().getIPAddress(),
-            port: this.getConnected().getPort()
+            port: this.getConnected().getPort(),
+            username: this.getConnected().getUsername(),
+            password: this.getConnected().getPassword(),
+            proxyDNS: this.getConnected().getPacType() === 'SOCKS'
         }];
     }
 
