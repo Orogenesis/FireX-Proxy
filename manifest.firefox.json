@@ -15,7 +15,8 @@
     "proxy",
     "storage",
     "*://*.firexproxy.com/*",
-    "cookies"
+    "cookies",
+    "<all_urls>"
   ],
   "optional_permissions": [
     "webRequest",

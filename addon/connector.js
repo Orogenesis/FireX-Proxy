@@ -1,6 +1,5 @@
-import { isChrome } from './helpers.js'
+import { isChrome, isInNet, shExpMatch } from './helpers.js'
 import { TemplateEngine } from './templateEngine.js'
-import { isInNet, shExpMatch } from './helpers'
 
 function shouldProxyRequest(requestInfo, blacklist, isBlacklistEnabled) {
     function isProtocolSupported(protocol) {
@@ -66,7 +65,9 @@ function shouldProxyRequest(requestInfo, blacklist, isBlacklistEnabled) {
 export class Connector {
     constructor() {
         this.observers = [];
+        this.blacklist = [];
         this.connected = null;
+        this.isBlacklistEnabled = false;
     }
 
     /**
@@ -89,22 +90,22 @@ export class Connector {
         this.observers.forEach(observer => observer(this));
     }
 
-    handleProxyRequest(blacklist = [], isBlacklistEnabled = false) {
-        const connectedProxy = this.getConnected();
+    /**
+     * @param {*} requestInfo
+     * @returns {Function}
+     */
+    handleProxyRequest(requestInfo) {
+        if (!shouldProxyRequest(requestInfo, this.blacklist, this.isBlacklistEnabled)) {
+            return {
+                type: 'DIRECT'
+            };
+        }
 
-        return function (requestInfo) {
-            if (!shouldProxyRequest(requestInfo, blacklist, isBlacklistEnabled)) {
-                return {
-                    type: 'DIRECT'
-                };
-            }
-
-            return [{
-                type: connectedProxy.getPacType(),
-                host: connectedProxy.getIPAddress(),
-                port: connectedProxy.getPort()
-            }];
-        };
+        return [{
+            type: this.getConnected().getPacType(),
+            host: this.getConnected().getIPAddress(),
+            port: this.getConnected().getPort()
+        }];
     }
 
     /**
@@ -114,6 +115,10 @@ export class Connector {
      * @returns {void}
      */
     connect(address, blacklist = [], isBlacklistEnabled = false) {
+        this.blacklist = blacklist;
+        this.isBlacklistEnabled = isBlacklistEnabled;
+        this.connected = address;
+
         if (isChrome()) {
             new TemplateEngine()
                 .setPlaceholders({
@@ -136,12 +141,11 @@ export class Connector {
                         });
                 });
         } else {
-            browser.proxy.onRequest.addListener(this.handleProxyRequest(isBlacklistEnabled, blacklist), {
+            browser.proxy.onRequest.addListener(this.handleProxyRequest.bind(this), {
                 urls: ['<all_urls>']
             });
         }
 
-        this.connected = address;
         this.broadcast();
     }
 
@@ -154,7 +158,8 @@ export class Connector {
                 const message = { value: { mode: 'system' }, scope: 'regular' };
                 browser.proxy.settings.set(message, resolve);
             } else {
-                browser.proxy.onRequest.removeListener(this.handleProxyRequest());
+                browser.proxy.onRequest.removeListener(this.handleProxyRequest.bind(this));
+                resolve();
             }
 
             this.connected = null;

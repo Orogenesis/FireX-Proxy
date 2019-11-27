@@ -59,8 +59,6 @@ import { User } from "./user.js"
     // Disable all proxies on browser start
     connector.disconnect();
 
-    const pacMessageConfiguration = { toProxyScript: true };
-
     browser.storage.local.get()
         .then(storage => {
             const favorites = (storage.favorites || [])
@@ -70,10 +68,6 @@ import { User } from "./user.js"
             blacklistSession = storage.patterns || [];
             isBlacklistEnabled = storage.isBlacklistEnabled || false;
 
-            if (!isChrome()) {
-                browser.runtime.sendMessage({ blacklist: blacklistSession, isBlacklistEnabled: isBlacklistEnabled }, pacMessageConfiguration);
-            }
-
             user.credentials = storage.credentials || {};
         });
 
@@ -82,18 +76,11 @@ import { User } from "./user.js"
             isBlacklistEnabled = storage.isBlacklistEnabled ? storage.isBlacklistEnabled.newValue : isBlacklistEnabled;
             blacklistSession = storage.patterns ? storage.patterns.newValue : blacklistSession ;
 
-            if (!isChrome()) {
-                browser.runtime.sendMessage({
-                    blacklist: blacklistSession,
-                    isBlacklistEnabled: isBlacklistEnabled
-                }, pacMessageConfiguration);
-            } else {
-                const proxies = premiumListSession.filterEnabled()
-                    .union(proxyListSession.filterEnabled());
+            const proxies = premiumListSession.filterEnabled()
+                .union(proxyListSession.filterEnabled());
 
-                if (!proxies.isEmpty()) {
-                    connector.connect(proxies.one(), blacklistSession, isBlacklistEnabled);
-                }
+            if (!proxies.isEmpty()) {
+                connector.connect(proxies.one(), blacklistSession, isBlacklistEnabled);
             }
         }
     });
