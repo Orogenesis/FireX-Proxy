@@ -1,29 +1,29 @@
 const pacDictionary = {
-    'HTTP'   : 'PROXY',
-    'HTTPS'  : 'PROXY',
-    'SOCKS5' : 'SOCKS',
-    'SOCKS4' : 'SOCKS'
+    'HTTP': 'PROXY',
+    'HTTPS': 'PROXY',
+    'SOCKS5': 'SOCKS',
+    'SOCKS4': 'SOCKS'
 };
 
 const pacObjectDictionary = {
-    'HTTP'   : 'HTTP',
-    'HTTPS'  : 'HTTPS',
-    'SOCKS5' : 'SOCKS',
-    'SOCKS4' : 'SOCKS4'
+    'HTTP': 'HTTP',
+    'HTTPS': 'HTTPS',
+    'SOCKS5': 'SOCKS',
+    'SOCKS4': 'SOCKS4'
 };
 
 export class Address {
     constructor() {
-        this.ipAddress     = null;
-        this.port          = null;
-        this.country       = null;
-        this.protocol      = null;
-        this.activeState   = false;
+        this.ipAddress = null;
+        this.port = null;
+        this.country = null;
+        this.protocol = null;
+        this.activeState = false;
         this.favoriteState = false;
-        this.pingTimeMs    = null;
-        this.isoCode       = null;
-        this.username      = null;
-        this.password      = null;
+        this.pingTimeMs = null;
+        this.isoCode = null;
+        this.username = null;
+        this.password = null;
     }
 
     /**
@@ -205,17 +205,10 @@ export class Address {
     }
 
     /**
-     * @returns {Object}
+     * @returns {string}
      */
-    getPacObject() {
-        return {
-            type: pacObjectDictionary[this.getProtocol()],
-            host: this.ipAddress,
-            port: this.port,
-            username: this.username || '',
-            password: this.password || '',
-            proxyDNS: this.getProtocol() === 'SOCKS5'
-        }
+    getPacType() {
+        return pacObjectDictionary[this.getProtocol()];
     }
 
     /**
