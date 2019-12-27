@@ -9,10 +9,10 @@ import BrowserAction from '@/BrowserAction.vue'
 import store from '@/store'
 
 Vue.use(Vuetify, {
-    iconfont: 'fa',
-    theme: {
-        primary: '#554fe8'
-    }
+  iconfont: 'fa',
+  theme: {
+    primary: '#554fe8'
+  }
 });
 
 Vue.component('proxy-list-component', () => import('@/components/ProxyListComponent.vue'));
@@ -20,7 +20,7 @@ Vue.component('blacklist-component', () => import('@/components/BlacklistCompone
 Vue.component('premium-component', () => import('@/components/PremiumComponent.vue'));
 
 new Vue({
-    el: '#browser-action',
-    store,
-    render: h => h(BrowserAction)
+  el: '#browser-action',
+  store,
+  render: h => h(BrowserAction)
 });

@@ -1,28 +1,28 @@
 function FindProxyForURL(url, host) {
-    if (host === 'localhost' ||
-        shExpMatch(host, 'localhost.*') ||
-        shExpMatch(host, '*.local') ||
-        host === '127.0.0.1' ||
-        shExpMatch(host, '*.firexproxy.com') ||
-        shExpMatch(host, 'firexproxy.com')) {
-        return 'DIRECT';
-    }
-
-    if (isInNet(host, '10.0.0.0', '255.0.0.0') || isInNet(host, '192.168.0.0', '255.255.0.0')) {
-        return 'DIRECT';
-    }
-
-    if (!{{isBlacklistEnabled}}) {
-        return '{{proxy}}';
-    }
-
-    let blacklist = {{blacklist}};
-
-    for (let pattern in blacklist) {
-        if (shExpMatch(host, blacklist[pattern])) {
-            return '{{proxy}}';
-        }
-    }
-
+  if (host === 'localhost' ||
+    shExpMatch(host, 'localhost.*') ||
+    shExpMatch(host, '*.local') ||
+    host === '127.0.0.1' ||
+    shExpMatch(host, '*.firexproxy.com') ||
+    shExpMatch(host, 'firexproxy.com')) {
     return 'DIRECT';
+  }
+
+  if (isInNet(host, '10.0.0.0', '255.0.0.0') || isInNet(host, '192.168.0.0', '255.255.0.0')) {
+    return 'DIRECT';
+  }
+
+  if (!{{isBlacklistEnabled}}) {
+    return '{{proxy}}';
+  }
+
+  let blacklist = {{blacklist}};
+
+  for (let pattern in blacklist) {
+    if (shExpMatch(host, blacklist[pattern])) {
+      return '{{proxy}}';
+    }
+  }
+
+  return 'DIRECT';
 }
