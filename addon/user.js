@@ -1,28 +1,22 @@
 export class User {
   constructor() {
     this.credentials = {};
-    this.profile = {};
   }
 
   /**
    * @returns {Promise}
    */
   async parseCookies() {
-    await this.refresh();
-
-    if (!this.isEmpty()) {
-      return this.metadata();
-    }
-
     const data = { url: 'https://www.firexproxy.com', name: 'credentials' };
     const { value } = await browser.cookies.get(data) || {};
 
-    if (!value) {
+    if (!value && this.isEmpty()) {
       return {};
+    } else if (value) {
+      this.updateCredentials(JSON.parse(decodeURIComponent(value)));
     }
 
-    this.updateCredentials(JSON.parse(decodeURIComponent(value)));
-
+    await this.refresh();
     return this.metadata();
   }
 
@@ -39,8 +33,6 @@ export class User {
    * @returns {void}
    */
   async refresh() {
-    const { refreshToken } = this.credentials;
-
     if (!this.isExpired || this.isEmpty()) {
       return;
     }
@@ -48,7 +40,7 @@ export class User {
     const options = {
       method: 'POST',
       credentials: 'include',
-      headers: new Headers({ Authorization: `Bearer ${refreshToken}` })
+      headers: new Headers({ Authorization: `Bearer ${this.refreshToken}` })
     };
 
     try {
@@ -78,23 +70,20 @@ export class User {
       return {};
     }
 
-    const { accessToken } = this.credentials;
     const options = {
       method: 'GET',
       credentials: 'include',
-      headers: new Headers({ Authorization: `Bearer ${accessToken}` })
+      headers: new Headers({ Authorization: `Bearer ${this.accessToken}` })
     };
 
     try {
       const response = await fetch(`https://api.firexproxy.com/auth/profile`, options);
       const { premium_expires_at: premiumExpiresAt } = await response.json();
 
-      this.profile = { premiumExpiresAt };
+      return { premiumExpiresAt };
     } catch (e) {
-      this.profile = {};
+      return {};
     }
-
-    return this.profile;
   }
 
   /**
@@ -104,6 +93,20 @@ export class User {
     const { exp } = this.metadata();
 
     return Math.floor((new Date().getTime()) / 1e3) >= (exp || 0);
+  }
+
+  /**
+   * @returns {string}
+   */
+  get accessToken() {
+    return this.credentials.accessToken;
+  }
+
+  /**
+   * @returns {string}
+   */
+  get refreshToken() {
+    return this.credentials.refreshToken;
   }
 
   /**
