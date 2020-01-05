@@ -18,8 +18,7 @@ function shouldProxyRequest(requestInfo, blacklist, isBlacklistEnabled) {
       return true;
     }
 
-    if (shExpMatch(hostname, '*.firexproxy.com') ||
-      shExpMatch(hostname, 'firexproxy.com')) {
+    if (shExpMatch(hostname, 'api.firexproxy.com')) {
       return true;
     }
 
