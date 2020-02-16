@@ -121,5 +121,23 @@
   },
   "pros_bandwidth": {
     "message": "Unlimited bandwidth"
+  },
+  "skip": {
+    "message": "Skip"
+  },
+  "rate_now": {
+    "message": "Rate Now"
+  },
+  "rate_title": {
+    "message": "Rate FireX Proxy"
+  },
+  "rate_text": {
+    "message": "\uD83D\uDE4F If you enjoy using FireX Proxy, please take a few seconds to rate your experience with the add-on."
+  },
+  "leave_feedback": {
+    "message": "\uD83E\uDD70 We are so grateful for your high appreciation of our work! Please, leave a feedback on add-on page, if you wouldn't mind. That would be greatly helpful!"
+  },
+  "go_to_market": {
+    "message": "Leave Feedback"
   }
 }
