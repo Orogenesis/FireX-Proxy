@@ -58,6 +58,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <RatingComponent></RatingComponent>
   </v-app>
 </template>
 
@@ -65,10 +66,12 @@
   import * as browser from 'webextension-polyfill'
   import FilterListComponent from '@/components/FilterListComponent.vue'
   import AddProxyComponent from '@/components/AddProxyComponent.vue'
+  import RatingComponent from '@/components/RatingComponent.vue'
 
   export default {
     name: 'popup',
     components: {
+      RatingComponent,
       AddProxyComponent,
       FilterListComponent
     },

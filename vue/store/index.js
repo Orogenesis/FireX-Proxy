@@ -6,6 +6,7 @@ import patterns from './modules/patterns'
 import filters from './modules/filters'
 import user from './modules/user'
 import premium from './modules/premium'
+import rating from './modules/rating'
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     filters,
     patterns,
     user,
-    premium
+    premium,
+    rating
   }
 })

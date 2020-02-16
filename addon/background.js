@@ -18,6 +18,7 @@ import { User } from "./user.js"
   let isBlacklistEnabled = false;
   let authenticationEvents = false;
   let appState = {
+    rated: false,
     filters: {
       countryFilter: [],
       protocolFilter: [],
@@ -70,10 +71,8 @@ import { User } from "./user.js"
   browser.runtime.onInstalled.addListener(details => {
     const { reason } = details;
 
-    if (reason === 'update') {
-      if (browser.i18n.getUILanguage() === 'ru') {
-        browser.tabs.create({ url: '../welcome.html' });
-      }
+    if (reason === 'install') {
+      browser.storage.local.set({ installedAt: new Date().getTime() });
     }
   });
 

@@ -79,7 +79,6 @@
 
 <script>
   import * as browser from 'webextension-polyfill'
-
   const permissions = { permissions: ['webRequest', 'webRequestBlocking'], origins: ['<all_urls>'] };
 
   export default {
