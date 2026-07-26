@@ -1,0 +1,141 @@
+name: Build native checker installers
+
+on:
+  workflow_dispatch:
+    inputs:
+      chrome-extension-id:
+        description: Optional Chrome/Chromium extension ID override for native host manifests
+        required: false
+        type: string
+  push:
+    branches:
+      - master
+      - main
+    tags:
+      - 'checker-v*'
+    paths:
+      - '.github/workflows/native-checker.yml'
+      - 'native/firex-checker/**'
+      - 'checker-manifest.json'
+      - 'scripts/sync-checker-manifest.mjs'
+      - 'scripts/package-native-host.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: write
+
+jobs:
+  sync-manifest:
+    name: Sync checker manifest
+    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Sync checker manifest
+        run: npm run checker:manifest
+
+      - name: Commit checker manifest
+        run: |
+          if git diff --quiet -- checker-manifest.json; then
+            echo "checker-manifest.json is already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add checker-manifest.json
+          git commit -m "chore: update checker manifest"
+          git push
+
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: ubuntu-latest
+            os: linux
+            arch: x64
+            target: x86_64-unknown-linux-gnu
+            binary: native/firex-checker/target/x86_64-unknown-linux-gnu/release/firex-checker
+          - name: macos-x64
+            runner: macos-13
+            os: macos
+            arch: x64
+            target: x86_64-apple-darwin
+            binary: native/firex-checker/target/x86_64-apple-darwin/release/firex-checker
+          - name: macos-arm64
+            runner: macos-14
+            os: macos
+            arch: arm64
+            target: aarch64-apple-darwin
+            binary: native/firex-checker/target/aarch64-apple-darwin/release/firex-checker
+          - name: windows-x64
+            runner: windows-latest
+            os: windows
+            arch: x64
+            target: x86_64-pc-windows-msvc
+            binary: native/firex-checker/target/x86_64-pc-windows-msvc/release/firex-checker.exe
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add ${{ matrix.target }}
+
+      - name: Build native checker
+        run: cargo build --release --target ${{ matrix.target }} --manifest-path native/firex-checker/Cargo.toml
+
+      - name: Package native checker
+        env:
+          FIREX_CHROME_EXTENSION_ID: ${{ github.event.inputs['chrome-extension-id'] || vars.FIREX_CHROME_EXTENSION_ID }}
+          FIREX_FIREFOX_EXTENSION_ID: firex-proxy@local
+        run: >
+          node scripts/package-native-host.mjs
+          --os ${{ matrix.os }}
+          --arch ${{ matrix.arch }}
+          --binary ${{ matrix.binary }}
+          --out dist/native
+
+      - name: Upload installer artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firex-checker-${{ matrix.name }}
+          path: dist/native/*
+          if-no-files-found: error
+
+  release:
+    name: Attach installers to release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/checker-v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download installer artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/native
+          merge-multiple: true
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/native/*

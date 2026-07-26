@@ -3,3 +3,5 @@
 node_modules/
 .wxt/
 dist/
+.native-package/
+native/firex-checker/target/

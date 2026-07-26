@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export type PopupTab = 'proxies' | 'bypass' | 'source';
+export type PopupTab = 'proxies' | 'bypass' | 'source' | 'settings';
 
 interface TabDefinition {
   id: PopupTab;

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DefaultProxySources } from '../../core/constants';
-import type { ExtensionResponse, ProxyDraft, ProxyEndpoint, ProxySnapshot } from '../../core/types';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { DefaultProxyCheckerSettings, DefaultProxySources } from '../../core/constants';
+import type { ExtensionResponse, ProxyCheckerSettings, ProxyDraft, ProxyEndpoint, ProxySnapshot } from '../../core/types';
 import { ExtensionClient } from '../extensionClient';
 import { ensureSourceHostPermissions } from '../sourcePermissions';
 
@@ -9,7 +9,20 @@ const client = new ExtensionClient();
 const emptySnapshot: ProxySnapshot = {
   proxies: [],
   bypassRules: [],
-  source: { urls: [] }
+  source: { urls: [] },
+  checker: {
+    host: { status: 'unknown' },
+    settings: { ...DefaultProxyCheckerSettings, targets: [...DefaultProxyCheckerSettings.targets] },
+    run: {
+      status: 'idle',
+      checked: 0,
+      total: 0,
+      working: 0,
+      failed: 0,
+      queued: 0
+    },
+    results: {}
+  }
 };
 
 export function useProxyStore() {
@@ -18,6 +31,7 @@ export function useProxyStore() {
   const [busy, setBusy] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [error, setError] = useState<string>();
+  const checkerSettingsSaveId = useRef(0);
 
   const activeProxy = useMemo(
     () => snapshot.proxies.find(proxy => proxy.id === snapshot.activeProxyId),
@@ -61,6 +75,38 @@ export function useProxyStore() {
     source: { urls }
   })), [run]);
 
+  const startChecker = useCallback(() => run(() => client.send({ type: 'checker:start' })), [run]);
+
+  const stopChecker = useCallback(() => run(() => client.send({ type: 'checker:stop' })), [run]);
+
+  const setCheckerSettings = useCallback((settings: ProxyCheckerSettings) => {
+    const saveId = checkerSettingsSaveId.current + 1;
+    checkerSettingsSaveId.current = saveId;
+    setError(undefined);
+    setSnapshot(current => ({
+      ...current,
+      checker: {
+        ...current.checker,
+        settings
+      }
+    }));
+
+    client.send<ProxySnapshot>({
+      type: 'checker:settings',
+      settings
+    })
+      .then(nextSnapshot => {
+        if (checkerSettingsSaveId.current === saveId) {
+          setSnapshot(nextSnapshot);
+        }
+      })
+      .catch(cause => {
+        if (checkerSettingsSaveId.current === saveId) {
+          setError(cause instanceof Error ? cause.message : 'Failed to save checker settings.');
+        }
+      });
+  }, []);
+
   const syncSource = useCallback(() => run(async () => {
     const urls = [...new Set([...DefaultProxySources, ...snapshot.source.urls])];
 
@@ -88,13 +134,21 @@ export function useProxyStore() {
   }, []);
 
   useEffect(() => {
+    const probeCheckerSnapshot = () => {
+      client.send<ProxySnapshot>({ type: 'checker:probe' })
+        .then(setSnapshot)
+        .catch(cause => setError(cause instanceof Error ? cause.message : 'Failed to detect native checker.'));
+    };
+
     const initialize = async () => {
       setError(undefined);
       const nextSnapshot = await client.send<ProxySnapshot>({ type: 'snapshot:get' });
 
       if (nextSnapshot.proxies.length === 0) {
         try {
-          setSnapshot(await autoSyncSource());
+          const syncedSnapshot = await autoSyncSource();
+          setSnapshot(syncedSnapshot);
+          probeCheckerSnapshot();
         } catch (cause) {
           setSnapshot(nextSnapshot);
           throw cause;
@@ -104,12 +158,27 @@ export function useProxyStore() {
       }
 
       setSnapshot(nextSnapshot);
+      probeCheckerSnapshot();
     };
 
     initialize()
       .catch(cause => setError(cause instanceof Error ? cause.message : 'Failed to load proxies.'))
       .finally(() => setLoading(false));
   }, [autoSyncSource]);
+
+  useEffect(() => {
+    if (snapshot.checker.run.status !== 'checking') {
+      return;
+    }
+
+    const timer = setInterval(() => {
+      client.send<ProxySnapshot>({ type: 'snapshot:get' })
+        .then(setSnapshot)
+        .catch(cause => setError(cause instanceof Error ? cause.message : 'Failed to refresh checker status.'));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [snapshot.checker.run.status]);
 
   return {
     activeProxy,
@@ -119,6 +188,7 @@ export function useProxyStore() {
     syncing,
     bypassRules: snapshot.bypassRules,
     proxies: snapshot.proxies,
+    checker: snapshot.checker,
     source: snapshot.source,
     sourceSync: snapshot.sourceSync,
     activeProxyId: snapshot.activeProxyId,
@@ -127,7 +197,10 @@ export function useProxyStore() {
     disconnectProxy,
     removeProxy,
     setBypassRules,
+    setCheckerSettings,
     setSourceUrls,
+    startChecker,
+    stopChecker,
     syncSource,
     updateProxy
   };

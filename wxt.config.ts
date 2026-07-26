@@ -1,4 +1,19 @@
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'wxt';
+
+interface ExtensionIdentity {
+  chromium: {
+    id: string;
+    key: string;
+  };
+  firefox: {
+    id: string;
+  };
+}
+
+const extensionIdentity = JSON.parse(
+  readFileSync(new URL('./config/extension-identity.json', import.meta.url), 'utf8')
+) as ExtensionIdentity;
 
 export default defineConfig({
   modules: ['@wxt-dev/module-react'],
@@ -11,7 +26,7 @@ export default defineConfig({
       ? {
           browser_specific_settings: {
             gecko: {
-              id: 'firex-proxy@local',
+              id: extensionIdentity.firefox.id,
               data_collection_permissions: {
                 required: ['none']
               },
@@ -43,9 +58,10 @@ export default defineConfig({
         },
         default_popup: 'popup.html'
       },
+      ...(!isFirefox ? { key: extensionIdentity.chromium.key } : {}),
       permissions: isFirefox
-        ? ['proxy', 'storage', 'https://raw.githubusercontent.com/*']
-        : ['proxy', 'storage'],
+        ? ['alarms', 'nativeMessaging', 'proxy', 'storage', 'https://raw.githubusercontent.com/*']
+        : ['alarms', 'nativeMessaging', 'proxy', 'storage'],
       ...(!isFirefox ? { host_permissions: ['https://raw.githubusercontent.com/*'] } : {}),
       ...(!isFirefox ? { optional_host_permissions: ['http://*/*', 'https://*/*'] } : { optional_permissions: ['http://*/*', 'https://*/*'] }),
       ...firefoxSettings

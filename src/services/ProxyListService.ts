@@ -16,10 +16,16 @@ export class ProxyListService {
     const bypassRules = await this.storage.getBypassRules();
     const source = await this.storage.getSource();
     const sourceSync = await this.storage.getSourceSync();
+    const checker = {
+      host: await this.storage.getCheckerHost(),
+      settings: await this.storage.getCheckerSettings(),
+      run: await this.storage.getCheckerRun(),
+      results: await this.storage.getProxyHealth()
+    };
 
     if (activeProxyId && !catalog.has(activeProxyId)) {
       await this.storage.clearActiveProxyId();
-      return { proxies: catalog.toJSON(), bypassRules, source, sourceSync };
+      return { proxies: catalog.toJSON(), bypassRules, source, sourceSync, checker };
     }
 
     return {
@@ -27,7 +33,8 @@ export class ProxyListService {
       activeProxyId,
       bypassRules,
       source,
-      sourceSync
+      sourceSync,
+      checker
     };
   }
 

@@ -24,6 +24,7 @@ export interface ProxySnapshot {
   bypassRules: string[];
   source: ProxySourceSettings;
   sourceSync?: ProxySourceSync;
+  checker: ProxyCheckerSnapshot;
 }
 
 export interface ProxySourceSettings {
@@ -43,6 +44,70 @@ export interface ProxySourceResult {
   imported: number;
 }
 
+export type ProxyHealthStatus = 'working' | 'failed';
+
+export interface ProxyHealthResult {
+  proxyId: string;
+  status: ProxyHealthStatus;
+  latencyMs?: number;
+  checkedAt: number;
+  error?: string;
+}
+
+export type NativeCheckerHostStatus = 'unknown' | 'available' | 'missing' | 'outdated' | 'update_available';
+
+export interface NativeCheckerHostSnapshot {
+  status: NativeCheckerHostStatus;
+  version?: string;
+  latestVersion?: string;
+  minimumVersion?: string;
+  protocolVersion?: number;
+  requiredProtocolVersion?: number;
+  releaseUrl?: string;
+  message?: string;
+  checkedAt?: number;
+}
+
+export interface CheckerVersionManifest {
+  latestVersion: string;
+  minimumVersion: string;
+  protocolVersion: number;
+  releaseUrl: string;
+  fetchedAt: number;
+}
+
+export type ProxyCheckRunStatus = 'idle' | 'checking' | 'finished' | 'error';
+
+export interface ProxyCheckRun {
+  status: ProxyCheckRunStatus;
+  requestId?: string;
+  checked: number;
+  total: number;
+  working: number;
+  failed: number;
+  queued: number;
+  startedAt?: number;
+  finishedAt?: number;
+  message?: string;
+}
+
+export interface ProxyCheckerSettings {
+  enabled: boolean;
+  maxWorking: number;
+  maxCandidates: number;
+  concurrency: number;
+  timeoutMs: number;
+  recheckIntervalMinutes: number;
+  targets: string[];
+}
+
+export interface ProxyCheckerSnapshot {
+  host: NativeCheckerHostSnapshot;
+  settings: ProxyCheckerSettings;
+  run: ProxyCheckRun;
+  results: Record<string, ProxyHealthResult>;
+}
+
 export type ExtensionRequest =
   | { type: 'snapshot:get' }
   | { type: 'proxy:add'; proxy: ProxyDraft }
@@ -53,7 +118,11 @@ export type ExtensionRequest =
   | { type: 'bypass:set'; rules: string[] }
   | { type: 'source:set'; source: ProxySourceSettings }
   | { type: 'source:auto-sync' }
-  | { type: 'source:sync' };
+  | { type: 'source:sync' }
+  | { type: 'checker:probe' }
+  | { type: 'checker:start' }
+  | { type: 'checker:stop' }
+  | { type: 'checker:settings'; settings: ProxyCheckerSettings };
 
 export type ExtensionResponse = ProxySnapshot | ProxyEndpoint | void;
 
@@ -64,5 +133,10 @@ export interface ExtensionStorage {
   source?: ProxySourceSettings;
   sourceSync?: ProxySourceSync;
   sourceAutoSyncAttemptedAt?: number;
+  checkerHost?: NativeCheckerHostSnapshot;
+  checkerVersionManifest?: CheckerVersionManifest;
+  checkerSettings?: ProxyCheckerSettings;
+  checkerRun?: ProxyCheckRun;
+  proxyHealth?: Record<string, ProxyHealthResult>;
   installedAt?: number;
 }

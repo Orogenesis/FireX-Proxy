@@ -1,0 +1,9 @@
+{
+  "chromium": {
+    "id": "ikmmgjfkajbfbmlmmjjbjicbjnommlob",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAx2dfEPRyFc6k3i9c0bgWOb1RdpNhwNW2gcLWMO/WgCuzuyz2AHes9Rbj0gmuHYgd4zaJSZSCb5UK9xHlbseRZG8be5WjNGcvkxfAIgdGF3bbY43lM9DilhxPBp9ielkC9wmVwLSBLogHir7G/PuWbpuRou1kzZdz4oQxl4O8YYfEQReUgmGiKEg6zCpG3mISaSl9rOhzvC0STszGPccw7qexkJrj6L7R4fiE5cSjonXutd5sZlA5l56dP44IRDUAgkUTRrGXqui7BwbqY5Zgx57T1MZ+w9shb/Dt/pSPg3GgmrotzzSv6xnqvVbAh9tXTy3Q3/W9KP6z3Sv0NSLTzwIDAQAB"
+  },
+  "firefox": {
+    "id": "firex-proxy@local"
+  }
+}

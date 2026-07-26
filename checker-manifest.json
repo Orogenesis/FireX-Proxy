@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "checker": {
+    "latestVersion": "0.1.1",
+    "minimumVersion": "0.1.1",
+    "protocolVersion": 1,
+    "releaseUrl": "https://github.com/Orogenesis/FireX-Proxy/releases/latest"
+  }
+}
