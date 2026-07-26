@@ -70,13 +70,13 @@ jobs:
             target: x86_64-unknown-linux-gnu
             binary: native/firex-checker/target/x86_64-unknown-linux-gnu/release/firex-checker
           - name: macos-x64
-            runner: macos-13
+            runner: macos-15-intel
             os: macos
             arch: x64
             target: x86_64-apple-darwin
             binary: native/firex-checker/target/x86_64-apple-darwin/release/firex-checker
           - name: macos-arm64
-            runner: macos-14
+            runner: macos-15
             os: macos
             arch: arm64
             target: aarch64-apple-darwin
