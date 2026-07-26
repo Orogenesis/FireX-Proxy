@@ -110,7 +110,7 @@ To release a new checker version:
 make checker-release VERSION=0.1.2
 ```
 
-That command updates the Rust crate version, refreshes `Cargo.lock`, syncs `checker-manifest.json`, commits those version files, creates a `checker-v0.1.2` tag, and pushes the branch and tag. The tag starts the GitHub Actions workflow that builds and publishes native checker installers.
+That command updates the Rust crate version, refreshes `Cargo.lock`, syncs `checker-manifest.json`, commits those version files, creates a `checker-v0.1.2` tag, and pushes the branch and tag. Branch pushes only run the lightweight manifest sync job. The checker tag starts the installer builds and publishes the native checker release assets.
 
 To uninstall the `firex-checker`:
 

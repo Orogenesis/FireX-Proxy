@@ -57,6 +57,7 @@ jobs:
 
   build:
     name: ${{ matrix.name }}
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/checker-v')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
