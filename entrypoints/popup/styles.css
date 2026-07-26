@@ -252,11 +252,11 @@ button:disabled {
 
 .checkerPanel {
   gap: 10px;
-  padding: 10px;
+  padding: 12px;
 }
 
 .checkerPanel.compact {
-  gap: 8px;
+  gap: 10px;
 }
 
 .checkerTop,
@@ -276,20 +276,23 @@ button:disabled {
 
 .checkerStatusStrip {
   display: grid;
+  position: relative;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
-  min-height: 48px;
-  padding: 9px 10px;
+  min-height: 66px;
+  padding: 11px 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #f8fafc;
+  background: #fff;
+  overflow: hidden;
+  --checker-progress: 0%;
 }
 
 .checkerStatusStrip.available,
 .checkerStatusStrip.update_available {
-  border-color: #b7e4dc;
-  background: #f0fdfa;
+  border-color: var(--line);
+  background: #fff;
 }
 
 .checkerStatusStrip.missing,
@@ -298,30 +301,139 @@ button:disabled {
   background: #fff7ed;
 }
 
-.checkerStatusStrip div {
-  display: grid;
-  min-width: 0;
-  gap: 2px;
+.checkerStatusStrip.checking {
+  border-color: #a7d9d3;
+  background: #fbfefd;
 }
 
-.checkerStatusStrip strong,
-.checkerStatusStrip span {
+.checkerStatusStrip.checking::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--checker-progress);
+  background:
+    linear-gradient(90deg, rgb(15 118 110 / 0.14), rgb(20 184 166 / 0.08)),
+    linear-gradient(180deg, rgb(255 255 255 / 0.42), rgb(255 255 255 / 0));
+  content: "";
+  transition: width 0.25s ease;
+}
+
+.checkerStatusStrip.checking::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.42), transparent);
+  content: "";
+  transform: translateX(-100%);
+  animation: progressSheen 1.8s ease-in-out infinite;
+}
+
+.checkerStatusText {
+  display: grid;
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  gap: 3px;
+}
+
+.checkerStatusText strong,
+.checkerStatusText > span:not(.checkerState) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.checkerStatusStrip strong {
-  font-size: 12px;
+.checkerStatusText strong {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 16px;
 }
 
-.checkerStatusStrip span {
+.checkerStatusText span {
   color: var(--muted);
   font-size: 11px;
+  line-height: 14px;
+}
+
+.checkerStatusText .checkerState {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  overflow: visible;
+  color: #475467;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+
+.checkerStateDot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 999px;
+  background: #98a2b3;
+}
+
+.checkerStatusStrip.available .checkerStateDot,
+.checkerStatusStrip.update_available .checkerStateDot {
+  background: var(--primary);
+}
+
+.checkerStatusStrip.missing .checkerStateDot,
+.checkerStatusStrip.outdated .checkerStateDot {
+  background: var(--danger);
+}
+
+.checkerStatusStrip.checking .checkerStateDot {
+  background: var(--primary);
+  box-shadow: 0 0 0 5px rgb(15 118 110 / 0.10);
+  animation: statePulse 1.2s ease-in-out infinite;
+}
+
+.checkerResultSummary {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: rgb(248 250 252 / 0.88);
+  backdrop-filter: blur(6px);
+}
+
+.checkerResultSummary > span {
+  display: grid;
+  min-width: 62px;
+  gap: 1px;
+  padding: 6px 8px;
+}
+
+.checkerResultSummary > span + span {
+  border-left: 1px solid var(--line);
+}
+
+.checkerResultSummary strong {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 15px;
+}
+
+.checkerResultSummary small {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 11px;
+  text-transform: uppercase;
 }
 
 .checkerDownload {
   display: inline-flex;
+  position: relative;
+  z-index: 1;
   height: 30px;
   align-items: center;
   justify-content: center;
@@ -334,42 +446,9 @@ button:disabled {
   font-weight: 800;
 }
 
-.checkerProgressBlock {
-  display: grid;
-  gap: 6px;
-}
-
-.checkProgress {
-  height: 5px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--soft);
-}
-
-.checkProgress div {
-  height: 100%;
-  border-radius: inherit;
-  background: var(--primary);
-  transition: width 0.2s ease;
-}
-
 .checkerMessage {
   color: var(--muted);
   font-size: 11px;
-}
-
-.checkerCounters {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-}
-
-.checkerCounters span {
-  overflow: hidden;
-  color: var(--muted);
-  font-size: 11px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .checkerSettings {
@@ -939,5 +1018,27 @@ input:focus {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes statePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgb(15 118 110 / 0.10);
+  }
+
+  50% {
+    box-shadow: 0 0 0 7px rgb(15 118 110 / 0.04);
+  }
+}
+
+@keyframes progressSheen {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  55%,
+  100% {
+    transform: translateX(100%);
   }
 }

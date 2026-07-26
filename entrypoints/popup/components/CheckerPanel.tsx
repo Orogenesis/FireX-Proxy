@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useId, useState } from 'react';
+import { type CSSProperties, type ReactNode, useEffect, useId, useState } from 'react';
 import { Activity, Clock3, Download, Gauge, Minus, Play, Plus, Search, Square, Timer, Zap } from 'lucide-react';
 import { NativeCheckerInstallGuideUrl } from '../../../src/core/constants';
 import type { ProxyCheckerSettings, ProxyCheckerSnapshot } from '../../../src/core/types';
@@ -60,7 +60,6 @@ export function CheckerStatusPanel({
         proxyCount={proxyCount}
         visibleProxyCount={visibleProxyCount}
       />
-      <CheckerProgress checker={checker} />
       {checker.run.message && <small className="checkerMessage">{checker.run.message}</small>}
     </section>
   );
@@ -187,20 +186,37 @@ interface CheckerStatusStripProps {
 
 function CheckerStatusStrip({ checker, checkedProxyCount, proxyCount, visibleProxyCount }: CheckerStatusStripProps) {
   const needsInstall = checker.host.status === 'missing' || checker.host.status === 'outdated' || checker.host.status === 'update_available';
+  const metrics = checkerMetrics(checker, checkedProxyCount, proxyCount, visibleProxyCount);
+  const progressStyle = checker.run.status === 'checking'
+    ? ({ '--checker-progress': `${progressPercent(checker)}%` } as CSSProperties)
+    : undefined;
 
   return (
-    <div className={`checkerStatusStrip ${checker.host.status}`}>
-      <div>
+    <div className={`checkerStatusStrip ${checker.host.status} ${checker.run.status === 'checking' ? 'checking' : ''}`} style={progressStyle}>
+      <div className="checkerStatusText">
+        <span className="checkerState">
+          <span className="checkerStateDot" aria-hidden="true" />
+          {stateLabel(checker)}
+        </span>
         <strong>{hostLabel(checker)}</strong>
-        <span>{statusDetail(checker, checkedProxyCount, proxyCount, visibleProxyCount)}</span>
+        <span>{statusDetail(checker, checkedProxyCount, proxyCount)}</span>
       </div>
+      {metrics.length > 0 && (
+        <div className="checkerResultSummary">
+          {metrics.map(metric => (
+            <span key={metric.label}>
+              <strong>{metric.value}</strong>
+              <small>{metric.label}</small>
+            </span>
+          ))}
+        </div>
+      )}
       {needsInstall && (
         <a
           className="checkerDownload"
           href={NativeCheckerInstallGuideUrl}
           target="_blank"
           rel="noreferrer"
-          title="Open the native checker installation guide."
         >
           <Download size={15} />
           {checkerActionLabel(checker.host.status)}
@@ -216,25 +232,6 @@ function checkerActionLabel(status: ProxyCheckerSnapshot['host']['status']): str
   }
 
   return 'Guide';
-}
-
-function CheckerProgress({ checker }: { checker: ProxyCheckerSnapshot }) {
-  if (checker.run.status !== 'checking') {
-    return null;
-  }
-
-  return (
-    <div className="checkerProgressBlock">
-      <div className="checkProgress">
-        <div style={{ width: `${progressPercent(checker)}%` }} />
-      </div>
-      <div className="checkerCounters">
-        <span>{checker.run.checked}/{checker.run.total} checked</span>
-        <span>{checker.run.working} working</span>
-        <span>{checker.run.queued} queued</span>
-      </div>
-    </div>
-  );
 }
 
 interface NumberFieldProps {
@@ -295,11 +292,10 @@ function NumberField({ icon, label, unit, min, max, step = 1, value, disabled, o
 function statusDetail(
   checker: ProxyCheckerSnapshot,
   checkedProxyCount: number,
-  proxyCount: number,
-  visibleProxyCount: number
+  proxyCount: number
 ): string {
   if (checker.run.status === 'checking') {
-    return 'Checking proxies';
+    return `${checker.run.working} of ${checker.settings.maxWorking} working proxies found.`;
   }
 
   if (checker.host.status === 'missing') {
@@ -319,7 +315,7 @@ function statusDetail(
   }
 
   if (checker.host.status === 'available' && checkedProxyCount > 0) {
-    return `${visibleProxyCount} working proxies visible from ${checkedProxyCount} checked.`;
+    return 'Last check complete.';
   }
 
   if (checker.host.status === 'available') {
@@ -327,6 +323,66 @@ function statusDetail(
   }
 
   return 'Status will refresh automatically when the popup opens.';
+}
+
+interface CheckerMetric {
+  label: string;
+  value: string | number;
+}
+
+function checkerMetrics(
+  checker: ProxyCheckerSnapshot,
+  checkedProxyCount: number,
+  proxyCount: number,
+  visibleProxyCount: number
+): CheckerMetric[] {
+  if (checker.run.status === 'checking') {
+    return [
+      { label: 'Checked', value: checker.run.total > 0 ? `${checker.run.checked}/${checker.run.total}` : checker.run.checked },
+      { label: 'Working', value: checker.run.working },
+      { label: 'Queued', value: checker.run.queued }
+    ];
+  }
+
+  if (checker.host.status === 'available' && checkedProxyCount > 0) {
+    return [
+      { label: 'Working', value: visibleProxyCount },
+      { label: 'Checked', value: checkedProxyCount }
+    ];
+  }
+
+  if (checker.host.status === 'available' && proxyCount > 0) {
+    return [
+      { label: 'Loaded', value: proxyCount },
+      { label: 'Target', value: checker.settings.maxWorking }
+    ];
+  }
+
+  return [];
+}
+
+function stateLabel(checker: ProxyCheckerSnapshot): string {
+  if (checker.run.status === 'checking') {
+    return 'Scanning';
+  }
+
+  if (checker.host.status === 'available') {
+    return 'Ready';
+  }
+
+  if (checker.host.status === 'update_available') {
+    return 'Update available';
+  }
+
+  if (checker.host.status === 'outdated') {
+    return 'Update required';
+  }
+
+  if (checker.host.status === 'missing') {
+    return 'Not installed';
+  }
+
+  return 'Detecting';
 }
 
 function hostLabel(checker: ProxyCheckerSnapshot): string {
@@ -350,9 +406,20 @@ function hostLabel(checker: ProxyCheckerSnapshot): string {
 }
 
 function progressPercent(checker: ProxyCheckerSnapshot): number {
-  if (checker.run.total <= 0) {
+  const { checked, total, working } = checker.run;
+  const workingTarget = Math.max(1, checker.settings.maxWorking);
+
+  if (working >= workingTarget || (total > 0 && checked >= total)) {
+    return 100;
+  }
+
+  if (total <= 0 && checked <= 0 && working <= 0) {
     return 0;
   }
 
-  return Math.min(100, Math.round((checker.run.checked / checker.run.total) * 100));
+  const targetProgress = (working / workingTarget) * 100;
+  const scanProgress = total > 0 ? (checked / total) * 100 : 0;
+  const progress = Math.max(targetProgress, scanProgress);
+
+  return Math.max(2, Math.min(99, Math.round(progress)));
 }
