@@ -1,30 +1,85 @@
-[![Build Status](https://travis-ci.org/Orogenesis/FireX-Proxy.svg?branch=master)](https://travis-ci.org/Orogenesis/FireX-Proxy)
+# FireX Proxy
 
-### FireX Proxy
-FireX Proxy - the user's trusted Chrome and Firefox browser extension that allows you to unblock any website and browse the web privately and securely 🛡️
+FireX Proxy is a lightweight Chrome and Firefox proxy switcher for HTTP and SOCKS endpoints. It keeps manual proxies, refreshes lists from plain-text sources, and applies browser-native bypass rules when a proxy is active.
 
-Firefox: https://addons.mozilla.org/firefox/addon/firex-proxy  
-Google Chrome: https://chrome.google.com/webstore/detail/firex-proxy/jccfbhillgcekaepchoahodacnlhcbnj  
+The current version is intentionally simple:
 
-### Translation
+- add HTTP, HTTPS, SOCKS4, and SOCKS5 proxies manually
+- sync proxies from one or more text files
+- keep native bypass rules for hosts that should not use the proxy
+- build for Chrome/Chromium and Firefox from the same codebase
 
-Improve or suggest a translation [here](https://github.com/Orogenesis/FireX-Proxy/tree/master/_locales). See the list of supported [language codes](https://developer.chrome.com/webstore/i18n#localeTable).
+## Proxy Source Format
 
-### Development
+The default source file is [`proxies.txt`](./proxies.txt).
 
-1. Clone the repository: `git clone git@github.com:Orogenesis/FireX-Proxy.git`
-2. Run `npm install`
+Each proxy is one line:
 
-#### Chrome:
-1. Run `npm run build-chrome`
-2. Navigate to chrome://extensions and enable "Developer Mode".
-3. Choose "Load unpacked"
-4. Select the `dist` directory
+```txt
+protocol://host:port # optional display name
+```
 
-*Note that you will sometimes need to manually reload the unpacked extension, depending which files you're working on.*
+Supported protocols:
 
-#### Firefox:
-1. Run `npm run build-firefox`
-2. Navigate to about:debugging
-3. Choose `Load Temporary Add-on`
-4. Select the `dist/firex-proxy-firefox.xpi` file
+```txt
+http
+https
+socks4
+socks5
+```
+
+Blank lines and lines starting with `#` are ignored.
+
+Example:
+
+```txt
+http://198.51.100.10:8080 # Demo HTTP
+socks5://198.51.100.13:1080 # Demo SOCKS5
+```
+
+## Development
+
+Install dependencies:
+
+```sh
+npm install
+```
+
+Run the extension in development mode:
+
+```sh
+make dev
+```
+
+Run Firefox development mode:
+
+```sh
+make dev-firefox
+```
+
+Build production bundles:
+
+```sh
+make build-chrome
+make build-firefox
+```
+
+Generated extensions are written to `dist/`.
+
+## Updating `proxies.txt`
+
+The proxy source file can be regenerated locally:
+
+```sh
+make update-proxies
+```
+
+For a quick preview without writing the file:
+
+```sh
+npm run update:proxies -- --dry-run --limit 20
+```
+
+The updater fetches public protocol-specific proxy feeds, normalizes them into FireX Proxy's source format, removes duplicates, and filters obvious non-routable/private addresses.
+
+GitHub Actions also runs the updater on a schedule and commits `proxies.txt` when the generated file changes.

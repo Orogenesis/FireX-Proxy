@@ -1,0 +1,54 @@
+import { defineConfig } from 'wxt';
+
+export default defineConfig({
+  modules: ['@wxt-dev/module-react'],
+  srcDir: '.',
+  publicDir: 'public',
+  outDir: 'dist',
+  manifest: ({ browser }) => {
+    const isFirefox = browser === 'firefox';
+    const firefoxSettings = isFirefox
+      ? {
+          browser_specific_settings: {
+            gecko: {
+              id: 'firex-proxy@local',
+              data_collection_permissions: {
+                required: ['none']
+              },
+              strict_min_version: '109.0'
+            }
+          }
+        }
+      : {};
+
+    return {
+      name: 'FireX Proxy',
+      version: '6.0.0',
+      description: 'A clean local proxy list for Chrome, Firefox, and Chromium browsers.',
+      icons: {
+        16: 'data/icons/action/icon-16.png',
+        32: 'data/icons/action/icon-32.png',
+        48: 'data/icons/action/icon-48.png',
+        64: 'data/icons/action/icon-64.png',
+        128: 'data/icons/action/icon-128.png'
+      },
+      action: {
+        default_title: 'FireX Proxy',
+        default_icon: {
+          16: 'data/icons/action/icon-16.png',
+          32: 'data/icons/action/icon-32.png',
+          48: 'data/icons/action/icon-48.png',
+          64: 'data/icons/action/icon-64.png',
+          128: 'data/icons/action/icon-128.png'
+        },
+        default_popup: 'popup.html'
+      },
+      permissions: isFirefox
+        ? ['proxy', 'storage', 'https://raw.githubusercontent.com/*']
+        : ['proxy', 'storage'],
+      ...(!isFirefox ? { host_permissions: ['https://raw.githubusercontent.com/*'] } : {}),
+      ...(!isFirefox ? { optional_host_permissions: ['http://*/*', 'https://*/*'] } : { optional_permissions: ['http://*/*', 'https://*/*'] }),
+      ...firefoxSettings
+    };
+  }
+});
