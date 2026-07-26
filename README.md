@@ -96,6 +96,8 @@ FireX Proxy handles that with an optional Rust companion app called `firex-check
 
 When the checker is not installed, the extension still works as a normal proxy switcher. It can add proxies, sync sources, connect, disconnect, and apply bypass rules. The checker is recommended because most public proxies do not stay usable for long.
 
+Installation instructions are in the [`firex-checker` installation guide](./docs/firex-checker-installation.md).
+
 Checker release metadata lives in [`checker-manifest.json`](./checker-manifest.json). `latestVersion` tells the extension that an update is available. `minimumVersion` is the oldest checker version the current extension should still trust; raise it when compatibility actually changes.
 
 To sync the manifest from the Rust crate version:
@@ -111,9 +113,3 @@ make checker-release VERSION=0.1.2
 ```
 
 That command updates the Rust crate version, refreshes `Cargo.lock`, syncs `checker-manifest.json`, commits those version files, creates a `checker-v0.1.2` tag, and pushes the branch and tag. Branch pushes only run the lightweight manifest sync job. The checker tag starts the installer builds and publishes the native checker release assets.
-
-To uninstall the `firex-checker`:
-
-```sh
-sudo make checker-uninstall
-```

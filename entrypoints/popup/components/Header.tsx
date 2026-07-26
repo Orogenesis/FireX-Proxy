@@ -1,5 +1,5 @@
 import { Activity, AlertTriangle, CheckCircle2, ExternalLink, Power } from 'lucide-react';
-import { NativeCheckerReleaseUrl } from '../../../src/core/constants';
+import { NativeCheckerInstallGuideUrl } from '../../../src/core/constants';
 import type { NativeCheckerHostSnapshot, ProxyEndpoint } from '../../../src/core/types';
 import { endpointAddress, endpointLabel } from '../../../src/ui/format';
 
@@ -13,7 +13,6 @@ interface HeaderProps {
 export function Header({ activeProxy, busy, checkerHost, onDisconnect }: HeaderProps) {
   const checkerLabel = getCheckerLabel(checkerHost);
   const checkerTip = getCheckerTip(checkerHost);
-  const checkerReleaseUrl = checkerHost.releaseUrl || NativeCheckerReleaseUrl;
   const checkerBadge = (
     <>
       {getCheckerIcon(checkerHost.status)}
@@ -33,7 +32,7 @@ export function Header({ activeProxy, busy, checkerHost, onDisconnect }: HeaderP
       </div>
       <div className="headerActions">
         {isCheckerDownloadable(checkerHost) ? (
-          <a className={`checkerBadge ${checkerHost.status}`} href={checkerReleaseUrl} target="_blank" rel="noreferrer" title={checkerTip}>
+          <a className={`checkerBadge ${checkerHost.status}`} href={NativeCheckerInstallGuideUrl} target="_blank" rel="noreferrer" title={checkerTip}>
             {checkerBadge}
           </a>
         ) : (
@@ -85,11 +84,11 @@ function getCheckerTip(host: NativeCheckerHostSnapshot): string {
   }
 
   if (host.status === 'outdated') {
-    return host.message || 'Native checker is outdated. Download the latest release to keep proxy checks reliable.';
+    return host.message || 'Native checker is outdated. Open the installation guide to update it.';
   }
 
   if (host.status === 'missing') {
-    return 'Download the native checker to test proxy availability on this computer.';
+    return 'Open the installation guide to set up the native checker.';
   }
 
   return 'Native checker status. It is optional, but recommended for filtering dead proxies.';

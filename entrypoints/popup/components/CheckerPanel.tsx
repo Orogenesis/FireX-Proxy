@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useId, useState } from 'react';
 import { Activity, Clock3, Download, Gauge, Minus, Play, Plus, Search, Square, Timer, Zap } from 'lucide-react';
-import { NativeCheckerReleaseUrl } from '../../../src/core/constants';
+import { NativeCheckerInstallGuideUrl } from '../../../src/core/constants';
 import type { ProxyCheckerSettings, ProxyCheckerSnapshot } from '../../../src/core/types';
 
 interface CheckerStatusPanelProps {
@@ -187,7 +187,6 @@ interface CheckerStatusStripProps {
 
 function CheckerStatusStrip({ checker, checkedProxyCount, proxyCount, visibleProxyCount }: CheckerStatusStripProps) {
   const needsInstall = checker.host.status === 'missing' || checker.host.status === 'outdated' || checker.host.status === 'update_available';
-  const releaseUrl = checker.host.releaseUrl || NativeCheckerReleaseUrl;
 
   return (
     <div className={`checkerStatusStrip ${checker.host.status}`}>
@@ -198,17 +197,25 @@ function CheckerStatusStrip({ checker, checkedProxyCount, proxyCount, visiblePro
       {needsInstall && (
         <a
           className="checkerDownload"
-          href={releaseUrl}
+          href={NativeCheckerInstallGuideUrl}
           target="_blank"
           rel="noreferrer"
-          title="Open the latest FireX Proxy release and download the native checker for your operating system."
+          title="Open the native checker installation guide."
         >
           <Download size={15} />
-          Download
+          {checkerActionLabel(checker.host.status)}
         </a>
       )}
     </div>
   );
+}
+
+function checkerActionLabel(status: ProxyCheckerSnapshot['host']['status']): string {
+  if (status === 'missing') {
+    return 'Install';
+  }
+
+  return 'Guide';
 }
 
 function CheckerProgress({ checker }: { checker: ProxyCheckerSnapshot }) {

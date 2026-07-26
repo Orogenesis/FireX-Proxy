@@ -20,6 +20,8 @@ export const NativeCheckerManifestCacheMs = 6 * 60 * 60 * 1000;
 
 export const NativeCheckerReleaseUrl = 'https://github.com/Orogenesis/FireX-Proxy/releases/latest';
 
+export const NativeCheckerInstallGuideUrl = 'https://github.com/Orogenesis/FireX-Proxy/blob/master/docs/firex-checker-installation.md';
+
 export const DefaultProxyCheckerSettings = {
   enabled: true,
   maxWorking: 10,
