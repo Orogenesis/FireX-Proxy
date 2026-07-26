@@ -1,4 +1,4 @@
-import { Power, RefreshCw } from 'lucide-react';
+import { Power } from 'lucide-react';
 import type { ProxyEndpoint } from '../../../src/core/types';
 import { endpointAddress, endpointLabel } from '../../../src/ui/format';
 
@@ -6,10 +6,9 @@ interface HeaderProps {
   activeProxy?: ProxyEndpoint;
   busy: boolean;
   onDisconnect(): void;
-  onRefresh(): void;
 }
 
-export function Header({ activeProxy, busy, onDisconnect, onRefresh }: HeaderProps) {
+export function Header({ activeProxy, busy, onDisconnect }: HeaderProps) {
   return (
     <header className="header">
       <div className="brand">
@@ -25,9 +24,6 @@ export function Header({ activeProxy, busy, onDisconnect, onRefresh }: HeaderPro
             <Power size={18} />
           </button>
         )}
-        <button className="iconButton" disabled={busy} title="Refresh" onClick={onRefresh}>
-          <RefreshCw size={18} />
-        </button>
       </div>
     </header>
   );

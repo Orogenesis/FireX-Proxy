@@ -27,6 +27,9 @@ export class MessageRouter {
       case 'source:set':
         await this.source.setSource(request.source);
         return this.proxies.snapshot();
+      case 'source:auto-sync':
+        await this.source.autoSync();
+        return this.proxies.snapshot();
       case 'source:sync':
         await this.source.sync();
         return this.proxies.snapshot();

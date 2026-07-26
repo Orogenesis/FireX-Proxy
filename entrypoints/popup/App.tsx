@@ -25,7 +25,6 @@ export default function App() {
         activeProxy={proxies.activeProxy}
         busy={proxies.busy}
         onDisconnect={proxies.disconnectProxy}
-        onRefresh={proxies.refresh}
       />
       <Notice message={proxies.error} />
       <Tabs activeTab={activeTab} tabs={tabs} onChange={setActiveTab} />

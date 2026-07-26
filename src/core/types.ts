@@ -52,6 +52,7 @@ export type ExtensionRequest =
   | { type: 'proxy:disconnect' }
   | { type: 'bypass:set'; rules: string[] }
   | { type: 'source:set'; source: ProxySourceSettings }
+  | { type: 'source:auto-sync' }
   | { type: 'source:sync' };
 
 export type ExtensionResponse = ProxySnapshot | ProxyEndpoint | void;
@@ -62,5 +63,6 @@ export interface ExtensionStorage {
   bypassRules?: string[];
   source?: ProxySourceSettings;
   sourceSync?: ProxySourceSync;
+  sourceAutoSyncAttemptedAt?: number;
   installedAt?: number;
 }

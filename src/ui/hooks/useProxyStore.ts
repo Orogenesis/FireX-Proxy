@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DefaultProxySources } from '../../core/constants';
 import type { ExtensionResponse, ProxyDraft, ProxyEndpoint, ProxySnapshot } from '../../core/types';
 import { ExtensionClient } from '../extensionClient';
-import { ensureSourceHostPermissions, hasSourceHostPermissions } from '../sourcePermissions';
+import { ensureSourceHostPermissions } from '../sourcePermissions';
 
 const client = new ExtensionClient();
 
@@ -23,11 +23,6 @@ export function useProxyStore() {
     () => snapshot.proxies.find(proxy => proxy.id === snapshot.activeProxyId),
     [snapshot.activeProxyId, snapshot.proxies]
   );
-
-  const refresh = useCallback(async () => {
-    setError(undefined);
-    setSnapshot(await client.send<ProxySnapshot>({ type: 'snapshot:get' }));
-  }, []);
 
   const run = useCallback(async (operation: () => Promise<ExtensionResponse>) => {
     setBusy(true);
@@ -82,17 +77,11 @@ export function useProxyStore() {
     }
   }), [run, snapshot.source.urls]);
 
-  const autoSyncSource = useCallback(async (snapshotToSync: ProxySnapshot) => {
-    const urls = [...new Set([...DefaultProxySources, ...snapshotToSync.source.urls])];
-
-    if (!await hasSourceHostPermissions(urls)) {
-      return snapshotToSync;
-    }
-
+  const autoSyncSource = useCallback(async () => {
     setSyncing(true);
 
     try {
-      return await client.send<ProxySnapshot>({ type: 'source:sync' });
+      return await client.send<ProxySnapshot>({ type: 'source:auto-sync' });
     } finally {
       setSyncing(false);
     }
@@ -104,7 +93,13 @@ export function useProxyStore() {
       const nextSnapshot = await client.send<ProxySnapshot>({ type: 'snapshot:get' });
 
       if (nextSnapshot.proxies.length === 0) {
-        setSnapshot(await autoSyncSource(nextSnapshot));
+        try {
+          setSnapshot(await autoSyncSource());
+        } catch (cause) {
+          setSnapshot(nextSnapshot);
+          throw cause;
+        }
+
         return;
       }
 
@@ -130,7 +125,6 @@ export function useProxyStore() {
     addProxy,
     connectProxy,
     disconnectProxy,
-    refresh,
     removeProxy,
     setBypassRules,
     setSourceUrls,

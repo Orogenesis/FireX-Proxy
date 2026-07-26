@@ -1,3 +1,4 @@
+import { ProxySourceAutoSyncIntervalMs } from '../core/constants';
 import type { ProxyEndpoint, ProxySourceSettings, ProxySourceSync } from '../core/types';
 import { ProxyCatalog } from '../domain/proxy/ProxyCatalog';
 import { ProxySourceParser } from '../domain/source/ProxySourceParser';
@@ -19,6 +20,31 @@ export class ProxySourceService {
     }
 
     await this.storage.setSource(source);
+  }
+
+  async autoSync(): Promise<boolean> {
+    const now = Date.now();
+    const lastAutoSyncAttemptedAt = await this.storage.getSourceAutoSyncAttemptedAt();
+    const lastSourceSync = await this.storage.getSourceSync();
+    const lastSyncActivityAt = Math.max(lastAutoSyncAttemptedAt ?? 0, lastSourceSync?.syncedAt ?? 0);
+
+    if (lastSyncActivityAt && now - lastSyncActivityAt < ProxySourceAutoSyncIntervalMs) {
+      return false;
+    }
+
+    await this.storage.setSourceAutoSyncAttemptedAt(now);
+
+    const source = await this.storage.getSource();
+    const urls = source.urls.map(url => this.validateUrl(url));
+
+    for (const url of urls) {
+      if (!await this.permissions.hasUrlAccess(url.href)) {
+        return false;
+      }
+    }
+
+    await this.sync();
+    return true;
   }
 
   async sync(): Promise<ProxySourceSync> {

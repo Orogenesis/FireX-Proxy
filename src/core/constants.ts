@@ -4,6 +4,8 @@ export const DefaultProxySources = [
   'https://raw.githubusercontent.com/Orogenesis/FireX-Proxy/master/proxies.txt'
 ] as const;
 
+export const ProxySourceAutoSyncIntervalMs = 6 * 60 * 60 * 1000;
+
 export const LocalBypassRules = [
   '<local>',
   'localhost',

@@ -70,6 +70,14 @@ export class StorageRepository {
     await browser.storage.local.set({ sourceSync });
   }
 
+  async getSourceAutoSyncAttemptedAt(): Promise<number | undefined> {
+    return (await this.getAll()).sourceAutoSyncAttemptedAt;
+  }
+
+  async setSourceAutoSyncAttemptedAt(sourceAutoSyncAttemptedAt: number): Promise<void> {
+    await browser.storage.local.set({ sourceAutoSyncAttemptedAt });
+  }
+
   private normalizeRules(rules: string[]): string[] {
     return [...new Set(rules.map(rule => rule.trim()).filter(Boolean))];
   }
