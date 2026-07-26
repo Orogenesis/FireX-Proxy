@@ -1,6 +1,6 @@
 # FireX Proxy source file
 #
-# Generated at: 2026-07-26T09:36:13.774Z
+# Generated at: 2026-07-26T10:04:50.577Z
 #
 # Format:
 #   protocol://host:port # optional display name
