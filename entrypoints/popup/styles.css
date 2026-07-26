@@ -341,9 +341,25 @@ input:focus {
 }
 
 .proxyList {
-  display: grid;
-  align-content: start;
-  gap: 8px;
+  position: relative;
+  height: 344px;
+  min-height: 220px;
+  overflow: auto;
+  padding-right: 4px;
+  scrollbar-gutter: stable;
+}
+
+.proxyVirtualCanvas {
+  position: relative;
+  width: 100%;
+}
+
+.proxyVirtualRow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 8px;
 }
 
 .inlineEditor,
