@@ -172,8 +172,6 @@ function windowsInstallScript() {
 
 $ErrorActionPreference = "Stop"
 $HostName = "__HOST_NAME__"
-$LegacyHostName = "com.firexproxy.checker"
-$LegacyInstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\NativeChecker"
 $InstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\Native"
 $BinaryPath = Join-Path $InstallDir "firex-native.exe"
 
@@ -201,7 +199,6 @@ Write-Manifest -Path $FirefoxManifestPath -Manifest @{
   allowed_extensions = @($FirefoxExtensionId)
 }
 Set-NativeHostRegistry -KeyPath "HKCU:\Software\Mozilla\NativeMessagingHosts\$HostName" -ManifestPath $FirefoxManifestPath
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Mozilla\NativeMessagingHosts\$LegacyHostName"
 
 if ($ChromeExtensionId -and $ChromeExtensionId -ne "__CHROME_EXTENSION_ID__") {
   $ChromeManifestPath = Join-Path $InstallDir "$HostName.chrome.json"
@@ -214,11 +211,8 @@ if ($ChromeExtensionId -and $ChromeExtensionId -ne "__CHROME_EXTENSION_ID__") {
   }
   Set-NativeHostRegistry -KeyPath "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$HostName" -ManifestPath $ChromeManifestPath
   Set-NativeHostRegistry -KeyPath "HKCU:\Software\Chromium\NativeMessagingHosts\$HostName" -ManifestPath $ChromeManifestPath
-  Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$LegacyHostName"
-  Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Chromium\NativeMessagingHosts\$LegacyHostName"
 }
 
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path $LegacyInstallDir
 Write-Host "FireX Native installed."
 Write-Host "Restart the browser or reload the extension."
 `
@@ -230,18 +224,12 @@ Write-Host "Restart the browser or reload the extension."
 function windowsUninstallScript() {
   return String.raw`$ErrorActionPreference = "Stop"
 $HostName = "__HOST_NAME__"
-$LegacyHostName = "com.firexproxy.checker"
 $InstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\Native"
-$LegacyInstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\NativeChecker"
 
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path $InstallDir
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path $LegacyInstallDir
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Mozilla\NativeMessagingHosts\$HostName"
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$HostName"
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Chromium\NativeMessagingHosts\$HostName"
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Mozilla\NativeMessagingHosts\$LegacyHostName"
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$LegacyHostName"
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Chromium\NativeMessagingHosts\$LegacyHostName"
 
 Write-Host "FireX Native removed."
 `.replaceAll('__HOST_NAME__', HostName);

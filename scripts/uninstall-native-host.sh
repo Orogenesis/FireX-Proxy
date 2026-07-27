@@ -2,7 +2,6 @@
 set -euo pipefail
 
 HOST_NAME="com.firexproxy.native"
-LEGACY_HOST_NAME="com.firexproxy.checker"
 REMOVE_SYSTEM="false"
 REMOVE_BUILD="true"
 FOUND_SYSTEM_FILES="false"
@@ -74,13 +73,9 @@ case "$(uname -s)" in
     remove_file "$HOME/Library/Application Support/Mozilla/NativeMessagingHosts/$HOST_NAME.json"
     remove_file "$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts/$HOST_NAME.json"
     remove_file "$HOME/Library/Application Support/Chromium/NativeMessagingHosts/$HOST_NAME.json"
-    remove_file "$HOME/Library/Application Support/Mozilla/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-    remove_file "$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-    remove_file "$HOME/Library/Application Support/Chromium/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
 
     if [[ "$REMOVE_SYSTEM" == "true" ]]; then
       remove_system_file "/usr/local/bin/firex-native"
-      remove_system_file "/usr/local/bin/firex-checker"
       remove_system_file "/Library/Application Support/Mozilla/NativeMessagingHosts/$HOST_NAME.json"
       remove_system_file "/Library/Google/Chrome/NativeMessagingHosts/$HOST_NAME.json"
       remove_system_file "/Library/Application Support/Chromium/NativeMessagingHosts/$HOST_NAME.json"
@@ -89,19 +84,9 @@ case "$(uname -s)" in
       remove_system_file "/Library/Application Support/Vivaldi/NativeMessagingHosts/$HOST_NAME.json"
       remove_system_file "/Library/Application Support/com.operasoftware.Opera/NativeMessagingHosts/$HOST_NAME.json"
       remove_system_file "/Library/Application Support/Arc/User Data/NativeMessagingHosts/$HOST_NAME.json"
-      remove_system_file "/Library/Application Support/Mozilla/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/Library/Google/Chrome/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/Library/Application Support/Chromium/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/Library/Application Support/BraveSoftware/Brave-Browser/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/Library/Application Support/Microsoft Edge/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/Library/Application Support/Vivaldi/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/Library/Application Support/com.operasoftware.Opera/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/Library/Application Support/Arc/User Data/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
       forget_macos_package "$HOST_NAME"
-      forget_macos_package "$LEGACY_HOST_NAME"
     else
       warn_if_present "/usr/local/bin/firex-native"
-      warn_if_present "/usr/local/bin/firex-checker"
       warn_if_present "/Library/Application Support/Mozilla/NativeMessagingHosts/$HOST_NAME.json"
       warn_if_present "/Library/Google/Chrome/NativeMessagingHosts/$HOST_NAME.json"
       warn_if_present "/Library/Application Support/Chromium/NativeMessagingHosts/$HOST_NAME.json"
@@ -110,42 +95,23 @@ case "$(uname -s)" in
       warn_if_present "/Library/Application Support/Vivaldi/NativeMessagingHosts/$HOST_NAME.json"
       warn_if_present "/Library/Application Support/com.operasoftware.Opera/NativeMessagingHosts/$HOST_NAME.json"
       warn_if_present "/Library/Application Support/Arc/User Data/NativeMessagingHosts/$HOST_NAME.json"
-      warn_if_present "/Library/Application Support/Mozilla/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/Library/Google/Chrome/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/Library/Application Support/Chromium/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/Library/Application Support/BraveSoftware/Brave-Browser/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/Library/Application Support/Microsoft Edge/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/Library/Application Support/Vivaldi/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/Library/Application Support/com.operasoftware.Opera/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/Library/Application Support/Arc/User Data/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
     fi
     ;;
   Linux)
     remove_file "$HOME/.mozilla/native-messaging-hosts/$HOST_NAME.json"
     remove_file "$HOME/.config/google-chrome/NativeMessagingHosts/$HOST_NAME.json"
     remove_file "$HOME/.config/chromium/NativeMessagingHosts/$HOST_NAME.json"
-    remove_file "$HOME/.mozilla/native-messaging-hosts/$LEGACY_HOST_NAME.json"
-    remove_file "$HOME/.config/google-chrome/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
-    remove_file "$HOME/.config/chromium/NativeMessagingHosts/$LEGACY_HOST_NAME.json"
 
     if [[ "$REMOVE_SYSTEM" == "true" ]]; then
       remove_system_file "/usr/bin/firex-native"
-      remove_system_file "/usr/bin/firex-checker"
       remove_system_file "/usr/lib/mozilla/native-messaging-hosts/$HOST_NAME.json"
       remove_system_file "/etc/opt/chrome/native-messaging-hosts/$HOST_NAME.json"
       remove_system_file "/etc/chromium/native-messaging-hosts/$HOST_NAME.json"
-      remove_system_file "/usr/lib/mozilla/native-messaging-hosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/etc/opt/chrome/native-messaging-hosts/$LEGACY_HOST_NAME.json"
-      remove_system_file "/etc/chromium/native-messaging-hosts/$LEGACY_HOST_NAME.json"
     else
       warn_if_present "/usr/bin/firex-native"
-      warn_if_present "/usr/bin/firex-checker"
       warn_if_present "/usr/lib/mozilla/native-messaging-hosts/$HOST_NAME.json"
       warn_if_present "/etc/opt/chrome/native-messaging-hosts/$HOST_NAME.json"
       warn_if_present "/etc/chromium/native-messaging-hosts/$HOST_NAME.json"
-      warn_if_present "/usr/lib/mozilla/native-messaging-hosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/etc/opt/chrome/native-messaging-hosts/$LEGACY_HOST_NAME.json"
-      warn_if_present "/etc/chromium/native-messaging-hosts/$LEGACY_HOST_NAME.json"
     fi
     ;;
   *)
@@ -156,7 +122,6 @@ esac
 
 if [[ "$REMOVE_BUILD" == "true" ]]; then
   remove_file "$ROOT_DIR/native/firex-native/target/release/firex-native"
-  remove_file "$ROOT_DIR/native/firex-checker/target/release/firex-checker"
 fi
 
 if [[ "$FOUND_SYSTEM_FILES" == "true" ]]; then
