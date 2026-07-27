@@ -79,7 +79,7 @@ export function ProxySource({ busy, syncing, source, sourceSync, onSave, onSync 
 function SourceRow(props: {
   busy: boolean;
   defaultSource: boolean;
-  result?: { imported: number; bytes: number };
+  result?: { imported: number };
   url: string;
   onRemove(url: string): void;
 }) {
@@ -89,7 +89,7 @@ function SourceRow(props: {
         <span>{props.url}</span>
         <small>
           {props.defaultSource ? 'Default source' : 'Custom source'}
-          {props.result ? ` - ${props.result.imported} imported, ${props.result.bytes} bytes` : ''}
+          {props.result ? ` - ${props.result.imported} imported` : ''}
         </small>
       </div>
       <button
@@ -112,7 +112,6 @@ function SourceStatus({ sourceSync }: { sourceSync?: ProxySourceSync }) {
   return (
     <div className="sourceStatus">
       <span>Last sync: {new Date(sourceSync.syncedAt).toLocaleString()}</span>
-      <span>{sourceSync.bytes} bytes fetched</span>
       <span>{sourceSync.imported} proxies imported</span>
     </div>
   );

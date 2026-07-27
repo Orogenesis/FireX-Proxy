@@ -6,9 +6,7 @@ import type { ProxyCheckerSettings, ProxyCheckerSnapshot } from '../../../src/co
 interface CheckerStatusPanelProps {
   busy: boolean;
   checker: ProxyCheckerSnapshot;
-  checkedProxyCount: number;
   proxyCount: number;
-  visibleProxyCount: number;
   onStart(): void;
   onStop(): void;
 }
@@ -22,45 +20,54 @@ interface CheckerSettingsPanelProps {
 export function CheckerStatusPanel({
   busy,
   checker,
-  checkedProxyCount,
   proxyCount,
-  visibleProxyCount,
   onStart,
   onStop
 }: CheckerStatusPanelProps) {
   const checking = checker.run.status === 'checking';
+  const runnable = isCheckerUsable(checker.host.status);
+  const progressStyle = checking
+    ? ({ '--checker-progress': `${progressPercent(checker)}%` } as CSSProperties)
+    : undefined;
 
   return (
-    <section className="checkerPanel compact">
-      <PanelHeader
-        title="Proxy checker"
-        actions={(
-          <>
-            {checking ? (
-              <button className="iconButton danger" disabled={busy} title="Stop check" onClick={onStop}>
-                <Square size={16} />
-              </button>
-            ) : (
-              <button
-                className="iconButton success"
-                disabled={busy || !isCheckerUsable(checker.host.status) || proxyCount === 0}
-                title="Check proxies"
-                onClick={onStart}
-              >
-                <Play size={16} />
-              </button>
-            )}
-          </>
-        )}
-      />
+    <section className={`checkerRunWidget ${checker.host.status} ${checking ? 'checking' : ''}`} style={progressStyle}>
+      <div className="checkerRunInfo">
+        <span className="checkerRunMark" aria-hidden="true">
+          <Activity size={15} />
+        </span>
+        <div>
+          <strong>Proxy checker</strong>
+          <span>{checkerRunLabel(checker, proxyCount)}</span>
+        </div>
+      </div>
 
-      <CheckerStatusStrip
-        checker={checker}
-        checkedProxyCount={checkedProxyCount}
-        proxyCount={proxyCount}
-        visibleProxyCount={visibleProxyCount}
-      />
-      {checker.run.message && <small className="checkerMessage">{checker.run.message}</small>}
+      <div className="checkerRunAction">
+        {checking ? (
+          <button className="iconButton danger" disabled={busy} title="Stop check" onClick={onStop}>
+            <Square size={16} />
+          </button>
+        ) : runnable ? (
+          <button
+            className="iconButton success"
+            disabled={busy || proxyCount === 0}
+            title="Check proxies"
+            onClick={onStart}
+          >
+            <Play size={16} />
+          </button>
+        ) : (
+          <a
+            className="iconButton install"
+            href={NativeCheckerInstallGuideUrl}
+            target="_blank"
+            rel="noreferrer"
+            title={checkerInstallTip(checker)}
+          >
+            <Download size={16} />
+          </a>
+        )}
+      </div>
     </section>
   );
 }
@@ -69,9 +76,46 @@ function isCheckerUsable(status: ProxyCheckerSnapshot['host']['status']): boolea
   return status === 'available' || status === 'update_available';
 }
 
+function checkerRunLabel(checker: ProxyCheckerSnapshot, proxyCount: number): string {
+  if (checker.run.status === 'checking') {
+    return 'Checking proxies';
+  }
+
+  if (checker.host.status === 'missing') {
+    return 'Install FireX Native';
+  }
+
+  if (checker.host.status === 'outdated') {
+    return 'Update FireX Native';
+  }
+
+  if (checker.host.status === 'update_available') {
+    return 'Update available';
+  }
+
+  if (checker.host.status === 'available' && proxyCount === 0) {
+    return 'No proxies loaded';
+  }
+
+  if (checker.host.status === 'available') {
+    return 'Ready';
+  }
+
+  return 'Detecting';
+}
+
+function checkerInstallTip(checker: ProxyCheckerSnapshot): string {
+  if (checker.host.status === 'outdated') {
+    return 'Open the FireX Native installation guide to update it, then restart the browser.';
+  }
+
+  return 'Open the FireX Native installation guide. It checks proxies locally; restart the browser after installing.';
+}
+
 export function CheckerSettingsPanel({ busy, checker, onSave }: CheckerSettingsPanelProps) {
   const [settings, setSettings] = useState(checker.settings);
   const checking = checker.run.status === 'checking';
+  const settingsAvailable = isCheckerUsable(checker.host.status);
 
   useEffect(() => {
     setSettings(checker.settings);
@@ -91,71 +135,73 @@ export function CheckerSettingsPanel({ busy, checker, onSave }: CheckerSettingsP
 
       <CheckerStatusStrip checker={checker} checkedProxyCount={0} proxyCount={0} visibleProxyCount={0} />
 
-      <div className="checkerSettings" aria-disabled={busy || checking}>
-        <label className="switchRow" title="Let the extension periodically ask FireX Native to refresh proxy health.">
-          <input
-            type="checkbox"
-            checked={settings.enabled}
-            disabled={busy || checking}
-            onChange={event => updateSettings(current => ({ ...current, enabled: event.target.checked }))}
-          />
-          <span />
-          <strong>Periodic recheck</strong>
-        </label>
-
-        <div className="checkerSettingsList">
-          <NumberField
-            icon={<Search size={16} />}
-            label="Find working proxies"
-            min={1}
-            max={500}
-            value={settings.maxWorking}
-            disabled={busy || checking}
-            onChange={maxWorking => updateSettings(current => ({ ...current, maxWorking }))}
-          />
-          <NumberField
-            icon={<Gauge size={16} />}
-            label="Scan limit"
-            min={1}
-            max={20000}
-            value={settings.maxCandidates}
-            disabled={busy || checking}
-            onChange={maxCandidates => updateSettings(current => ({ ...current, maxCandidates }))}
-          />
-          <NumberField
-            icon={<Zap size={16} />}
-            label="Concurrency"
-            min={1}
-            max={512}
-            value={settings.concurrency}
-            disabled={busy || checking}
-            onChange={concurrency => updateSettings(current => ({ ...current, concurrency }))}
-          />
-          <NumberField
-            icon={<Timer size={16} />}
-            label="Timeout"
-            unit="ms"
-            min={1000}
-            max={30000}
-            step={500}
-            value={settings.timeoutMs}
-            disabled={busy || checking}
-            onChange={timeoutMs => updateSettings(current => ({ ...current, timeoutMs }))}
-          />
-          {settings.enabled && (
-            <NumberField
-              icon={<Clock3 size={16} />}
-              label="Recheck interval"
-              unit="min"
-              min={5}
-              max={1440}
-              value={settings.recheckIntervalMinutes}
+      {settingsAvailable && (
+        <div className="checkerSettings" aria-disabled={busy || checking}>
+          <label className="switchRow" title="Let the extension periodically ask FireX Native to refresh proxy health.">
+            <input
+              type="checkbox"
+              checked={settings.enabled}
               disabled={busy || checking}
-              onChange={recheckIntervalMinutes => updateSettings(current => ({ ...current, recheckIntervalMinutes }))}
+              onChange={event => updateSettings(current => ({ ...current, enabled: event.target.checked }))}
             />
-          )}
+            <span />
+            <strong>Periodic recheck</strong>
+          </label>
+
+          <div className="checkerSettingsList">
+            <NumberField
+              icon={<Search size={16} />}
+              label="Find working proxies"
+              min={1}
+              max={500}
+              value={settings.maxWorking}
+              disabled={busy || checking}
+              onChange={maxWorking => updateSettings(current => ({ ...current, maxWorking }))}
+            />
+            <NumberField
+              icon={<Gauge size={16} />}
+              label="Scan limit"
+              min={1}
+              max={20000}
+              value={settings.maxCandidates}
+              disabled={busy || checking}
+              onChange={maxCandidates => updateSettings(current => ({ ...current, maxCandidates }))}
+            />
+            <NumberField
+              icon={<Zap size={16} />}
+              label="Concurrency"
+              min={1}
+              max={512}
+              value={settings.concurrency}
+              disabled={busy || checking}
+              onChange={concurrency => updateSettings(current => ({ ...current, concurrency }))}
+            />
+            <NumberField
+              icon={<Timer size={16} />}
+              label="Timeout"
+              unit="ms"
+              min={1000}
+              max={30000}
+              step={500}
+              value={settings.timeoutMs}
+              disabled={busy || checking}
+              onChange={timeoutMs => updateSettings(current => ({ ...current, timeoutMs }))}
+            />
+            {settings.enabled && (
+              <NumberField
+                icon={<Clock3 size={16} />}
+                label="Recheck interval"
+                unit="min"
+                min={5}
+                max={1440}
+                value={settings.recheckIntervalMinutes}
+                disabled={busy || checking}
+                onChange={recheckIntervalMinutes => updateSettings(current => ({ ...current, recheckIntervalMinutes }))}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

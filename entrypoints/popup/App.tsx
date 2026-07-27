@@ -25,14 +25,6 @@ export default function App() {
     () => proxies.proxies.filter(proxy => proxies.checker.results[proxy.id]).length,
     [proxies.checker.results, proxies.proxies]
   );
-  const visibleProxies = useMemo(() => {
-    if (checkedProxyCount === 0) {
-      return proxies.proxies;
-    }
-
-    return proxies.proxies.filter(proxy => proxies.checker.results[proxy.id]?.status === 'working');
-  }, [checkedProxyCount, proxies.checker.results, proxies.proxies]);
-
   return (
     <main className="shell">
       <Header
@@ -50,18 +42,17 @@ export default function App() {
             <CheckerStatusPanel
               busy={proxies.busy}
               checker={proxies.checker}
-              checkedProxyCount={checkedProxyCount}
               proxyCount={proxies.proxies.length}
-              visibleProxyCount={visibleProxies.length}
               onStart={proxies.startChecker}
               onStop={proxies.stopChecker}
             />
             <ProxyList
               activeProxyId={proxies.activeProxyId}
               busy={proxies.busy}
+              checkedProxyCount={checkedProxyCount}
               loading={proxies.loading}
               syncing={proxies.syncing}
-              proxies={visibleProxies}
+              proxies={proxies.proxies}
               healthResults={proxies.checker.results}
               emptyMessage={checkedProxyCount > 0 ? 'No working proxies found.' : undefined}
               scrollParentRef={contentRef}

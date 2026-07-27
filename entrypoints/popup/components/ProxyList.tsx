@@ -1,11 +1,14 @@
-import { type RefObject, useLayoutEffect, useRef, useState } from 'react';
+import { type RefObject, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { ProxyEndpoint, ProxyHealthResult } from '../../../src/core/types';
+import { useProxyFilters } from '../hooks/useProxyFilters';
+import { ProxyFilters } from './ProxyFilters';
 import { ProxyRow } from './ProxyRow';
 
 interface ProxyListProps {
   activeProxyId?: string;
   busy: boolean;
+  checkedProxyCount: number;
   loading: boolean;
   syncing: boolean;
   proxies: ProxyEndpoint[];
@@ -20,6 +23,7 @@ interface ProxyListProps {
 export function ProxyList({
   activeProxyId,
   busy,
+  checkedProxyCount,
   loading,
   syncing,
   proxies,
@@ -31,12 +35,16 @@ export function ProxyList({
   onRemove
 }: ProxyListProps) {
   const listRef = useRef<HTMLElement>(null);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [scrollMargin, setScrollMargin] = useState(0);
+  const filters = useProxyFilters({ checkedProxyCount, healthResults, proxies });
+  const closeFilters = useCallback(() => setFiltersExpanded(false), []);
+  const toggleFilters = useCallback(() => setFiltersExpanded(current => !current), []);
   const virtualizer = useVirtualizer({
-    count: proxies.length,
+    count: filters.filteredProxies.length,
     getScrollElement: () => scrollParentRef.current,
     estimateSize: () => 82,
-    getItemKey: index => proxies[index]?.id ?? index,
+    getItemKey: index => filters.filteredProxies[index]?.id ?? index,
     scrollMargin,
     overscan: 8
   });
@@ -64,6 +72,10 @@ export function ProxyList({
     return () => resizeObserver.disconnect();
   }, [scrollParentRef]);
 
+  useEffect(() => {
+    virtualizer.scrollToOffset(scrollMargin);
+  }, [filters.effectiveHealthFilter, filters.state.protocolFilter, filters.state.query, virtualizer]);
+
   if (loading || syncing) {
     return (
       <div className="empty loadingState">
@@ -79,36 +91,59 @@ export function ProxyList({
 
   return (
     <section ref={listRef} className="proxyList" aria-label="Proxy list">
-      <div className="proxyVirtualCanvas" style={{ height: `${virtualizer.getTotalSize()}px` }}>
-        {virtualizer.getVirtualItems().map(virtualRow => {
-          const proxy = proxies[virtualRow.index];
-
-          if (!proxy) {
-            return null;
-          }
-
-          return (
-            <div
-              key={proxy.id}
-              className="proxyVirtualRow"
-              style={{
-                height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start - scrollMargin}px)`
-              }}
-            >
-              <ProxyRow
-                active={proxy.id === activeProxyId}
-                busy={busy}
-                health={healthResults[proxy.id]}
-                proxy={proxy}
-                onConnect={onConnect}
-                onDisconnect={onDisconnect}
-                onRemove={onRemove}
-              />
-            </div>
-          );
-        })}
+      <div className="proxyListHeader">
+        <div className="proxyListHeading">
+          <strong>Proxies</strong>
+          <span>{filters.filteredProxies.length} / {proxies.length}</span>
+        </div>
+        <ProxyFilters
+          expanded={filtersExpanded}
+          hasActiveFilters={filters.hasActiveFilters}
+          healthFilter={filters.effectiveHealthFilter}
+          protocolFilter={filters.state.protocolFilter}
+          query={filters.state.query}
+          onClose={closeFilters}
+          onHealthFilterChange={filters.setHealthFilter}
+          onProtocolFilterChange={filters.setProtocolFilter}
+          onQueryChange={filters.setQuery}
+          onReset={filters.resetFilters}
+          onToggle={toggleFilters}
+        />
       </div>
+      {filters.filteredProxies.length === 0 ? (
+        <div className="empty filteredEmpty">{filters.hasActiveFilters ? 'No proxies match these filters.' : emptyMessage || 'No proxies match these filters.'}</div>
+      ) : (
+        <div className="proxyVirtualCanvas" style={{ height: `${virtualizer.getTotalSize()}px` }}>
+          {virtualizer.getVirtualItems().map(virtualRow => {
+            const proxy = filters.filteredProxies[virtualRow.index];
+
+            if (!proxy) {
+              return null;
+            }
+
+            return (
+              <div
+                key={proxy.id}
+                className="proxyVirtualRow"
+                style={{
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${virtualRow.start - scrollMargin}px)`
+                }}
+              >
+                <ProxyRow
+                  active={proxy.id === activeProxyId}
+                  busy={busy}
+                  health={healthResults[proxy.id]}
+                  proxy={proxy}
+                  onConnect={onConnect}
+                  onDisconnect={onDisconnect}
+                  onRemove={onRemove}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }

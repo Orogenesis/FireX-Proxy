@@ -255,8 +255,120 @@ button:disabled {
   padding: 12px;
 }
 
-.checkerPanel.compact {
+.checkerRunWidget {
+  display: flex;
+  position: relative;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
+  padding: 5px 5px 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  --checker-progress: 0%;
+}
+
+.checkerRunWidget.checking {
+  border-color: #a7d9d3;
+  background: #fbfefd;
+}
+
+.checkerRunWidget.checking::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--checker-progress);
+  background:
+    linear-gradient(90deg, rgb(15 118 110 / 0.16), rgb(20 184 166 / 0.08)),
+    linear-gradient(180deg, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0));
+  content: "";
+  transition: width 0.25s ease;
+}
+
+.checkerRunWidget.checking::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.48), transparent);
+  content: "";
+  transform: translateX(-100%);
+  animation: progressSheen 1.8s ease-in-out infinite;
+}
+
+.checkerRunInfo {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.checkerRunInfo > div {
+  display: grid;
+  min-width: 0;
+  gap: 1px;
+}
+
+.checkerRunInfo strong,
+.checkerRunInfo > div > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.checkerRunInfo strong {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 15px;
+}
+
+.checkerRunInfo > div > span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 12px;
+}
+
+.checkerRunMark {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--primary-strong);
+}
+
+.checkerRunWidget.missing .checkerRunMark,
+.checkerRunWidget.outdated .checkerRunMark {
+  color: var(--danger);
+}
+
+.checkerRunWidget.checking .checkerRunMark {
+  border-color: #b7e4dc;
+  color: var(--primary-strong);
+  box-shadow: 0 0 0 4px rgb(15 118 110 / 0.09);
+  animation: statePulse 1.2s ease-in-out infinite;
+}
+
+.checkerRunAction {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.iconButton.install {
+  border-color: #fed7aa;
+  background: #fff7ed;
+  color: var(--danger);
 }
 
 .checkerTop,
@@ -775,8 +887,241 @@ input:focus {
 }
 
 .proxyList {
+  display: grid;
+  gap: 8px;
   position: relative;
   overflow: visible;
+}
+
+.proxyListHeader {
+  display: flex;
+  position: relative;
+  z-index: 6;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 1px 0 5px;
+}
+
+.proxyListHeading {
+  display: flex;
+  height: 34px;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  padding: 0 11px;
+  border: 1px solid rgb(217 224 234 / 0.9);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 1px 2px rgb(16 24 40 / 0.05);
+}
+
+.proxyListHeader strong {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 850;
+  letter-spacing: 0;
+  line-height: 18px;
+}
+
+.proxyListHeading > span {
+  display: inline-flex;
+  height: 20px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #e8f3f1;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.proxyFilterLayer {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+}
+
+.proxyFilterLayer.open {
+  z-index: 30;
+}
+
+.proxyFilterToggle {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(217 224 234 / 0.86);
+  border-radius: 8px;
+  background: #fff;
+  color: #475467;
+  box-shadow: none;
+  pointer-events: auto;
+}
+
+.proxyFilterToggle:hover,
+.proxyFilterToggle.active {
+  border-color: #b7e4dc;
+  color: var(--primary-strong);
+}
+
+.proxyFilterToggle span {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 6px;
+  height: 6px;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.proxyFilterPanel {
+  display: grid;
+  position: fixed;
+  top: 126px;
+  right: 12px;
+  left: 12px;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid rgb(203 213 225 / 0.92);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: 0 18px 44px rgb(16 24 40 / 0.18);
+  backdrop-filter: blur(16px);
+  pointer-events: auto;
+}
+
+.filterPanelTop,
+.filterPanelActions,
+.filterOptionRow,
+.filterOptionRow > div {
+  display: flex;
+  align-items: center;
+}
+
+.filterPanelTop {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.filterOptionRow > span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.filterPanelActions {
+  gap: 4px;
+}
+
+.filterPanelActions button {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.filterPanelActions button:hover {
+  border-color: var(--line);
+  background: var(--soft);
+  color: var(--text);
+}
+
+.filterSearch {
+  display: flex;
+  min-width: 0;
+  height: 36px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid #d3dce8;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.filterSearch:focus-within {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(15 118 110 / 0.10);
+}
+
+.filterSearch input {
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.filterSearch input:focus {
+  box-shadow: none;
+}
+
+.filterSearch input::placeholder {
+  color: #98a2b3;
+  font-weight: 650;
+}
+
+.filterOptionRow {
+  min-width: 0;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 32px;
+}
+
+.filterOptionRow > span {
+  width: 58px;
+  flex: 0 0 58px;
+}
+
+.filterOptionRow > div {
+  min-width: 0;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.filterPill {
+  display: inline-flex;
+  height: 26px;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #475467;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.filterPill.active {
+  background: #fff;
+  color: var(--primary-strong);
+  box-shadow: var(--shadow);
 }
 
 .proxyVirtualCanvas {
