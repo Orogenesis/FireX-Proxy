@@ -68,7 +68,6 @@ function packageMacos() {
     '/',
     pkgPath
   ]);
-  tarGz(rootDir, join(outDir, `${packageBaseName}.tar.gz`));
 }
 
 function macosChromiumNativeHostDirs() {
@@ -123,7 +122,6 @@ function packageLinux() {
 
   const debPath = join(outDir, `${packageBaseName}.deb`);
   run('dpkg-deb', ['--build', '--root-owner-group', rootDir, debPath]);
-  tarGz(rootDir, join(outDir, `${packageBaseName}.tar.gz`));
 }
 
 function packageWindows() {
@@ -263,10 +261,6 @@ function copyExecutable(source, target) {
 function writeJsonManifest(path, manifest) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, `${JSON.stringify(manifest, null, 2)}\n`);
-}
-
-function tarGz(sourceDir, destination) {
-  run('tar', ['-czf', destination, '-C', sourceDir, '.']);
 }
 
 function debianArchitecture(value) {

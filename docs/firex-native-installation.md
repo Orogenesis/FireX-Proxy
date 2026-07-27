@@ -44,15 +44,11 @@ After installation, fully close and reopen the browser.
 
 ## Linux
 
-Download the package that matches your system.
-
-For Debian or Ubuntu:
+Download `firex-native-*-linux-x64.deb`, then install it:
 
 ```sh
 sudo apt install ./firex-native-*-linux-x64.deb
 ```
-
-For other distributions, use the `.tar.gz` archive and install the binary and native host manifests manually.
 
 After installation, fully close and reopen the browser.
 
