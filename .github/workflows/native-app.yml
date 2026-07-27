@@ -1,4 +1,4 @@
-name: Build native checker installers
+name: Build native app installers
 
 on:
   workflow_dispatch:
@@ -12,12 +12,12 @@ on:
       - master
       - main
     tags:
-      - 'checker-v*'
+      - 'native-v*'
     paths:
-      - '.github/workflows/native-checker.yml'
-      - 'native/firex-checker/**'
-      - 'checker-manifest.json'
-      - 'scripts/sync-checker-manifest.mjs'
+      - '.github/workflows/native-app.yml'
+      - 'native/firex-native/**'
+      - 'native-manifest.json'
+      - 'scripts/sync-native-manifest.mjs'
       - 'scripts/package-native-host.mjs'
       - 'package.json'
       - 'package-lock.json'
@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   sync-manifest:
-    name: Sync checker manifest
+    name: Sync native manifest
     if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
@@ -39,25 +39,25 @@ jobs:
         with:
           node-version: 22
 
-      - name: Sync checker manifest
-        run: npm run checker:manifest
+      - name: Sync native manifest
+        run: npm run native:manifest
 
-      - name: Commit checker manifest
+      - name: Commit native manifest
         run: |
-          if git diff --quiet -- checker-manifest.json; then
-            echo "checker-manifest.json is already current."
+          if git diff --quiet -- native-manifest.json; then
+            echo "native-manifest.json is already current."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add checker-manifest.json
-          git commit -m "chore: update checker manifest"
+          git add native-manifest.json
+          git commit -m "chore: update native manifest"
           git push
 
   build:
     name: ${{ matrix.name }}
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/checker-v')
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/native-v')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -68,25 +68,25 @@ jobs:
             os: linux
             arch: x64
             target: x86_64-unknown-linux-gnu
-            binary: native/firex-checker/target/x86_64-unknown-linux-gnu/release/firex-checker
+            binary: native/firex-native/target/x86_64-unknown-linux-gnu/release/firex-native
           - name: macos-x64
             runner: macos-15-intel
             os: macos
             arch: x64
             target: x86_64-apple-darwin
-            binary: native/firex-checker/target/x86_64-apple-darwin/release/firex-checker
+            binary: native/firex-native/target/x86_64-apple-darwin/release/firex-native
           - name: macos-arm64
             runner: macos-15
             os: macos
             arch: arm64
             target: aarch64-apple-darwin
-            binary: native/firex-checker/target/aarch64-apple-darwin/release/firex-checker
+            binary: native/firex-native/target/aarch64-apple-darwin/release/firex-native
           - name: windows-x64
             runner: windows-latest
             os: windows
             arch: x64
             target: x86_64-pc-windows-msvc
-            binary: native/firex-checker/target/x86_64-pc-windows-msvc/release/firex-checker.exe
+            binary: native/firex-native/target/x86_64-pc-windows-msvc/release/firex-native.exe
 
     steps:
       - name: Checkout
@@ -103,10 +103,10 @@ jobs:
           rustup default stable
           rustup target add ${{ matrix.target }}
 
-      - name: Build native checker
-        run: cargo build --release --target ${{ matrix.target }} --manifest-path native/firex-checker/Cargo.toml
+      - name: Build native app
+        run: cargo build --release --target ${{ matrix.target }} --manifest-path native/firex-native/Cargo.toml
 
-      - name: Package native checker
+      - name: Package native app
         env:
           FIREX_CHROME_EXTENSION_ID: ${{ github.event.inputs['chrome-extension-id'] || vars.FIREX_CHROME_EXTENSION_ID }}
           FIREX_FIREFOX_EXTENSION_ID: firex-proxy@local
@@ -120,14 +120,14 @@ jobs:
       - name: Upload installer artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: firex-checker-${{ matrix.name }}
+          name: firex-native-${{ matrix.name }}
           path: dist/native/*
           if-no-files-found: error
 
   release:
     name: Attach installers to release
     needs: build
-    if: startsWith(github.ref, 'refs/tags/checker-v')
+    if: startsWith(github.ref, 'refs/tags/native-v')
     runs-on: ubuntu-latest
     steps:
       - name: Download installer artifacts

@@ -56,42 +56,42 @@ function isCheckerDownloadable(host: NativeCheckerHostSnapshot): boolean {
 
 function getCheckerLabel(host: NativeCheckerHostSnapshot): string {
   if (host.status === 'available') {
-    return host.version ? `Checker ${host.version}` : 'Checker ready';
+    return host.version ? `Native ${host.version}` : 'Native ready';
   }
 
   if (host.status === 'update_available') {
-    return host.latestVersion ? `Update ${host.latestVersion}` : 'Update checker';
+    return host.latestVersion ? `Update ${host.latestVersion}` : 'Update native';
   }
 
   if (host.status === 'outdated') {
-    return 'Update checker';
+    return 'Update native';
   }
 
   if (host.status === 'missing') {
-    return 'Install checker';
+    return 'Install native';
   }
 
-  return 'Checker';
+  return 'Native';
 }
 
 function getCheckerTip(host: NativeCheckerHostSnapshot): string {
   if (host.status === 'available') {
-    return 'Native checker is installed. It tests proxies locally and stores working results with latency.';
+    return 'FireX Native is installed. It tests proxies locally and stores working results with latency.';
   }
 
   if (host.status === 'update_available') {
-    return host.message || 'A newer native checker is available.';
+    return host.message || 'A newer FireX Native version is available.';
   }
 
   if (host.status === 'outdated') {
-    return host.message || 'Native checker is outdated. Open the installation guide to update it.';
+    return host.message || 'FireX Native is outdated. Open the installation guide to update it.';
   }
 
   if (host.status === 'missing') {
-    return 'Open the installation guide to set up the native checker.';
+    return 'Open the installation guide to set up FireX Native.';
   }
 
-  return 'Native checker status. It is optional, but recommended for filtering dead proxies.';
+  return 'FireX Native status. It is optional, but recommended for filtering dead proxies.';
 }
 
 function getCheckerIcon(status: NativeCheckerHostSnapshot['status']) {

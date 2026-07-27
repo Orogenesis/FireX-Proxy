@@ -92,7 +92,7 @@ export function CheckerSettingsPanel({ busy, checker, onSave }: CheckerSettingsP
       <CheckerStatusStrip checker={checker} checkedProxyCount={0} proxyCount={0} visibleProxyCount={0} />
 
       <div className="checkerSettings" aria-disabled={busy || checking}>
-        <label className="switchRow" title="Let the extension periodically ask the native checker to refresh proxy health.">
+        <label className="switchRow" title="Let the extension periodically ask FireX Native to refresh proxy health.">
           <input
             type="checkbox"
             checked={settings.enabled}
@@ -387,22 +387,22 @@ function stateLabel(checker: ProxyCheckerSnapshot): string {
 
 function hostLabel(checker: ProxyCheckerSnapshot): string {
   if (checker.host.status === 'available') {
-    return checker.host.version ? `Checker ${checker.host.version}` : 'Checker installed';
+    return checker.host.version ? `FireX Native ${checker.host.version}` : 'FireX Native installed';
   }
 
   if (checker.host.status === 'update_available') {
-    return checker.host.latestVersion ? `Checker ${checker.host.version} - update ${checker.host.latestVersion}` : 'Checker update available';
+    return checker.host.latestVersion ? `FireX Native ${checker.host.version} - update ${checker.host.latestVersion}` : 'FireX Native update available';
   }
 
   if (checker.host.status === 'outdated') {
-    return 'Checker update required';
+    return 'FireX Native update required';
   }
 
   if (checker.host.status === 'missing') {
-    return 'Native checker recommended';
+    return 'FireX Native recommended';
   }
 
-  return 'Checker status unknown';
+  return 'FireX Native status unknown';
 }
 
 function progressPercent(checker: ProxyCheckerSnapshot): number {

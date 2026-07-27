@@ -137,7 +137,7 @@ export function useProxyStore() {
     const probeCheckerSnapshot = () => {
       client.send<ProxySnapshot>({ type: 'checker:probe' })
         .then(setSnapshot)
-        .catch(cause => setError(cause instanceof Error ? cause.message : 'Failed to detect native checker.'));
+        .catch(cause => setError(cause instanceof Error ? cause.message : 'Failed to detect FireX Native.'));
     };
 
     const initialize = async () => {

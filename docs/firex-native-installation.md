@@ -1,8 +1,8 @@
-# Installing firex-checker
+# Installing firex-native
 
-`firex-checker` is the native companion app used by FireX Proxy to test proxy availability on your computer. The browser extension works without it, but proxy health checks and latency measurements require the checker.
+`firex-native` is the native companion app used by FireX Proxy to test proxy availability on your computer. The browser extension works without it, but proxy health checks and latency measurements require FireX Native.
 
-Download the latest checker package from the FireX Proxy releases page:
+Download the latest FireX Native package from the FireX Proxy releases page:
 
 https://github.com/Orogenesis/FireX-Proxy/releases/latest
 
@@ -12,17 +12,17 @@ Choose the package for your operating system.
 
 Download the matching package:
 
-- Apple Silicon Macs: `firex-checker-*-macos-arm64.pkg`
-- Intel Macs: `firex-checker-*-macos-x64.pkg`
+- Apple Silicon Macs: `firex-native-*-macos-arm64.pkg`
+- Intel Macs: `firex-native-*-macos-x64.pkg`
 
 Open the `.pkg` file and follow the installer.
 
-If macOS blocks the package or the installed checker:
+If macOS blocks the package or installed app:
 
 1. Open **System Settings**.
 2. Go to **Privacy & Security**.
 3. Scroll to the **Security** section.
-4. Click **Open Anyway** for `firex-checker` or the downloaded package.
+4. Click **Open Anyway** for `firex-native` or the downloaded package.
 5. Confirm with Touch ID, password, or administrator approval.
 6. Open the package again if macOS asks you to retry.
 
@@ -30,7 +30,7 @@ After installation, fully quit and reopen the browser. Reloading the extension i
 
 ## Windows
 
-Download `firex-checker-*-windows-x64.zip`.
+Download `firex-native-*-windows-x64.zip`.
 
 Extract the archive, then run PowerShell from the extracted directory:
 
@@ -49,7 +49,7 @@ Download the package that matches your system.
 For Debian or Ubuntu:
 
 ```sh
-sudo apt install ./firex-checker-*-linux-x64.deb
+sudo apt install ./firex-native-*-linux-x64.deb
 ```
 
 For other distributions, use the `.tar.gz` archive and install the binary and native host manifests manually.
@@ -69,5 +69,5 @@ Then restart the browser.
 From this repository:
 
 ```sh
-sudo make checker-uninstall
+sudo make native-uninstall
 ```

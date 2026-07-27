@@ -9,9 +9,9 @@ import {
 import type { CheckerVersionManifest } from '../core/types';
 import { StorageRepository } from './StorageRepository';
 
-interface RemoteCheckerManifest {
+interface RemoteNativeManifest {
   schemaVersion: number;
-  checker: {
+  native: {
     latestVersion: string;
     minimumVersion: string;
     protocolVersion: number;
@@ -46,33 +46,33 @@ export class CheckerManifestService {
     const response = await fetch(NativeCheckerManifestUrl, { cache: 'no-store' });
 
     if (!response.ok) {
-      throw new Error(`Checker manifest fetch failed: ${response.status}`);
+      throw new Error(`Native manifest fetch failed: ${response.status}`);
     }
 
     return this.parse(await response.json());
   }
 
   private parse(value: unknown): CheckerVersionManifest {
-    const manifest = value as Partial<RemoteCheckerManifest>;
-    const checker = manifest.checker;
+    const manifest = value as Partial<RemoteNativeManifest>;
+    const native = manifest.native;
 
     if (
       manifest.schemaVersion !== 1
-      || !checker
-      || !this.isVersion(checker.latestVersion)
-      || !this.isVersion(checker.minimumVersion)
-      || !Number.isInteger(checker.protocolVersion)
-      || typeof checker.releaseUrl !== 'string'
-      || !checker.releaseUrl.startsWith('https://')
+      || !native
+      || !this.isVersion(native.latestVersion)
+      || !this.isVersion(native.minimumVersion)
+      || !Number.isInteger(native.protocolVersion)
+      || typeof native.releaseUrl !== 'string'
+      || !native.releaseUrl.startsWith('https://')
     ) {
-      throw new Error('Checker manifest is invalid.');
+      throw new Error('Native manifest is invalid.');
     }
 
     return {
-      latestVersion: checker.latestVersion,
-      minimumVersion: checker.minimumVersion,
-      protocolVersion: checker.protocolVersion,
-      releaseUrl: checker.releaseUrl,
+      latestVersion: native.latestVersion,
+      minimumVersion: native.minimumVersion,
+      protocolVersion: native.protocolVersion,
+      releaseUrl: native.releaseUrl,
       fetchedAt: Date.now()
     };
   }

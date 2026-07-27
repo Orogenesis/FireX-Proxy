@@ -3,23 +3,23 @@ import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
-const HostName = 'com.firexproxy.checker';
+const HostName = 'com.firexproxy.native';
 const root = resolve(import.meta.dirname, '..');
 const extensionIdentity = readExtensionIdentity();
 const FirefoxExtensionId = process.env.FIREX_FIREFOX_EXTENSION_ID || extensionIdentity.firefox.id;
 const ChromeExtensionId = process.env.FIREX_CHROME_EXTENSION_ID || extensionIdentity.chromium.id;
 
 const options = parseArgs(process.argv.slice(2));
-const version = options.version || readCheckerVersion();
+const version = options.version || readNativeVersion();
 const os = requiredOption('os');
 const arch = requiredOption('arch');
 const binary = resolve(requiredOption('binary'));
 const outDir = resolve(options.out || join(root, 'dist', 'native'));
 const workDir = resolve(options.work || join(root, '.native-package', `${os}-${arch}`));
-const packageBaseName = `firex-checker-${version}-${os}-${arch}`;
+const packageBaseName = `firex-native-${version}-${os}-${arch}`;
 
 if (!existsSync(binary)) {
-  fail(`Native checker binary does not exist: ${binary}`);
+  fail(`Native app binary does not exist: ${binary}`);
 }
 
 rmSync(workDir, { force: true, recursive: true });
@@ -41,7 +41,7 @@ switch (os) {
 
 function packageMacos() {
   const rootDir = join(workDir, 'root');
-  const binPath = '/usr/local/bin/firex-checker';
+  const binPath = '/usr/local/bin/firex-native';
   const binaryTarget = join(rootDir, binPath);
 
   copyExecutable(binary, binaryTarget);
@@ -61,7 +61,7 @@ function packageMacos() {
     '--root',
     rootDir,
     '--identifier',
-    'com.firexproxy.checker',
+    'com.firexproxy.native',
     '--version',
     version,
     '--install-location',
@@ -85,7 +85,7 @@ function macosChromiumNativeHostDirs() {
 
 function packageLinux() {
   const rootDir = join(workDir, 'deb');
-  const binPath = '/usr/bin/firex-checker';
+  const binPath = '/usr/bin/firex-native';
   const binaryTarget = join(rootDir, binPath);
 
   copyExecutable(binary, binaryTarget);
@@ -110,13 +110,13 @@ function packageLinux() {
   writeFileSync(
     join(debianDir, 'control'),
     [
-      'Package: firex-checker',
+      'Package: firex-native',
       `Version: ${version}`,
       'Section: net',
       'Priority: optional',
       `Architecture: ${debianArchitecture(arch)}`,
       'Maintainer: FireX Proxy <noreply@github.com>',
-      'Description: Native proxy checker for FireX Proxy',
+      'Description: FireX Proxy native companion app',
       ''
     ].join('\n')
   );
@@ -129,7 +129,7 @@ function packageLinux() {
 function packageWindows() {
   const zipRoot = join(workDir, packageBaseName);
   mkdirSync(zipRoot, { recursive: true });
-  cpSync(binary, join(zipRoot, 'firex-checker.exe'));
+  cpSync(binary, join(zipRoot, 'firex-native.exe'));
   writeFileSync(join(zipRoot, 'install.ps1'), windowsInstallScript());
   writeFileSync(join(zipRoot, 'uninstall.ps1'), windowsUninstallScript());
   writeFileSync(join(zipRoot, 'README.txt'), windowsReadme());
@@ -147,7 +147,7 @@ function packageWindows() {
 function firefoxManifest(path) {
   return {
     name: HostName,
-    description: 'FireX Proxy native proxy checker',
+    description: 'FireX Proxy native companion app',
     path,
     type: 'stdio',
     allowed_extensions: [FirefoxExtensionId]
@@ -157,7 +157,7 @@ function firefoxManifest(path) {
 function chromeManifest(path) {
   return {
     name: HostName,
-    description: 'FireX Proxy native proxy checker',
+    description: 'FireX Proxy native companion app',
     path,
     type: 'stdio',
     allowed_origins: [`chrome-extension://${ChromeExtensionId}/`]
@@ -172,11 +172,13 @@ function windowsInstallScript() {
 
 $ErrorActionPreference = "Stop"
 $HostName = "__HOST_NAME__"
-$InstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\NativeChecker"
-$BinaryPath = Join-Path $InstallDir "firex-checker.exe"
+$LegacyHostName = "com.firexproxy.checker"
+$LegacyInstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\NativeChecker"
+$InstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\Native"
+$BinaryPath = Join-Path $InstallDir "firex-native.exe"
 
 New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
-Copy-Item -Force -Path (Join-Path $PSScriptRoot "firex-checker.exe") -Destination $BinaryPath
+Copy-Item -Force -Path (Join-Path $PSScriptRoot "firex-native.exe") -Destination $BinaryPath
 
 function Write-Manifest {
   param([string]$Path, [hashtable]$Manifest)
@@ -193,27 +195,31 @@ function Set-NativeHostRegistry {
 $FirefoxManifestPath = Join-Path $InstallDir "$HostName.firefox.json"
 Write-Manifest -Path $FirefoxManifestPath -Manifest @{
   name = $HostName
-  description = "FireX Proxy native proxy checker"
+  description = "FireX Proxy native companion app"
   path = $BinaryPath
   type = "stdio"
   allowed_extensions = @($FirefoxExtensionId)
 }
 Set-NativeHostRegistry -KeyPath "HKCU:\Software\Mozilla\NativeMessagingHosts\$HostName" -ManifestPath $FirefoxManifestPath
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Mozilla\NativeMessagingHosts\$LegacyHostName"
 
 if ($ChromeExtensionId -and $ChromeExtensionId -ne "__CHROME_EXTENSION_ID__") {
   $ChromeManifestPath = Join-Path $InstallDir "$HostName.chrome.json"
   Write-Manifest -Path $ChromeManifestPath -Manifest @{
     name = $HostName
-    description = "FireX Proxy native proxy checker"
+    description = "FireX Proxy native companion app"
     path = $BinaryPath
     type = "stdio"
     allowed_origins = @("chrome-extension://$ChromeExtensionId/")
   }
   Set-NativeHostRegistry -KeyPath "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$HostName" -ManifestPath $ChromeManifestPath
   Set-NativeHostRegistry -KeyPath "HKCU:\Software\Chromium\NativeMessagingHosts\$HostName" -ManifestPath $ChromeManifestPath
+  Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$LegacyHostName"
+  Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Chromium\NativeMessagingHosts\$LegacyHostName"
 }
 
-Write-Host "FireX Proxy native checker installed."
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path $LegacyInstallDir
+Write-Host "FireX Native installed."
 Write-Host "Restart the browser or reload the extension."
 `
     .replaceAll('__HOST_NAME__', HostName)
@@ -224,20 +230,26 @@ Write-Host "Restart the browser or reload the extension."
 function windowsUninstallScript() {
   return String.raw`$ErrorActionPreference = "Stop"
 $HostName = "__HOST_NAME__"
-$InstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\NativeChecker"
+$LegacyHostName = "com.firexproxy.checker"
+$InstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\Native"
+$LegacyInstallDir = Join-Path $env:LOCALAPPDATA "FireX Proxy\NativeChecker"
 
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path $InstallDir
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path $LegacyInstallDir
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Mozilla\NativeMessagingHosts\$HostName"
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$HostName"
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Chromium\NativeMessagingHosts\$HostName"
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Mozilla\NativeMessagingHosts\$LegacyHostName"
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$LegacyHostName"
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue -Path "HKCU:\Software\Chromium\NativeMessagingHosts\$LegacyHostName"
 
-Write-Host "FireX Proxy native checker removed."
+Write-Host "FireX Native removed."
 `.replaceAll('__HOST_NAME__', HostName);
 }
 
 function windowsReadme() {
   return [
-    'FireX Proxy Native Checker',
+    'FireX Native',
     '',
     'Install for Firefox:',
     '  powershell -ExecutionPolicy Bypass -File .\\install.ps1',
@@ -281,12 +293,12 @@ function debianArchitecture(value) {
   return value;
 }
 
-function readCheckerVersion() {
-  const cargoToml = readFileSync(join(root, 'native', 'firex-checker', 'Cargo.toml'), 'utf8');
+function readNativeVersion() {
+  const cargoToml = readFileSync(join(root, 'native', 'firex-native', 'Cargo.toml'), 'utf8');
   const match = cargoToml.match(/^version\s*=\s*"([^"]+)"/m);
 
   if (!match?.[1]) {
-    fail('Could not read checker version from Cargo.toml');
+    fail('Could not read native app version from Cargo.toml');
   }
 
   return match[1];

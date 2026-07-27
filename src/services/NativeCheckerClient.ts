@@ -71,7 +71,7 @@ export class NativeCheckerClient {
         if (!settled) {
           settled = true;
           port?.disconnect();
-          reject(new Error('Native checker did not respond.'));
+          reject(new Error('FireX Native did not respond.'));
         }
       }, timeoutMs);
 
@@ -112,7 +112,7 @@ export class NativeCheckerClient {
 
         settled = true;
         clearTimeout(timer);
-        reject(new Error(this.runtimeErrorMessage() || 'Native checker is not installed.'));
+        reject(new Error(this.runtimeErrorMessage() || 'FireX Native is not installed.'));
       });
 
       port.postMessage({ type: 'ping' });
@@ -154,7 +154,7 @@ export class NativeCheckerClient {
           return;
         }
 
-        reject(new Error(stopped ? 'Checker stopped.' : this.runtimeErrorMessage() || 'Native checker disconnected.'));
+        reject(new Error(stopped ? 'Checker stopped.' : this.runtimeErrorMessage() || 'FireX Native disconnected.'));
       });
     });
 
@@ -196,6 +196,6 @@ export class NativeCheckerClient {
       return cause;
     }
 
-    return new Error(typeof cause === 'string' ? cause : 'Native checker is not installed.');
+    return new Error(typeof cause === 'string' ? cause : 'FireX Native is not installed.');
   }
 }

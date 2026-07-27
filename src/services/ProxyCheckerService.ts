@@ -45,7 +45,7 @@ export class ProxyCheckerService {
       const host: NativeCheckerHostSnapshot = {
         status: 'missing',
         checkedAt,
-        message: cause instanceof Error ? cause.message : 'Native checker is not installed.'
+        message: cause instanceof Error ? cause.message : 'FireX Native is not installed.'
       };
 
       await this.storage.setCheckerHost(host);
@@ -66,7 +66,7 @@ export class ProxyCheckerService {
     const host = await this.probe();
 
     if (host.status !== 'available' && host.status !== 'update_available') {
-      await this.storage.setCheckerRun(this.errorRun(host.message || 'Native checker is not available.'));
+      await this.storage.setCheckerRun(this.errorRun(host.message || 'FireX Native is not available.'));
       return;
     }
 
@@ -313,21 +313,21 @@ export class ProxyCheckerService {
     if (protocolVersion !== manifest.protocolVersion) {
       return {
         status: 'outdated',
-        message: `Install checker ${manifest.minimumVersion} or newer.`
+        message: `Install FireX Native ${manifest.minimumVersion} or newer.`
       };
     }
 
     if (this.compareVersion(version, manifest.minimumVersion) < 0) {
       return {
         status: 'outdated',
-        message: `Install checker ${manifest.minimumVersion} or newer.`
+        message: `Install FireX Native ${manifest.minimumVersion} or newer.`
       };
     }
 
     if (this.compareVersion(version, manifest.latestVersion) < 0) {
       return {
         status: 'update_available',
-        message: `Checker ${manifest.latestVersion} is available.`
+        message: `FireX Native ${manifest.latestVersion} is available.`
       };
     }
 

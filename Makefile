@@ -2,9 +2,9 @@ UNAME_S := $(shell uname -s)
 UNAME_M := $(shell uname -m)
 PACKAGE_OS := $(if $(filter Darwin,$(UNAME_S)),macos,$(if $(filter Linux,$(UNAME_S)),linux,unsupported))
 PACKAGE_ARCH := $(if $(filter x86_64 amd64,$(UNAME_M)),x64,$(if $(filter arm64 aarch64,$(UNAME_M)),arm64,$(UNAME_M)))
-CHECKER_BINARY := native/firex-checker/target/release/firex-checker
+NATIVE_BINARY := native/firex-native/target/release/firex-native
 
-.PHONY: dev dev-firefox build build-chrome build-firefox rust-deps checker-build checker-manifest checker-release checker-uninstall checker-check-file checker-package update-proxies zip zip-chrome zip-firefox clean
+.PHONY: dev dev-firefox build build-chrome build-firefox rust-deps native-build native-manifest native-release native-uninstall native-check-file native-package update-proxies zip zip-chrome zip-firefox clean
 
 dev:
 	npm run dev
@@ -24,23 +24,23 @@ build-firefox:
 rust-deps:
 	scripts/ensure-rust.sh
 
-checker-build: rust-deps
-	npm run checker:build
+native-build: rust-deps
+	npm run native:build
 
-checker-manifest:
-	npm run checker:manifest
+native-manifest:
+	npm run native:manifest
 
-checker-release: rust-deps
-	npm run checker:release -- $(VERSION)
+native-release: rust-deps
+	npm run native:release -- $(VERSION)
 
-checker-uninstall:
-	npm run checker:uninstall -- --system
+native-uninstall:
+	npm run native:uninstall -- --system
 
-checker-check-file: rust-deps
-	npm run checker:check-file
+native-check-file: rust-deps
+	npm run native:check-file
 
-checker-package: checker-build
-	npm run checker:package -- --os $(PACKAGE_OS) --arch $(PACKAGE_ARCH) --binary $(CHECKER_BINARY)
+native-package: native-build
+	npm run native:package -- --os $(PACKAGE_OS) --arch $(PACKAGE_ARCH) --binary $(NATIVE_BINARY)
 
 update-proxies:
 	npm run update:proxies

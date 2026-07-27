@@ -28,7 +28,7 @@ impl AppCommand {
             "--check-file" => {
                 let path = args
                     .next()
-                    .context("usage: firex-checker --check-file <path> [max-working]")?;
+                    .context("usage: firex-native --check-file <path> [max-working]")?;
                 let max_working = args.next().map(|value| {
                     value
                         .parse::<usize>()
@@ -36,7 +36,7 @@ impl AppCommand {
                 });
 
                 if args.next().is_some() {
-                    bail!("usage: firex-checker --check-file <path> [max-working]");
+                    bail!("usage: firex-native --check-file <path> [max-working]");
                 }
 
                 Ok(Self::CheckFile(CheckFileCommand::new(

@@ -5,33 +5,33 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const cargoTomlPath = 'native/firex-checker/Cargo.toml';
-const cargoLockPath = 'native/firex-checker/Cargo.lock';
-const manifestPath = 'checker-manifest.json';
+const cargoTomlPath = 'native/firex-native/Cargo.toml';
+const cargoLockPath = 'native/firex-native/Cargo.lock';
+const manifestPath = 'native-manifest.json';
 const releaseFiles = [cargoTomlPath, cargoLockPath, manifestPath];
 const version = parseVersion(process.argv.slice(2));
-const tagName = `checker-v${version}`;
+const tagName = `native-v${version}`;
 
 await ensureVersionFilesAreSafeToEdit();
 await updateCargoVersion(version);
 run('cargo', ['check', '--manifest-path', cargoTomlPath]);
-run('npm', ['run', 'checker:manifest']);
+run('npm', ['run', 'native:manifest']);
 ensureTagDoesNotExist(tagName);
 ensureReleaseFilesChanged();
 
 run('git', ['add', ...releaseFiles]);
-run('git', ['commit', '-m', `chore: release firex-checker ${version}`]);
+run('git', ['commit', '-m', `chore: release firex-native ${version}`]);
 run('git', ['tag', tagName]);
 run('git', ['push', 'origin', 'HEAD']);
 run('git', ['push', 'origin', tagName]);
 
-console.error(`firex-checker ${version} pushed with tag ${tagName}.`);
+console.error(`firex-native ${version} pushed with tag ${tagName}.`);
 
 function parseVersion(args) {
   const value = args[0] || process.env.VERSION;
 
   if (!value || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(value)) {
-    fail('Usage: npm run checker:release -- <version>');
+    fail('Usage: npm run native:release -- <version>');
   }
 
   return value;
@@ -58,7 +58,7 @@ async function updateCargoVersion(nextVersion) {
   );
 
   if (updated === cargoToml) {
-    fail('Could not update firex-checker version in Cargo.toml.');
+    fail('Could not update firex-native version in Cargo.toml.');
   }
 
   await writeFile(resolve(root, cargoTomlPath), updated, 'utf8');
@@ -85,7 +85,7 @@ function ensureReleaseFilesChanged() {
   const diff = commandOutput('git', ['status', '--porcelain', '--', ...releaseFiles]);
 
   if (!diff.trim()) {
-    fail(`firex-checker is already at ${version}.`);
+    fail(`firex-native is already at ${version}.`);
   }
 }
 
